@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Main } from '../pages/MainPage'
 import { RoutePaths } from './paths'
-import { NavBar } from 'src/components/ui/navBar'
+import { NavBar } from 'src/components/ui/navbar'
 import { SiteNew } from 'src/pages/SiteNewPage'
 import { NotFound } from 'src/pages/NotFoundPage'
 
