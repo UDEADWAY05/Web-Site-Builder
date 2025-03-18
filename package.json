@@ -12,6 +12,7 @@
         "coverage": "vitest run --coverage"
     },
     "dependencies": {
+        "@headlessui/react": "^2.2.0",
         "@radix-ui/react-slot": "1.1.2",
         "@reduxjs/toolkit": "2.6.1",
         "@tailwindcss/vite": "4.0.14",
