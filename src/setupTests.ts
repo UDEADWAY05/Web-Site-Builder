@@ -1,0 +1,1 @@
+import '@testing-library/jest-dom'; // Добавляет методы в expect, например, toBeInTheDocument
