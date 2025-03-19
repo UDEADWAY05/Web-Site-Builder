@@ -12,7 +12,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route path={RoutePaths.MAIN} element={<Main />} />
         <Route path={RoutePaths.SITE_NEW} element={<SiteNew />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </>
   )
