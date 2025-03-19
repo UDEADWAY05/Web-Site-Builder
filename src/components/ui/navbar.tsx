@@ -20,6 +20,7 @@ interface NavigationProp {
   name: string
   href: string
   current: boolean
+  id: string
 }
 
 interface ICurrentUser {
@@ -29,8 +30,18 @@ interface ICurrentUser {
 
 export function NavBar() {
   const navigation: NavigationProp[] = [
-    { name: 'Главная', href: `${RoutePaths.MAIN}`, current: true },
-    { name: 'Новый проект', href: `${RoutePaths.SITE_NEW}`, current: false },
+    {
+      name: 'Главная',
+      href: `${RoutePaths.MAIN}`,
+      current: true,
+      id: 'main',
+    },
+    {
+      name: 'Новый проект',
+      href: `${RoutePaths.SITE_NEW}`,
+      current: false,
+      id: 'siteNew',
+    },
   ]
 
   const [currentUser] = useState<ICurrentUser | null>(null)
@@ -87,6 +98,7 @@ export function NavBar() {
                   <Link
                     key={item.name}
                     to={item.href}
+                    data-testid={`${item.id}-link`}
                     aria-current={item.current ? 'page' : undefined}
                     className={classNames(
                       item.current
@@ -153,6 +165,7 @@ export function NavBar() {
                     <MenuItem>
                       <Link
                         to={RoutePaths.AUTH}
+                        data-testid={`${RoutePaths.AUTH}-link`}
                         className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                       >
                         Вход

@@ -1,6 +1,6 @@
 export const NotFound = () => {
   return (
-    <div>
+    <div data-testid="notFound-page">
       <p>NotFound</p>
     </div>
   )
