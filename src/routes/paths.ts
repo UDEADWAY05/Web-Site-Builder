@@ -4,4 +4,6 @@ export enum RoutePaths {
   SIGNOUT = 'signout',
   SITE = 'site',
   SITE_NEW = 'site/new',
+  USER = 'user',
+  USERDETAIL = 'user/id',
 }
