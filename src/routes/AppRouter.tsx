@@ -1,9 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import { Main } from 'src/pages/main';
-import { RoutePaths } from './paths';
+import { Routes, Route } from 'react-router-dom'
+import { Main } from '../pages/MainPage'
+import { RoutePaths } from './paths'
+import { SiteNew } from 'src/pages/SiteNewPage'
+import { NotFound } from 'src/pages/NotFoundPage'
 
-export const AppRoutes = () => (
-    <Routes>
+export const AppRoutes = () => {
+  return (
+    <>
+      <Routes>
         <Route path={RoutePaths.MAIN} element={<Main />} />
-    </Routes>
-);
+        <Route path={RoutePaths.SITE_NEW} element={<SiteNew />} />
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
+    </>
+  )
+}
