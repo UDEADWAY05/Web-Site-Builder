@@ -26,6 +26,7 @@ interface NavigationProp {
 interface ICurrentUser {
   id: string
   img: string
+  isLoggedin: boolean
 }
 
 export function NavBar() {
@@ -44,7 +45,12 @@ export function NavBar() {
     },
   ]
 
-  const [currentUser] = useState<ICurrentUser | null>(null)
+  const [currentUser] = useState<ICurrentUser | null>({
+    id: '1',
+    img: '111',
+    isLoggedin: true,
+  })
+  console.log(currentUser)
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -128,27 +134,25 @@ export function NavBar() {
                 <MenuButton className="relative flex rounded-full bg-gray-500 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  {currentUser ? (
-                    <img
-                      alt="userAvatar"
-                      src={currentUser.img}
-                      className="size-8 rounded-full"
-                    />
+                  {currentUser?.isLoggedin ? (
+                    <NavProfile />
                   ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
+                    <Link to={RoutePaths.SIGNOUT}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        />
+                      </svg>
+                    </Link>
                   )}
                 </MenuButton>
               </div>
@@ -156,7 +160,7 @@ export function NavBar() {
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
-                {currentUser ? (
+                {!currentUser ? (
                   <MenuItem>
                     <NavProfile />
                   </MenuItem>

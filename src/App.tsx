@@ -1,12 +1,13 @@
+import { NavBar } from './components/ui/navbar'
 import { AppRoutes } from './routes/AppRouter'
 
 function App() {
-
-    return (
-        <div className="App">
-            <AppRoutes />
-        </div>
-    )
+  return (
+    <div className="App">
+      <NavBar />
+      <AppRoutes />
+    </div>
+  )
 }
 
 export default App
