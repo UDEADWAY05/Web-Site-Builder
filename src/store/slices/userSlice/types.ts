@@ -1,4 +1,5 @@
 export type User = {
     id:string | null,
-    email:string | null
+    email:string | null,
+    isLoggedIn:boolean
 }
