@@ -1,11 +1,15 @@
-import { NavBar } from "./components/ui/navbar/navbar"
+import ErrorBoundary from './components/common/errorBoundary'
+import { NavBar } from './components/ui/navbar/navbar'
+
 import { AppRoutes } from './routes/AppRouter'
 
 function App() {
   return (
     <div className="App">
       <NavBar />
-      <AppRoutes />
+      <ErrorBoundary>
+        <AppRoutes />
+      </ErrorBoundary>
     </div>
   )
 }
