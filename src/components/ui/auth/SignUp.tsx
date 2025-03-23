@@ -6,9 +6,8 @@ export const SignUp = () => {
     const handleFormSubmit = (email:string,password:string) => createUserWithEmailAndPassword(auth,email,password)
     
     return (
-        <>
-            <h1>Signup form</h1>
+        <main className="flex justify-center items-center">
              <EmailPasswordForm handleFormSubmit={handleFormSubmit} />
-        </>
+        </main>
     )
 }
