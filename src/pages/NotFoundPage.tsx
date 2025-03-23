@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import notFound from '../../public/no-book.jpg'
+import notFound from '../assets/no-book.jpg'
 
 export const NotFound = () => {
   const navigate = useNavigate()
