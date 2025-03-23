@@ -12,7 +12,6 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser(state, action:PayloadAction<User>) {
-            console.log('setting user',action.payload)
             state.email = action.payload.email;
             state.id = action.payload.id;
             state.isLoggedIn = true
