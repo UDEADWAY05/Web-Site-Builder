@@ -7,6 +7,7 @@ import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage } from '../fo
 import { Input } from '../input'
 import { Button } from '../button'
 import { FormEvent } from "react"
+import { FirebaseError } from "firebase/app"
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
@@ -34,27 +35,33 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const formError =	errors?.email?.message ||	errors?.password?.message || errors.root?.message
+  const serverError =	errors.root?.message
 	
-  const onSubmit = async (e:FormEvent<HTMLFormElement>) => {
-    e.preventDefault() 
-    const formData = new FormData(e.currentTarget)
+  const onSubmit = async (e:FormEvent<HTMLFormElement>) => {    
+    try {
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
 
-    const email = formData.get('email')?.toString()
-    const password = formData.get('password')?.toString()
+      const email = formData.get('email')?.toString()
+      const password = formData.get('password')?.toString()
 
-    if (!email || !password){
-      setError('root',{type:'manual',message:'Проверьте правильность ввода email и пароля'})
-      return
+      if (!email || !password){
+        setError('root',{type:'manual',message:'Поля имени и пароля не могут быть пустыми'})
+        return
+      }
+
+      const { user } = await handleFormSubmit(email,password)
+      dispatch(setUser({ email:user.email,id:user.uid,isLoggedIn:true }))
+  
+      navigate('/sites/new')
+    } 
+    catch (e) {
+      if (e instanceof FirebaseError){
+        setError('root',{type:'server',message:e.message})
+      }
     }
-
-    const { user } = await handleFormSubmit(email,password)
-    dispatch(setUser({ email:user.email,id:user.uid,isLoggedIn:true }))
-
-    navigate('/sites/new')
   } 
 
-  
   return (
     <Form {...form}>
     <form onSubmit={onSubmit} className="px-2 py-4 flex flex-col w-1/4">
@@ -85,6 +92,7 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
         )}
       />
       <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
+      {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
   </Form>
   )
