@@ -7,29 +7,35 @@ import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage } from '../fo
 import { Input } from '../input'
 import { Button } from '../button'
 import { FormEvent } from "react"
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 
-type Inputs = {
-  email: string
-  password: string
-}
+const schema = z.object({
+  email:z.string().min(6,{ message:'Email должен содержать не меньше 6 символов' }).email('Email введен неверно'),
+  password:z.string().min(6,{ message: 'Пароль должен содержать минимум 6 символов'})
+})
 
 interface EmailPasswodFormProps {
     handleFormSubmit:(email:string,password:string) => Promise<UserCredential>
 }
 
 export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
-  const form = useForm<Inputs>({
+  const form = useForm<z.infer<typeof schema>>({
+    mode:'onBlur',
     defaultValues:{
       email:'',
       password:''
     },
+    resolver:zodResolver(schema)
   })
-  const { formState:{ errors,isDirty,isValid },setError} = form
-  console.log(isDirty,isValid)
+
+  const { register,formState:{ errors,isDirty,isValid },setError} = form
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+  const formError =	errors?.email?.message ||	errors?.password?.message || errors.root?.message
+	
   const onSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault() 
     const formData = new FormData(e.currentTarget)
@@ -42,25 +48,24 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
       return
     }
 
-    console.log(email,password)
     const { user } = await handleFormSubmit(email,password)
-    console.log(user)
     dispatch(setUser({ email:user.email,id:user.uid,isLoggedIn:true }))
 
     navigate('/sites/new')
   } 
 
+  
   return (
     <Form {...form}>
-    <form onSubmit={onSubmit} className="px-2 py-4 flex flex-col">
+    <form onSubmit={onSubmit} className="px-2 py-4 flex flex-col w-1/4">
       <FormField
         control={form.control}
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel htmlFor="email">Email</FormLabel>
             <FormControl>
-              <Input placeholder="email" {...field} required={true} minLength={6} />
+              <Input {...register('email')} id={'email'} placeholder="email" {...field} autoFocus />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -71,17 +76,15 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Password</FormLabel>
+            <FormLabel htmlFor="password">Password</FormLabel>
             <FormControl>
-              <Input placeholder="password" {...field} required={true} minLength={6} />
+              <Input {...register('password')} id={'password'} type='password' placeholder="password" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
       <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
-        {errors.email && (<span role="alert">Проверьте правильность ввода email</span>)}
-        {errors.password && (<span role="alert">Проверьте правильность ввода пароля</span>)}
     </form>
   </Form>
   )
