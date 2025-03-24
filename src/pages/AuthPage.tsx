@@ -1,20 +1,24 @@
-import { ReactElement } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { Login } from 'src/components/ui/auth/Login';
-import { SignUp } from 'src/components/ui/auth/SignUp';
+import { AuthForm } from 'src/components/ui/auth/AuthForm';
+import { signInWithEmailAndPassword,createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
-const componentMap:{[key:string]:ReactElement} = {
-    'login' : <Login />,
-    'signup': <SignUp />
-}
+const authRouteOptions = [ 'login','signup']
 
 export const AuthPage = () => {
     const { type } = useParams();
-  
-    //redirect to '/' in case type is not login or signup or missing
-    if (!type || !Object.keys(componentMap).includes(type))  {
-        return <Navigate to={'/'} />
+
+    //if route is different from login or signup
+    if (!type || !authRouteOptions.includes(type)){
+        return <Navigate to='/*' /> 
     }
+  
+    const auth = getAuth()
+    const handleLogin = (email:string,password:string) => signInWithEmailAndPassword(auth,email,password)
+    const handleSignup = (email:string,password:string) => createUserWithEmailAndPassword(auth,email,password)
     
-    return componentMap[type]  
-  };
+    const isRegister = type !== 'login'
+
+    return (<div className='flex justify-center'>
+          <AuthForm isRegister={isRegister} handleFormSubmit={isRegister ? handleSignup : handleLogin}/>
+        </div> 
+  )};

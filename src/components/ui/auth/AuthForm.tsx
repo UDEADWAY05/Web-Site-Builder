@@ -1,4 +1,4 @@
-import { UserCredential } from "firebase/auth"
+import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch } from "src/hooks/redux-hooks"
@@ -6,28 +6,43 @@ import { setUser } from "src/store/slices/userSlice"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage } from '../form'
 import { Input } from '../input'
 import { Button } from '../button'
-import { FormEvent } from "react"
-import { FirebaseError } from "firebase/app"
+import { UserCredential } from "firebase/auth"
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 
-const schema = z.object({
-  email:z.string().min(6,{ message:'Email должен содержать не меньше 6 символов' }).email('Email введен неверно'),
-  password:z.string().min(6,{ message: 'Пароль должен содержать минимум 6 символов'})
-})
-
-interface EmailPasswodFormProps {
-    handleFormSubmit:(email:string,password:string) => Promise<UserCredential>
+interface AuthFormProps {
+    handleFormSubmit:(email:string,password:string) => Promise<UserCredential>,
+    isRegister:boolean
 }
 
-export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
-  const form = useForm<z.infer<typeof schema>>({
+const generateAuthSchema = (isRegister: boolean) => {
+    const baseSchema = z.object({
+      email: z.string().email("Неверно введен email"),
+      password: z.string().min(6, "Пароль должен содержать не менее 6 символов"),
+    });
+  
+    if (isRegister) {
+      return baseSchema.extend({
+        confirmPassword: z.string().min(6, "Пароль должен содержать не менее 6 символов"),
+      }).refine((data) => data.password === data.confirmPassword, {
+        message: "Пароли не совпадают",
+        path: ["confirmPassword"],
+      });
+    }
+  
+    return baseSchema;
+  };
+
+export function AuthForm({ handleFormSubmit,isRegister }:AuthFormProps) {
+  const authSchema = generateAuthSchema(isRegister)
+  const form = useForm<z.infer<typeof authSchema>>({
     mode:'onBlur',
     defaultValues:{
       email:'',
-      password:''
+      password:'',
+      ...(isRegister && { confirmPassword:'' })
     },
-    resolver:zodResolver(schema)
+    resolver:zodResolver(authSchema)
   })
 
   const { register,formState:{ errors,isDirty,isValid },setError} = form
@@ -55,16 +70,15 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
   
       navigate('/sites/new')
     } 
-    catch (e) {
-      if (e instanceof FirebaseError){
-        setError('root',{type:'server',message:e.message})
+    catch (e:unknown) {
+      if (e instanceof Error){
+        setError('root', { type:'server',message:e.message })
       }
-    }
-  } 
+  }} 
 
   return (
     <Form {...form}>
-    <form onSubmit={onSubmit} className="px-2 py-4 flex flex-col w-1/4">
+    <form onSubmit={onSubmit} className="px-2 py-4 flex flex-col sm:w-1/2 md:w-1/3 gap-1">
       <FormField
         control={form.control}
         name="email"
@@ -91,6 +105,20 @@ export function EmailPasswordForm({handleFormSubmit}:EmailPasswodFormProps) {
           </FormItem>
         )}
       />
+      {isRegister && <FormField
+        control={form.control}
+        name="confirmPassword"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
+            <FormControl>
+              <Input {...register('confirmPassword')} id={'confirmPassword'} type='password' placeholder="Conform password" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />}
+      
       <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
       {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
