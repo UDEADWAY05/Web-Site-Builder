@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import { Main } from '../pages/MainPage'
 import { RoutePaths } from './paths'
-import { SiteNew } from 'src/pages/SiteNewPage'
+
 import { NotFound } from 'src/pages/NotFoundPage'
-import { AuthPage } from 'src/pages/AuthPage';
+import { AuthPage } from 'src/pages/AuthPage'
+import { SiteNew } from 'src/pages/SiteNewPage'
 
 export const AppRoutes = () => {
   return (
