@@ -1,7 +1,7 @@
 export interface Blocks {
   id: number
-  type?: string
-  title: string
+  type: string
+  title?: string
   bgColor: string
   width?: number
   height?: string
