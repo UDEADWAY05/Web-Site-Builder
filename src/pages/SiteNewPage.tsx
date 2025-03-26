@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { DraggableBlock, SideBar } from 'src/components/ui/siteNew'
 import { Blocks } from 'src/components/ui/siteNew/type/type'
+import {
+  button,
+  horozontal,
+  list_ol,
+  list_ul,
+  photo,
+  quote,
+  title,
+  paragraf,
+} from '../assets'
 
 export function SiteNew() {
   const [projectName, setProjectName] = useState('My Project')
@@ -8,11 +18,65 @@ export function SiteNew() {
   const [blocks, setBlocks] = useState<Blocks[]>([])
   console.log(blocks)
 
+  // Кнопки для бокового меню
+  const blockTypes = [
+    {
+      type: 'header',
+      label: 'Заголовок',
+      defaultContent: 'Новый заголовок',
+      img: title,
+    },
+    {
+      type: 'paragraph',
+      label: 'Параграф',
+      defaultContent: 'Текст параграфа',
+      img: paragraf,
+    },
+    {
+      type: 'listUl',
+      label: 'Маркированный',
+      defaultContent: [' -Элемент ', '-Элемент '],
+      img: list_ul,
+    },
+    {
+      type: 'listOl',
+      label: 'Нумерованный',
+      defaultContent: ['Элемент 1', 'Элемент 2'],
+      img: list_ol,
+    },
+    {
+      type: 'image',
+      label: 'Изображение',
+      defaultContent: '',
+      img: photo,
+    },
+    {
+      type: 'divider',
+      label: 'Разделитель',
+      defaultContent: '',
+      img: horozontal,
+    },
+    { type: 'button', label: 'Кнопка', defaultContent: 'Нажать', img: button },
+    {
+      type: 'quote',
+      label: 'Цитата',
+      defaultContent: 'Текст цитаты',
+      img: quote,
+    },
+  ]
+
   const addBlock = (type: string) => {
-    setBlocks([
-      ...blocks,
-      { id: Date.now(), type, bgColor: bgColor, title: projectName },
-    ])
+    const newDate = {
+      id: Date.now(),
+      type,
+      bgColor: bgColor,
+      title: projectName,
+      width: type === 'image' ? 200 : 300,
+      height: 'auto',
+      styles: {},
+    }
+
+    setBlocks([...blocks, newDate])
   }
 
   return (
@@ -23,8 +87,9 @@ export function SiteNew() {
         bgColor={bgColor}
         setBgColor={setBgColor}
         addBlock={addBlock}
+        blockTypes={blockTypes}
       />
-      <DraggableBlock blocks={blocks} bgColor={bgColor} />
+      <DraggableBlock blocksButton={blocks} bgColor={bgColor} />
     </div>
   )
 }
