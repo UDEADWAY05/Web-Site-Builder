@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { Main } from '../pages/MainPage'
 import { RoutePaths } from './paths'
-
 import { NotFound } from 'src/pages/NotFoundPage'
 import { AuthPage } from 'src/pages/AuthPage'
 import { SiteNew } from 'src/pages/SiteNewPage'

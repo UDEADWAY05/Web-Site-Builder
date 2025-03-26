@@ -1,11 +1,14 @@
 // import  { ChangeEvent } from 'react'
 
+import { BlockButtonProp } from '../type/type'
+
 // interface SideBarProp {
 //   projectName: string
 //   setProjectName: string
 //   bgColor: string
-//   setBgColor: (e: ChangeEvent<HTMLInputElement>) => void
+//   setBgColor: (str:string) => void
 //   addBlock: (str: string) => void
+// blockTypes: BlockButtonProp[]
 // }
 export function SideBar({
   projectName,
@@ -13,15 +16,17 @@ export function SideBar({
   bgColor,
   setBgColor,
   addBlock,
+  blockTypes,
 }: {
   projectName: string
   setProjectName: (str: string) => void
   bgColor: string
   setBgColor: (str: string) => void
   addBlock: (str: string) => void
+  blockTypes: BlockButtonProp[]
 }) {
   return (
-    <div className="px-3 py-2 w-[200px] bg-[#f4f4f4]">
+    <div className="px-3 py-2 w-[250px] bg-[#f4f4f4]">
       <p className="p-2 text-xs opacity-25">Название сайта</p>
       <input
         type="text"
@@ -36,9 +41,31 @@ export function SideBar({
         onChange={(e) => setBgColor(e.target.value)}
       />
       <hr />
+      <p className="p-2 text-xs opacity-25">Базовый</p>
+      <div className="grid grid-cols-2 gap-1">
+        {blockTypes.map((block) => (
+          <div
+            key={block.type}
+            className="col border-2 border-black rounded-md p-1"
+            style={{ cursor: 'pointer' }}
+            // onClick={() => console.log('btn', block.label)}
+            onClick={() => {
+              console.log('btn', block.label)
+              addBlock(block.type)
+            }}
+          >
+            <div className="flex flex-col">
+              <img className="m-auto" src={block.img} alt={block.type} />
 
-      <button onClick={() => addBlock('h1')}>Добавить заголовок</button>
-      <button onClick={() => addBlock('button')}>Добавить кнопку</button>
+              <div className="text-center ">
+                <p className=" text-xs ">{block.label}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <hr />
+      <p className="p-2 text-xs opacity-25">Форма</p>
     </div>
   )
 }
