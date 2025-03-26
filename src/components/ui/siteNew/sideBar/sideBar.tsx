@@ -1,5 +1,3 @@
-// import  { ChangeEvent } from 'react'
-
 import { BlockButtonProp } from '../type/type'
 
 // interface SideBarProp {

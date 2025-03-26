@@ -1,4 +1,10 @@
 import { useState } from 'react'
+import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core'
+import {
+  SortableContext,
+  arrayMove,
+  rectSwappingStrategy,
+} from '@dnd-kit/sortable'
 import { DraggableBlock, SideBar } from 'src/components/ui/siteNew'
 import { Blocks } from 'src/components/ui/siteNew/type/type'
 import {
@@ -65,6 +71,17 @@ export function SiteNew() {
     },
   ]
 
+  // функция drag Drog
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      const oldIndex = blocks.findIndex((block) => block.id === active.id)
+      const newIndex = blocks.findIndex((block) => block.id === over.id)
+      setBlocks(arrayMove(blocks, oldIndex, newIndex))
+    }
+  }
+
   const addBlock = (type: string) => {
     const newDate = {
       id: Date.now(),
@@ -89,7 +106,11 @@ export function SiteNew() {
         addBlock={addBlock}
         blockTypes={blockTypes}
       />
-      <DraggableBlock blocksButton={blocks} bgColor={bgColor} />
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={blocks} strategy={rectSwappingStrategy}>
+          <DraggableBlock blocks={blocks} bgColor={bgColor} />
+        </SortableContext>
+      </DndContext>
     </div>
   )
 }
