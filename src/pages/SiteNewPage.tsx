@@ -1,12 +1,6 @@
 import { useState } from 'react'
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core'
-import {
-  SortableContext,
-  arrayMove,
-  rectSwappingStrategy,
-} from '@dnd-kit/sortable'
-import { DraggableBlock, SideBar } from 'src/components/ui/siteNew'
-import { Blocks } from 'src/components/ui/siteNew/type/type'
+
+import { BlockButtonProp, Blocks } from 'src/components/ui/siteNew/type/type'
 import {
   button,
   horozontal,
@@ -17,15 +11,19 @@ import {
   title,
   paragraf,
 } from '../assets'
+import { SideBar } from 'src/components/ui/siteNew'
+import { Canvas } from 'src/components/ui/siteNew/canvas'
 
 export function SiteNew() {
   const [projectName, setProjectName] = useState('My Project')
   const [bgColor, setBgColor] = useState('#5C90FF')
   const [blocks, setBlocks] = useState<Blocks[]>([])
   console.log(blocks)
+  const widthScreen = 800 // максимальная ширина рабочей области
+  const heigthScreen = 600 // максимальная высота рабочей области
 
   // Кнопки для бокового меню
-  const blockTypes = [
+  const blockTypes: BlockButtonProp[] = [
     {
       type: 'header',
       label: 'Заголовок',
@@ -71,46 +69,74 @@ export function SiteNew() {
     },
   ]
 
-  // функция drag Drog
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const blockType = e.dataTransfer?.getData('blockType')
+    console.log(blockType)
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
-    if (over && active.id !== over.id) {
-      const oldIndex = blocks.findIndex((block) => block.id === active.id)
-      const newIndex = blocks.findIndex((block) => block.id === over.id)
-      setBlocks(arrayMove(blocks, oldIndex, newIndex))
+    const canvastRest = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - canvastRest.left
+    const y = e.clientY - canvastRest.top
+
+    const newBlock = {
+      id: Date.now(),
+      bgColor,
+      type: blockType,
+      x,
+      y,
+      content: blockTypes.find((item) => item.type === blockType)
+        ?.defaultContent,
     }
+    setBlocks((prev) => [...prev, newBlock])
   }
 
-  const addBlock = (type: string) => {
-    const newDate = {
-      id: Date.now(),
-      type,
-      bgColor: bgColor,
-      title: projectName,
-      width: type === 'image' ? 200 : 300,
-      height: 'auto',
-      styles: {},
-    }
+  const updateBlockPosition = (id: number, newX: number, newY: number) => {
+    setBlocks(
+      (prevBlocks) =>
+        prevBlocks
+          .map((block) =>
+            block.id === id ? { ...block, x: newX, y: newY } : block
+          )
+          .filter(
+            (block) =>
+              block.x >= 0 &&
+              block.y >= 0 &&
+              block.x < widthScreen &&
+              block.y < heigthScreen
+          ) // Удаление блока, если он выходит за границы
+    )
+  }
 
-    setBlocks([...blocks, newDate])
+  // Обновление текста блока
+  const updateBlockContent = (id: number, newContent: string) => {
+    setBlocks((prevBlocks) =>
+      prevBlocks.map((block) =>
+        block.id === id ? { ...block, content: newContent } : block
+      )
+    )
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <SideBar
         projectName={projectName}
-        setProjectName={setProjectName}
         bgColor={bgColor}
+        setProjectName={setProjectName}
         setBgColor={setBgColor}
-        addBlock={addBlock}
         blockTypes={blockTypes}
       />
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={blocks} strategy={rectSwappingStrategy}>
-          <DraggableBlock blocks={blocks} bgColor={bgColor} />
-        </SortableContext>
-      </DndContext>
+      <Canvas
+        blocks={blocks}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        updateBlockPosition={updateBlockPosition}
+        updateBlockContent={updateBlockContent}
+        bgColor={bgColor}
+      />
     </div>
   )
 }

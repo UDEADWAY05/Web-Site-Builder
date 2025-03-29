@@ -1,61 +1,91 @@
-import { Blocks } from '../type/type'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-
-export function DraggableBlock({
-  blocks,
-  bgColor,
-}: {
-  blocks: Blocks[]
-  bgColor: string
-}) {
-  return (
-    <div
-      className="p-10 grow min-h-screen"
-      style={{ backgroundColor: bgColor }}
-    >
-      {blocks.map((block) => (
-        <SortableItem key={block.id} {...block} />
-      ))}
-    </div>
-  )
+import type { Blocks } from '../type/type'
+import { useState } from 'react'
+interface OffsetProp {
+  x: number
+  y: number
 }
 
-const SortableItem = ({ id, type }: { id: number; type?: string }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id })
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+export function DraggableBlock({
+  block,
+  updatePosition,
+  updateContent,
+}: {
+  block: Blocks
+  updatePosition: (id: number, newX: number, newY: number) => void
+  updateContent: (id: number, value: string) => void
+}) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const [offset, setOffset] = useState<OffsetProp>({ x: 0, y: 0 })
+
+  // Начало перетаскивания
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setDragging(true)
+    setOffset({ x: e.clientX - block.x, y: e.clientY - block.y })
   }
-  // console.log('style', style)
-  // console.log(attributes, listeners, setNodeRef, transform, transition)
-  console.log(type)
+
+  // Перемещение блока
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!dragging) return
+    updatePosition(block.id, e.clientX - offset.x, e.clientY - offset.y)
+  }
+
+  // Окончание перетаскивания
+  const handleMouseUp = () => {
+    setDragging(false)
+  }
+
+  // Изменение текста
+  const handleDoubleClick = () => {
+    setIsEditing(true)
+  }
+
+  // Подтверждение ввода текста
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    updateContent(block.id, e.target.value)
+    setIsEditing(false)
+  }
+
+  const style = {
+    left: block.x,
+    top: block.y,
+  }
 
   return (
     <div
-      ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className="p-2 m-2 bg-white cursor-grab"
+      className="p-2 m-2 bg-white cursor-grab absolute "
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onDoubleClick={handleDoubleClick}
     >
-      {type === 'header' && <h1>Новый заголовок</h1>}
-      {type === 'paragraph' && <p>Текст параграфа</p>}
-      {type === 'listUl' && (
+      {isEditing && (
+        <input
+          type="text"
+          defaultValue={block.content}
+          autoFocus
+          onBlur={handleBlur}
+          // onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+        />
+      )}
+      {block.type === 'header' && <h1>{block.content}</h1>}
+      {block.type === 'paragraph' && <p>{block.content}</p>}
+      {block.type === 'listUl' && (
         <ul>
-          <li>List</li>
+          <li>{block.content}</li>
         </ul>
       )}
-      {type === 'listOl' && (
+      {block.type === 'listOl' && (
         <ol>
-          <li>List</li>
+          <li>{block.content}</li>
         </ol>
       )}
-      {type === 'image' && <img src="#" alt="image" />}
-      {type === 'divider' && <hr />}
-      {type === 'button' && <button>Кнопка</button>}
-      {type === 'quote' && (
+      {block.type === 'image' && <img src="#" alt="image" />}
+      {block.type === 'divider' && <hr />}
+      {block.type === 'button' && <button>{block.content}</button>}
+      {block.type === 'quote' && (
         <div>
           <blockquote cite="https://www.huxley.net/bnw/four.html">
             <p>
