@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useDispatch } from 'react-redux'
 import { DraggableBlock } from './draggableBlock/draggableBlock'
 import { useAppSelector } from '../'
@@ -40,6 +41,26 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
     e.preventDefault()
   }
 
+=======
+import { DraggableBlock } from './draggableBlock/draggableBlock'
+import { Blocks } from './type/type'
+
+export function Canvas({
+  blocks,
+  onDrop,
+  onDragOver,
+  bgColor,
+  updateBlockPosition,
+  updateBlockContent,
+}: {
+  blocks: Blocks[]
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => void
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
+  bgColor: string
+  updateBlockPosition: (id: number, newX: number, newY: number) => void
+  updateBlockContent: (id: number, value: string) => void
+}) {
+>>>>>>> 21b5003 (feat: переход на чистый DragDrog)
   return (
     <div
       style={{
@@ -48,11 +69,24 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
         backgroundColor: bgColor,
         overflow: 'hidden',
       }}
+<<<<<<< HEAD
       onDrop={(e) => handleDrop(e)}
       onDragOver={(e) => handleDragOver(e)}
     >
       {blocks.map((block) => (
         <DraggableBlock key={block.id} {...block} />
+=======
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+    >
+      {blocks.map((block) => (
+        <DraggableBlock
+          key={block.id}
+          block={block}
+          updatePosition={updateBlockPosition}
+          updateContent={updateBlockContent}
+        />
+>>>>>>> 21b5003 (feat: переход на чистый DragDrog)
       ))}
     </div>
   )

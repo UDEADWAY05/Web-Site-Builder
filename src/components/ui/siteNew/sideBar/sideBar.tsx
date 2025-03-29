@@ -5,16 +5,21 @@ export function SideBar({
   setProjectName,
   bgColor,
   setBgColor,
-  addBlock,
   blockTypes,
 }: {
   projectName: string
   setProjectName: (str: string) => void
   bgColor: string
   setBgColor: (str: string) => void
-  addBlock: (str: string) => void
   blockTypes: BlockButtonProp[]
 }) {
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    blockType: string
+  ) => {
+    e.dataTransfer?.setData('blockType', blockType)
+  }
+
   return (
     <div className="px-3 py-2 w-[250px] bg-[#f4f4f4]">
       <p className="p-2 text-xs opacity-25">Название сайта</p>
@@ -35,14 +40,11 @@ export function SideBar({
       <div className="grid grid-cols-2 gap-1">
         {blockTypes.map((block) => (
           <div
+            draggable
             key={block.type}
             className="col border-2 border-black rounded-md p-1"
             style={{ cursor: 'pointer' }}
-            // onClick={() => console.log('btn', block.label)}
-            onClick={() => {
-              console.log('btn', block.label)
-              addBlock(block.type)
-            }}
+            onDragStart={(e) => handleDragStart(e, block.type)}
           >
             <div className="flex flex-col">
               <img className="m-auto" src={block.img} alt={block.type} />
