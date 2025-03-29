@@ -8,14 +8,11 @@ export class FirebaseApiService implements FirebaseService {
     public db:Firestore
 
     constructor(app:FirebaseApp,db:Firestore){
-        console.log(app)
         this.auth = getAuth(app)
         this.db = db
-        console.log(this.auth)
     }
 
     async login(email:string,password:string){
-        console.log(this.auth,email,password)
         const userCredential = await signInWithEmailAndPassword(this.auth,email,password)
 
         return userCredential.user
@@ -26,9 +23,7 @@ export class FirebaseApiService implements FirebaseService {
     }
 
     async signup(email:string,password:string,name:string){
-        console.log('in signup')
         const userCredentials = await addDoc(collection(this.db,'users'),{name,email,password})
-        console.log('uc',userCredentials)
         return userCredentials
     }
 
@@ -37,7 +32,6 @@ export class FirebaseApiService implements FirebaseService {
         const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-            console.log(docSnap)
             return { id: docSnap.id, ...docSnap.data() };
           } else {
             console.error("User with provided credentials doesn't exist!");

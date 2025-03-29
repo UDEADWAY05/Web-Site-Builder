@@ -8,9 +8,7 @@ export const Profile = () => {
     useEffect(() => {
         async function load(){
             const data = await firebaseService.getUserProfile('HIYd9H5gqN9BLw2nT9rW')
-            
-            console.log('data',data)
-            
+
             return data
         }
         
