@@ -14,14 +14,12 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers(builder){
         builder.addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
-            console.log(action.payload)
             state.data = action.payload;
             state.isLoggedIn = true 
         }),
         builder.addCase(signout.fulfilled,(state) => {
             state.data = initialState.data
             state.isLoggedIn = false
-            console.log(state)
         })
     }
 });

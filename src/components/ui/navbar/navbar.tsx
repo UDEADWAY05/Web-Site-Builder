@@ -49,7 +49,6 @@ export function NavBar() {
   ]
 
   const isLoggedIn = useAppSelector(isUserLoggedIn)
-  console.log('isLoggedIn: ',isLoggedIn)
   const currentUser = useAppSelector(selectUserData)
 
   const dispatch = useAppDispatch()
@@ -58,7 +57,6 @@ export function NavBar() {
   //   img: '111',
   //   isLoggedin: true,
   // })
-  console.log(currentUser)
 
   return (
     <Disclosure as="nav" className="bg-gray-800">

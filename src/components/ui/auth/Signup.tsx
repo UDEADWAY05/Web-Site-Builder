@@ -6,7 +6,7 @@ import { Button } from "../button"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppDispatch } from "src/hooks/redux-hooks"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { z } from 'zod'
 
 export const SignUp = () => {
@@ -92,6 +92,7 @@ export const SignUp = () => {
             )}
         />
         <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
+        <Link to='/auth/login' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">Have an account? Login</Link>
         {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
     </Form>
