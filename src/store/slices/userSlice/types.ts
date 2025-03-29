@@ -1,4 +1,11 @@
 export type User = {
-    id:string | null,
-    email:string | null
+    id:string,
+    email:string,
+    name:string
+}
+
+export type UserState = {
+  data: User | null,
+  isLoggedIn: boolean,
+  error: string | null
 }

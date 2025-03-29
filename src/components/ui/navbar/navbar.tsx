@@ -10,7 +10,10 @@ import {
 } from '@headlessui/react'
 import { RoutePaths } from 'src/routes/paths'
 import { NavProfile } from './navProfile'
-import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
+import { isUserLoggedIn, selectUserData } from 'src/store/slices/userSlice/selectors'
+import { Button } from '../button'
+import { signout } from 'src/store/slices/userSlice/thunks'
 
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -45,17 +48,22 @@ export function NavBar() {
     },
   ]
 
-  const [currentUser] = useState<ICurrentUser | null>({
-    id: '1',
-    img: '111',
-    isLoggedin: true,
-  })
-  console.log(currentUser)
+  const isLoggedIn = useAppSelector(isUserLoggedIn)
+  const currentUser = useAppSelector(selectUserData)
+
+  const dispatch = useAppDispatch()
+  // const [currentUser] = useState<ICurrentUser | null>({
+  //   id: '1',
+  //   img: '111',
+  //   isLoggedin: true,
+  // })
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
+        {isLoggedIn && <Button onClick={() => {console.log('signout');dispatch(signout())}}>Logout</Button>}
+
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-500 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset">
@@ -134,7 +142,7 @@ export function NavBar() {
                 <MenuButton className="relative flex rounded-full bg-gray-500 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  {currentUser?.isLoggedin ? (
+                  {isLoggedIn ? (
                     <NavProfile />
                   ) : (
                     <Link to={RoutePaths.SIGNOUT}>
@@ -160,7 +168,7 @@ export function NavBar() {
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
-                {!currentUser ? (
+                {!isLoggedIn ? (
                   <MenuItem>
                     <NavProfile />
                   </MenuItem>
