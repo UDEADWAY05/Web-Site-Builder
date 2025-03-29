@@ -13,7 +13,6 @@ export const SignUp = () => {
     const authSchema = generateAuthSchema({ isRegister:true })
     
     const form = useForm<z.infer<typeof authSchema>>({
-    mode:'onBlur',
     defaultValues:{
         email:'',
         password:'',
@@ -22,7 +21,7 @@ export const SignUp = () => {
     resolver:zodResolver(authSchema)
     })
 
-    const { register,formState:{ errors,isDirty,isValid },setError} = form
+    const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -30,7 +29,6 @@ export const SignUp = () => {
     const serverError = errors.root?.message
     
     const onSubmit = async ({ email,password,name }:{email:string,password:string,name:string}) => {
-      console.log('data: ',email,password,name)    
       dispatch(signup({ email,password,name }))
 
       navigate('/sites/new')
@@ -91,7 +89,7 @@ export const SignUp = () => {
             </FormItem>
             )}
         />
-        <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
+        <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
         <Link to='/auth/login' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">Have an account? Login</Link>
         {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
