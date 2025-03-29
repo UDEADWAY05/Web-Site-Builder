@@ -20,7 +20,6 @@ export const login = createAsyncThunk(
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          console.log('un',userData.name)
             
           return {id:user.uid,email:user.email,name:userData.name}
         }
