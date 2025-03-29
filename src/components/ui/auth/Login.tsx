@@ -14,7 +14,6 @@ export const Login = () => {
     const authSchema = generateAuthSchema({ isRegister:false })
     
     const form = useForm<z.infer<typeof authSchema>>({
-      mode:'onBlur',
       defaultValues:{
         email:'',
         password:'',
@@ -22,7 +21,7 @@ export const Login = () => {
       resolver:zodResolver(authSchema)
     })
 
-    const { register,formState:{ errors,isDirty,isValid },setError} = form
+    const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -30,12 +29,10 @@ export const Login = () => {
     const serverError =	errors.root?.message
         
     const onSubmit = async ({ email,password }:{email:string,password:string}) => {  
-      console.log(email,password)  
       try {
-          const user = await dispatch(login({ email,password }))
-          console.log('u in final',user)
+        const user = await dispatch(login({ email,password }))
 
-          navigate('/sites/new')
+        navigate('/sites/new')  
       }
       catch (e) {
         if (e instanceof FirebaseError){
@@ -78,7 +75,7 @@ export const Login = () => {
             </FormItem>
         )}
       />
-      <Button type="submit" disabled={!isDirty || !isValid}>Submit</Button>
+      <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
       <Link to='/auth/signup' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">No account yet? Signup</Link>
       {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
