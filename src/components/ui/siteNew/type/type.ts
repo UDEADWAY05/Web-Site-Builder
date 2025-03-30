@@ -1,11 +1,10 @@
 export interface Blocks {
-  content: string | number | readonly string[] | undefined
+  content?: string | number | readonly string[]
   id: number
   type: string
-  title?: string
-  bgColor: string
-  width?: number
-  height?: string
+  layout: { title: string; bgColor: string }
+  width?: number | string
+  height?: number | string
   styles?: object
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   x: string | number | any

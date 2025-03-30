@@ -7,6 +7,8 @@ import quote from './quote.svg'
 import photo from './photo.svg'
 import title from './title.svg'
 import paragraf from './paragraf.svg'
+import cancel from './cancel.svg'
+import edit from './edit.svg'
 
 export {
   button,
@@ -18,4 +20,6 @@ export {
   quote,
   title,
   paragraf,
+  cancel,
+  edit,
 }
