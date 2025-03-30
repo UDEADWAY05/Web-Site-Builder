@@ -1,5 +1,4 @@
 import { useState } from 'react'
-
 import { BlockButtonProp, Blocks } from 'src/components/ui/siteNew/type/type'
 import {
   button,
@@ -72,15 +71,13 @@ export function SiteNew() {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     const blockType = e.dataTransfer?.getData('blockType')
-    console.log(blockType)
-
     const canvastRest = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - canvastRest.left
     const y = e.clientY - canvastRest.top
 
     const newBlock = {
       id: Date.now(),
-      bgColor,
+      layout: { title: projectName, bgColor },
       type: blockType,
       x,
       y,
@@ -108,12 +105,29 @@ export function SiteNew() {
   }
 
   // Обновление текста блока
-  const updateBlockContent = (id: number, newContent: string) => {
+  const updateBlockContent = (id: number, newContent: string | string[]) => {
+    console.log(id, newContent)
+
     setBlocks((prevBlocks) =>
-      prevBlocks.map((block) =>
-        block.id === id ? { ...block, content: newContent } : block
-      )
+      prevBlocks.map((block) => {
+        if (block.id === id) {
+          return { ...block, content: newContent }
+        }
+        // if (block.type === 'paragraph' || block.type === 'quote') {
+        //   return {
+        //     ...block.styles,
+        //     fontWeight: 'bold',
+        //     fontStyle: 'italic',
+        //   }
+
+        return block
+      })
     )
+  }
+
+  // удаление блока
+  const deleteBlock = (id: number) => {
+    setBlocks(blocks.filter((block) => block.id !== id))
   }
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -135,6 +149,7 @@ export function SiteNew() {
         onDragOver={handleDragOver}
         updateBlockPosition={updateBlockPosition}
         updateBlockContent={updateBlockContent}
+        deleteBlock={deleteBlock}
         bgColor={bgColor}
       />
     </div>

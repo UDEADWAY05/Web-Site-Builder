@@ -52,13 +52,15 @@ export function Canvas({
   bgColor,
   updateBlockPosition,
   updateBlockContent,
+  deleteBlock,
 }: {
   blocks: Blocks[]
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
   bgColor: string
   updateBlockPosition: (id: number, newX: number, newY: number) => void
-  updateBlockContent: (id: number, value: string) => void
+  updateBlockContent: (id: number, value: string | string[]) => void
+  deleteBlock: (id: number) => void
 }) {
 >>>>>>> 21b5003 (feat: переход на чистый DragDrog)
   return (
@@ -85,6 +87,7 @@ export function Canvas({
           block={block}
           updatePosition={updateBlockPosition}
           updateContent={updateBlockContent}
+          deleteBlock={deleteBlock}
         />
 >>>>>>> 21b5003 (feat: переход на чистый DragDrog)
       ))}
