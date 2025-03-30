@@ -2,18 +2,21 @@ import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
 import { Input } from "../input"
 import { Button } from "../button"
+import { useAuth } from "src/hooks/useAuth"
+import { setUser } from "src/store/slices/userSlice"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppDispatch } from "src/hooks/redux-hooks"
 import { Link,useNavigate } from "react-router-dom"
-import { FirebaseError } from "firebase/app"
-import { login } from "src/store/slices/userSlice/thunks"
 import { z } from 'zod'
+
+
 
 export const Login = () => {
     const authSchema = generateAuthSchema({ isRegister:false })
     
     const form = useForm<z.infer<typeof authSchema>>({
+      mode:'onChange',
       defaultValues:{
         email:'',
         password:'',
@@ -22,26 +25,24 @@ export const Login = () => {
     })
 
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
-
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     
-    const serverError =	errors.root?.message
+    const { signIn } = useAuth()
         
     const onSubmit = async ({ email,password }:{email:string,password:string}) => {  
       try {
-        const user = await dispatch(login({ email,password }))
+        const userDoc = await signIn(email,password)
 
-        navigate('/sites/new')  
+        if (userDoc){
+          dispatch(setUser({ email:userDoc.email,id:userDoc.id,name:userDoc.name }))
+          navigate('/site/new')
+        }
       }
       catch (e) {
-        if (e instanceof FirebaseError){
-          setError('root', { type:'firebase_error',message:e.message })
-        }
-        else if (e instanceof Error){
-            console.error(e)
-            setError('root', { type:'root_error',message:e.message })
-          }
+        if (e instanceof Error){
+          setError('root',{type:'root',message:e.message})  
+        }  
       }}    
     
     return (
@@ -77,7 +78,7 @@ export const Login = () => {
       />
       <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
       <Link to='/auth/signup' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">No account yet? Signup</Link>
-      {serverError && <span className="text-red-500">{ serverError }</span>}
+      {errors.root && <p className="text-red-500">{errors.root.message}</p>}
     </form>
   </Form>
 )

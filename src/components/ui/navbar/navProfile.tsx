@@ -1,17 +1,13 @@
 import { Link } from 'react-router-dom'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
-import { signout } from 'src/store/slices/userSlice/thunks'
 import { RoutePaths } from 'src/routes/paths'
 import { isUserLoggedIn, selectUserData } from 'src/store/slices/userSlice/selectors'
-import { Button } from '../button'
 
 export function NavProfile() {
   const isLoggedIn = useAppSelector(isUserLoggedIn)
   const user = useAppSelector(selectUserData)
   
-  const dispatch = useAppDispatch()
-
   if (!isLoggedIn) return <p>Loading currentUser...</p>
   
   return (
@@ -52,14 +48,12 @@ export function NavProfile() {
         </MenuItem>
         <MenuItem>
           <Link
-            onClick={() => dispatch(signout())}
             to={RoutePaths.AUTH}
             data-testid={`${RoutePaths.SIGNOUT}-link`}
             className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
           >
             Выход
           </Link>
-          <Button onClick={() => dispatch(signout())}>Выйти</Button>
         </MenuItem>
       </MenuItems>
     </Menu>

@@ -1,11 +1,10 @@
 import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
-import { signup } from "src/store/slices/userSlice/thunks"
+import { useAuth } from "src/hooks/useAuth"
 import { Input } from "../input"
 import { Button } from "../button"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAppDispatch } from "src/hooks/redux-hooks"
 import { Link, useNavigate } from "react-router-dom"
 import { z } from 'zod'
 
@@ -13,25 +12,32 @@ export const SignUp = () => {
     const authSchema = generateAuthSchema({ isRegister:true })
     
     const form = useForm<z.infer<typeof authSchema>>({
-    defaultValues:{
-        email:'',
-        password:'',
-        name:''
-    },
-    resolver:zodResolver(authSchema)
+        mode:'onChange',
+        defaultValues:{
+            email:'',
+            password:'',
+            name:''
+        },
+        resolver:zodResolver(authSchema)
     })
 
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
-
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     
-    const serverError = errors.root?.message
-    
-    const onSubmit = async ({ email,password,name }:{email:string,password:string,name:string}) => {
-      dispatch(signup({ email,password,name }))
+    const { signUp } = useAuth()    
 
-      navigate('/sites/new')
+    const onSubmit = async ({ email,password,name }:{email:string,password:string,name:string}) => {
+      try {
+        const userCredential = await signUp(email,password,name)
+
+        if (userCredential){
+          navigate('/sites/new')
+        }
+      } catch (e) {
+        if (e instanceof Error){
+          setError('root',{type:'root',message:e.message})  
+        }  
+      }
     }
 
     return (
@@ -91,7 +97,7 @@ export const SignUp = () => {
         />
         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
         <Link to='/auth/login' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">Have an account? Login</Link>
-        {serverError && <span className="text-red-500">{ serverError }</span>}
+        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
     </form>
     </Form>
 )

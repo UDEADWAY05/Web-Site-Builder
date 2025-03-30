@@ -13,7 +13,8 @@ import { NavProfile } from './navProfile'
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
 import { isUserLoggedIn, selectUserData } from 'src/store/slices/userSlice/selectors'
 import { Button } from '../button'
-import { signout } from 'src/store/slices/userSlice/thunks'
+// import { signout } from 'src/store/slices/userSlice/thunks'
+import { useAuth } from 'src/hooks/useAuth'
 
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -58,11 +59,13 @@ export function NavBar() {
   //   isLoggedin: true,
   // })
 
+  const {signOutUser} = useAuth()
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
-        {isLoggedIn && <Button onClick={() => {console.log('signout');dispatch(signout())}}>Logout</Button>}
+        {isLoggedIn && <Button onClick={() => {console.log('signout');dispatch(signOutUser)}}>Logout</Button>}
 
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}

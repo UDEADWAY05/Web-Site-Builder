@@ -10,7 +10,7 @@ export const ProtectedRoute = ({ auth = false }: IProtectedRoutesProps) => {
     const authenticated = useAppSelector(isUserLoggedIn);
 
     return (
-        authenticated === auth ? <Outlet /> : <Navigate to={auth ? '/auth/login' : '/me'} />
+        authenticated === auth ? <Outlet /> : <Navigate to={auth ? '/auth/login' : '/'} />
     );
     
 }
