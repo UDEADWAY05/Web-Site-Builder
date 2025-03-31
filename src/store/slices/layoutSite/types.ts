@@ -1,4 +1,4 @@
-export interface Blocks {
+export interface Block {
   content?: string | number | readonly string[]
   id: number
   type: string
@@ -17,4 +17,8 @@ export interface BlockButtonProp {
   label: string
   defaultContent: string | string[]
   img: string
+}
+export interface LayoutSiteState {
+  data: Block[] | null
+  error: null
 }

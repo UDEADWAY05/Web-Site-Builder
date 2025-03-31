@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BlockButtonProp, Blocks } from 'src/components/ui/siteNew/type/type'
+import { BlockButtonProp, Block } from 'src/store/slices/layoutSite/types'
 import {
   button,
   horozontal,
@@ -16,7 +16,7 @@ import { Canvas } from 'src/components/ui/siteNew/canvas'
 export function SiteNew() {
   const [projectName, setProjectName] = useState('My Project')
   const [bgColor, setBgColor] = useState('#5C90FF')
-  const [blocks, setBlocks] = useState<Blocks[]>([])
+  const [blocks, setBlocks] = useState<Block[]>([])
   console.log(blocks)
   const widthScreen = 800 // максимальная ширина рабочей области
   const heigthScreen = 600 // максимальная высота рабочей области

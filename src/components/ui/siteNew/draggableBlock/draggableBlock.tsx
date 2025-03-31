@@ -1,4 +1,4 @@
-import type { Blocks } from '../type/type'
+import type { Block } from '../../../../store/slices/layoutSite/types'
 import { useState } from 'react'
 import { cancel, edit } from '../../../../assets'
 
@@ -13,7 +13,7 @@ export function DraggableBlock({
   updateContent,
   deleteBlock,
 }: {
-  block: Blocks
+  block: Block
   updatePosition: (id: number, newX: number, newY: number) => void
   updateContent: (id: number, value: string | string[]) => void
   deleteBlock: (id: number) => void
@@ -48,7 +48,7 @@ export function DraggableBlock({
     setIsEditing(false)
   }
   // Подтверждение ввода текста
-  const startEditing = (item: Blocks) => {
+  const startEditing = (item: Block) => {
     if (!item) return <p>SomeThing Wrong</p>
     console.log('начало редактирования', item)
     return (
@@ -103,7 +103,7 @@ export function DraggableBlock({
   }
 
   // блок - редактирование блока
-  const controls = (item: Blocks) => {
+  const controls = (item: Block) => {
     return (
       <div
         className="flex justy justify-between content-center absolute"

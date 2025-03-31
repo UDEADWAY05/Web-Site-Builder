@@ -43,7 +43,7 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
 
 =======
 import { DraggableBlock } from './draggableBlock/draggableBlock'
-import { Blocks } from './type/type'
+import { Block } from '../../../store/slices/layoutSite/types'
 
 export function Canvas({
   blocks,
@@ -54,7 +54,7 @@ export function Canvas({
   updateBlockContent,
   deleteBlock,
 }: {
-  blocks: Blocks[]
+  blocks: Block[]
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void
   onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
   bgColor: string

@@ -3,9 +3,11 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE } fro
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import userReducer from './slices/userSlice/userSlice'
+import layoutSiteReducer from './slices/layoutSite/layoutSiteSlice'
 
 const rootReducer = combineReducers({
-    user:userReducer
+  user: userReducer,
+  layoutSite: layoutSiteReducer,
 })
 
 const persistedReducer = persistReducer(
@@ -14,6 +16,7 @@ const persistedReducer = persistReducer(
 )
 
 export const store = configureStore({
+<<<<<<< HEAD
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
@@ -22,6 +25,13 @@ export const store = configureStore({
             }
         }).concat([])
     }
+=======
+  reducer: rootReducer,
+  devTools: true,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat([])
+  },
+>>>>>>> 5e593ca (feat: базовая настройка redux)
 })
 
 export const persistor = persistStore(store)
