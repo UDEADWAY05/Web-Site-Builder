@@ -1,6 +1,5 @@
 import { createSlice,PayloadAction } from '@reduxjs/toolkit';
 import { User, UserState } from './types'
-import { login,signout } from './thunks';
 
 const initialState:UserState = {
     error:null,
@@ -12,13 +11,18 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+<<<<<<< HEAD
         setUser:(state,action:PayloadAction<User>) => {
+=======
+        setUser:(state,action:PayloadAction<User>)=> {
+>>>>>>> e2d4ac2 (fix:обновлен_стор_для_страницы_профиля.Верстка)
             state.data = action.payload
             state.isLoggedIn = true
         },
         removeUser:(state) => {
             state.data = null
             state.isLoggedIn = false
+<<<<<<< HEAD
         } 
     },
     // extraReducers(builder){
@@ -38,7 +42,12 @@ const userSlice = createSlice({
     //         state.isLoggedIn = false
     //     })
     // }
+=======
+        }
+    },
+>>>>>>> e2d4ac2 (fix:обновлен_стор_для_страницы_профиля.Верстка)
 });
 export const { setUser,removeUser } = userSlice.actions
 
+export const { setUser,removeUser } = userSlice.actions
 export default userSlice.reducer;

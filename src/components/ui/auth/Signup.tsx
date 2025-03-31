@@ -1,6 +1,8 @@
 import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
 import { useAuth } from "src/hooks/useAuth"
+import { useDispatch } from "react-redux"
+import { setUser } from "src/store/slices/userSlice"
 import { Input } from "../input"
 import { Button } from "../button"
 import { useForm } from 'react-hook-form'
@@ -12,27 +14,31 @@ export const SignUp = () => {
     const authSchema = generateAuthSchema({ isRegister:true })
     
     const form = useForm<z.infer<typeof authSchema>>({
-        mode:'onChange',
+        mode:'onTouched',
         defaultValues:{
             email:'',
             password:'',
-            name:''
+            name:'',
+            surname:''
         },
         resolver:zodResolver(authSchema)
     })
 
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     
     const { signUp } = useAuth()    
 
-    const onSubmit = async ({ email,password,name }:{email:string,password:string,name:string}) => {
+    const onSubmit = async ({ email,password,name,surname }:{email:string,password:string,name:string,surname:string}) => {
       try {
-        const userCredential = await signUp(email,password,name)
-
-        if (userCredential){
-          navigate('/sites/new')
-        }
+        const userCredential = await signUp(email,password,name,surname)
+        const user = userCredential?.user
+       
+        if (user){
+          dispatch(setUser({ id:user.uid,email,name,surname }))
+          navigate('/site/new')
+        }  
       } catch (e) {
         if (e instanceof Error){
           setError('root',{type:'root',message:e.message})  
@@ -71,6 +77,19 @@ export const SignUp = () => {
         />
         <FormField
         control={form.control}
+        name="surname"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel htmlFor="surname">Surname</FormLabel>
+            <FormControl>
+                <Input {...register('surname')} id={'surname'} type='text' placeholder="surname" {...field}/>
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+        <FormField
+        control={form.control}
         name="password"
         render={({ field }) => (
             <FormItem>
@@ -97,7 +116,6 @@ export const SignUp = () => {
         />
         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
         <Link to='/auth/login' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">Have an account? Login</Link>
-        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
     </form>
     </Form>
 )

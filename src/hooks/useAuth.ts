@@ -1,5 +1,4 @@
 import { useAppDispatch } from './redux-hooks';
-import { setUser } from 'src/store/slices/userSlice';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth,db } from 'src/firebase';
 import { doc, setDoc,getDoc } from 'firebase/firestore';
@@ -8,18 +7,17 @@ import { removeUser } from 'src/store/slices/userSlice/userSlice';
 export const useAuth = () => {
   const dispatch = useAppDispatch();
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, name: string,surname:string) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       if (user) {
+        console.log(user)
         await setDoc(doc(db, 'users', user.uid), {
           name,
           email,
+          surname
         });
-
-        //sign in automatically if user is created successfully
-        dispatch(setUser({ email,id:user.uid,name }))
 
         return await signInWithEmailAndPassword(auth, email, password);
   }}
@@ -27,15 +25,21 @@ export const useAuth = () => {
   const signIn = async (email: string, password: string) => {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       
-      if (user){
-        const userDoc = await getDoc(doc(db,'users',user.uid))
+      console.log(user.uid)
 
-        if (userDoc.exists()){
-          const userData = userDoc.data()
-          
-          return userData
-        }
+      if (!user){
+        throw new Error('Не удалось авторизоваться')
       }
+      
+      const userDoc = await getDoc(doc(db,'users',user.uid))
+
+      if (userDoc.exists()){
+        
+        const userData = userDoc.data()
+        console.log(userData)
+        // dispatch(setUser({id:user.uid,email:userData.email,name:userData.name}))
+        return {userId:user.uid,email:userData.email,name:userData.name,surname:userData.surname}
+      }      
   };
 
   const signOutUser = async () => {
@@ -47,5 +51,13 @@ export const useAuth = () => {
     }
   };
 
-  return { signUp, signIn, signOutUser };
+  const getUserById = async (id:string) => {
+    const userDoc = await getDoc(doc(db,'users',id))
+
+    const user = userDoc.data()
+    console.log(user)
+    return user
+  }
+
+  return { signUp, signIn, signOutUser,getUserById };
 };

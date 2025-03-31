@@ -8,7 +8,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppDispatch } from "src/hooks/redux-hooks"
 import { Link,useNavigate } from "react-router-dom"
+import { FirebaseError } from "firebase/app"
 import { z } from 'zod'
+
 
 
 
@@ -16,7 +18,7 @@ export const Login = () => {
     const authSchema = generateAuthSchema({ isRegister:false })
     
     const form = useForm<z.infer<typeof authSchema>>({
-      mode:'onChange',
+      mode:'onTouched',
       defaultValues:{
         email:'',
         password:'',
@@ -32,11 +34,12 @@ export const Login = () => {
         
     const onSubmit = async ({ email,password }:{email:string,password:string}) => {  
       try {
-        const userDoc = await signIn(email,password)
+        const user = await signIn(email,password)
+        console.log(user)
 
-        if (userDoc){
-          dispatch(setUser({ email:userDoc.email,id:userDoc.id,name:userDoc.name }))
-          navigate('/site/new')
+        if (user){
+          dispatch(setUser({ email:user.email,id:user.userId,name:user.name,surname:user.surname }))
+          navigate('/sites/new')
         }
       }
       catch (e) {
@@ -82,4 +85,4 @@ export const Login = () => {
     </form>
   </Form>
 )
-    }
+}

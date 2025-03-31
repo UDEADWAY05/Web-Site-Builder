@@ -1,4 +1,3 @@
-// import { initializeApp } from 'firebase/app';
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -14,4 +13,8 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
+<<<<<<< HEAD
 export const db = getFirestore(app)
+=======
+export const db = getFirestore()
+>>>>>>> e2d4ac2 (fix:обновлен_стор_для_страницы_профиля.Верстка)
