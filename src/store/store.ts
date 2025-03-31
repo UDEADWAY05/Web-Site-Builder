@@ -1,16 +1,18 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice/userSlice'
+import layoutSiteReducer from './slices/layoutSite/layoutSiteSlice'
 
 const rootReducer = combineReducers({
-    user:userReducer
+  user: userReducer,
+  layoutSite: layoutSiteReducer,
 })
 
 export const store = configureStore({
-    reducer: rootReducer,
-    devTools: true,
-    middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware().concat([])
-    }
+  reducer: rootReducer,
+  devTools: true,
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware().concat([])
+  },
 })
 
 export type AppDispatch = typeof store.dispatch

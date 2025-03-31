@@ -1,4 +1,4 @@
-import { BlockButtonProp } from '../type/type'
+import { BlockButtonProp } from '../../../../store/slices/layoutSite/types'
 
 // interface SideBarProp {
 //   projectName: string
