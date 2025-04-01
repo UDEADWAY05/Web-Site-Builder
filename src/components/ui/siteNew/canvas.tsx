@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import { useDispatch } from 'react-redux'
 import { DraggableBlock } from './draggableBlock/draggableBlock'
-import { useAppSelector } from '../'
+import { useAppSelector } from '../../../store/store'
 import {
   selectorLayoutSiteBgColor,
   selectorLayoutSiteData,
@@ -41,28 +40,6 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
     e.preventDefault()
   }
 
-=======
-import { DraggableBlock } from './draggableBlock/draggableBlock'
-import { Block } from '../../../store/slices/layoutSite/types'
-
-export function Canvas({
-  blocks,
-  onDrop,
-  onDragOver,
-  bgColor,
-  updateBlockPosition,
-  updateBlockContent,
-  deleteBlock,
-}: {
-  blocks: Block[]
-  onDrop: (e: React.DragEvent<HTMLDivElement>) => void
-  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
-  bgColor: string
-  updateBlockPosition: (id: number, newX: number, newY: number) => void
-  updateBlockContent: (id: number, value: string | string[]) => void
-  deleteBlock: (id: number) => void
-}) {
->>>>>>> 21b5003 (feat: переход на чистый DragDrog)
   return (
     <div
       style={{
@@ -71,25 +48,11 @@ export function Canvas({
         backgroundColor: bgColor,
         overflow: 'hidden',
       }}
-<<<<<<< HEAD
       onDrop={(e) => handleDrop(e)}
       onDragOver={(e) => handleDragOver(e)}
     >
       {blocks.map((block) => (
         <DraggableBlock key={block.id} {...block} />
-=======
-      onDrop={onDrop}
-      onDragOver={onDragOver}
-    >
-      {blocks.map((block) => (
-        <DraggableBlock
-          key={block.id}
-          block={block}
-          updatePosition={updateBlockPosition}
-          updateContent={updateBlockContent}
-          deleteBlock={deleteBlock}
-        />
->>>>>>> 21b5003 (feat: переход на чистый DragDrog)
       ))}
     </div>
   )

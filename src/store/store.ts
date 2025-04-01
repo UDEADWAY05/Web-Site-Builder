@@ -4,6 +4,7 @@ import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import userReducer from './slices/userSlice/userSlice'
 import layoutSiteReducer from './slices/layoutSite/layoutSiteSlice'
+import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -16,7 +17,6 @@ const persistedReducer = persistReducer(
 )
 
 export const store = configureStore({
-<<<<<<< HEAD
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
@@ -25,13 +25,6 @@ export const store = configureStore({
             }
         }).concat([])
     }
-=======
-  reducer: rootReducer,
-  devTools: true,
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat([])
-  },
->>>>>>> 5e593ca (feat: базовая настройка redux)
 })
 
 export const persistor = persistStore(store)
@@ -41,3 +34,4 @@ window.persistor = persistor
 
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
