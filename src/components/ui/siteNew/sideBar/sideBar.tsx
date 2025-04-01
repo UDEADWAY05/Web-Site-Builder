@@ -14,22 +14,6 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   const bgColor = useAppSelector(selectorLayoutSiteBgColor)
   const dispatch = useAppDispatch()
 
-<<<<<<< HEAD
-export function SideBar({
-  projectName,
-  setProjectName,
-  bgColor,
-  setBgColor,
-  blockTypes,
-}: {
-  projectName: string
-  setProjectName: (str: string) => void
-  bgColor: string
-  setBgColor: (str: string) => void
-  blockTypes: BlockButtonProp[]
-}) {
-=======
->>>>>>> 7a170b7 (feat: переход на Redux)
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     blockType: string
