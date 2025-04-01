@@ -1,6 +1,6 @@
 import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
-import { useAuth } from "src/hooks/useAuth"
+import { useFirebase } from "src/hooks/useFirebase"
 import { useDispatch } from "react-redux"
 import { setUser } from "src/store/slices/userSlice"
 import { Input } from "../input"
@@ -27,17 +27,18 @@ export const SignUp = () => {
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    
-    const { signUp } = useAuth()    
+    const serverError =	errors.root?.message
+    console.log(errors)
+    const { signUp } = useFirebase()    
 
     const onSubmit = async ({ email,password,name,surname }:{email:string,password:string,name:string,surname:string}) => {
       try {
         const userCredential = await signUp(email,password,name,surname)
-        const user = userCredential?.user
+        const user = userCredential.user
        
         if (user){
-          dispatch(setUser({ id:user.uid,email,name,surname }))
-          navigate('/site/new')
+          dispatch(setUser({ id:user.uid, email, name, surname }))
+          navigate('/sites/new')
         }  
       } catch (e) {
         if (e instanceof Error){
@@ -116,6 +117,7 @@ export const SignUp = () => {
         />
         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit'}</Button>
         <Link to='/auth/login' className="text-sm text-blue-500 hover:text-blue-800 justify-self-center">Have an account? Login</Link>
+        {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>
     </Form>
 )

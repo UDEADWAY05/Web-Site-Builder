@@ -3,17 +3,16 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
 } from '@headlessui/react'
 import { RoutePaths } from 'src/routes/paths'
-import { NavProfile } from './navProfile'
-import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
-import { isUserLoggedIn, selectUserData } from 'src/store/slices/userSlice/selectors'
+import { useFirebase } from 'src/hooks/useFirebase'
+import { useAppDispatch } from 'src/hooks/redux-hooks'
+import { useAppSelector } from 'src/hooks/redux-hooks'
+import { isUserLoggedIn } from 'src/store/slices/userSlice/selectors'
+import { removeUser } from 'src/store/slices/userSlice/userSlice'
 import { Button } from '../button'
-import { useAuth } from 'src/hooks/useAuth'
+// import { useAuth } from 'src/hooks/useAuth'
+// import { removeUser } from 'src/store/slices/userSlice'
 
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -45,7 +44,14 @@ export function NavBar() {
   const isLoggedIn = useAppSelector(isUserLoggedIn)
   
   const dispatch = useAppDispatch()
-  const { signOutUser } = useAuth()
+  const { signOutUser } = useFirebase()
+  
+  const handleSignOut = async () => {
+    await signOutUser()
+    dispatch(removeUser())
+  }
+  // const { signOutUser } = useAuth()
+  // const { signOutUser } = useFirebase()
   
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -122,29 +128,12 @@ export function NavBar() {
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
             </button>
-
-            {/* Profile dropdown */}
-            {/* <Menu as="div" className="relative ml-3"> */}
-                {/* <MenuButton className="relative flex rounded-full bg-gray-500 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  {isLoggedIn && (
-                    <NavProfile />)}
-                </MenuButton> */}
-            
-              {/* <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-              > */}
-                {isLoggedIn && (
-                  <>
-                    <Link to='/user'><Button className='hover:bg-gray-700'>Профиль</Button></Link>
-                    <Button onClick={() => dispatch(signOutUser)}>Выйти</Button>
-                  </>
-                  
-
-                      
-                )}
+              {isLoggedIn && (
+                <>
+                  <Link to='/user'><Button className='hover:bg-gray-700'>Профиль</Button></Link>
+                  <Button variant='default' className='hover:bg-gray-700' onClick={handleSignOut}>Выйти</Button>
+                </>                   
+              )}
           </div>
         </div>
       </div>

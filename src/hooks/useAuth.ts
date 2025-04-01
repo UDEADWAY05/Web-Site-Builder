@@ -24,8 +24,8 @@ export const useAuth = () => {
 
   const signIn = async (email: string, password: string) => {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+      console.log('user in sign in',user)
       
-      console.log(user.uid)
 
       if (!user){
         throw new Error('Не удалось авторизоваться')
