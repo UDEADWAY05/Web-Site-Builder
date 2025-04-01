@@ -1,26 +1,19 @@
+import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
 import { BlockButtonProp } from '../../../../store/slices/layoutSite/types'
+import {
+  selectorLayoutSiteBgColor,
+  selectorLayoutSiteTitle,
+} from 'src/store/slices/layoutSite/selectors'
+import {
+  blockBgColorUpdate,
+  blockTitleUpdate,
+} from 'src/store/slices/layoutSite'
 
-// interface SideBarProp {
-//   projectName: string
-//   setProjectName: string
-//   bgColor: string
-//   setBgColor: (str:string) => void
-//   addBlock: (str: string) => void
-// blockTypes: BlockButtonProp[]
-// }
-export function SideBar({
-  projectName,
-  setProjectName,
-  bgColor,
-  setBgColor,
-  blockTypes,
-}: {
-  projectName: string
-  setProjectName: (str: string) => void
-  bgColor: string
-  setBgColor: (str: string) => void
-  blockTypes: BlockButtonProp[]
-}) {
+export function SideBar({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
+  const projectName = useAppSelector(selectorLayoutSiteTitle)
+  const bgColor = useAppSelector(selectorLayoutSiteBgColor)
+  const dispatch = useAppDispatch()
+
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     blockType: string
@@ -34,14 +27,14 @@ export function SideBar({
       <input
         type="text"
         value={projectName}
-        onChange={(e) => setProjectName(e.target.value)}
+        onChange={(e) => dispatch(blockTitleUpdate(e.target.value))}
       />
       <hr />
       <p className="p-2 text-xs opacity-25">Цвет фона страницы</p>
       <input
         type="color"
         value={bgColor}
-        onChange={(e) => setBgColor(e.target.value)}
+        onChange={(e) => dispatch(blockBgColorUpdate(e.target.value))}
       />
       <hr />
       <p className="p-2 text-xs opacity-25">Базовый</p>

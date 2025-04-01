@@ -1,37 +1,59 @@
 import type { Block } from '../../../../store/slices/layoutSite/types'
 import { useState } from 'react'
 import { cancel, edit } from '../../../../assets'
+import { useAppDispatch } from 'src/hooks/redux-hooks'
+import {
+  blockContentUpdate,
+  blockDelete,
+  blockPositionUpdate,
+} from 'src/store/slices/layoutSite'
 
 interface OffsetProp {
   x: number
   y: number
 }
 
-export function DraggableBlock({
-  block,
-  updatePosition,
-  updateContent,
-  deleteBlock,
-}: {
-  block: Block
-  updatePosition: (id: number, newX: number, newY: number) => void
-  updateContent: (id: number, value: string | string[]) => void
-  deleteBlock: (id: number) => void
-}) {
+export function DraggableBlock(block: Block) {
   const [isEditing, setIsEditing] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [offset, setOffset] = useState<OffsetProp>({ x: 0, y: 0 })
 
+  const style = {
+    left: `${block.styles?.left}px`,
+    top: `${block.styles?.top}px`,
+    width: `${block.styles?.width}px`,
+    heigth: `${block.styles?.height}px`,
+    position: 'absolute',
+    minHeight: '30px',
+    backgroundColor: '#fff',
+    border: '1px solid #ddd',
+    padding: '10px',
+    cursor: 'move',
+    zIndex: 100,
+    ...block.styles,
+  }
+
+  const dispatch = useAppDispatch()
+
   // Начало перетаскивания
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true)
-    setOffset({ x: e.clientX - block.x, y: e.clientY - block.y })
+    setOffset({
+      x: e.clientX - block.styles?.left,
+      y: e.clientY - block.styles?.top,
+    })
   }
 
   // Перемещение блока
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!dragging) return
-    updatePosition(block.id, e.clientX - offset.x, e.clientY - offset.y)
+    dispatch(
+      blockPositionUpdate({
+        id: block.id,
+        newX: e.clientX - offset.x,
+        newY: e.clientY - offset.y,
+      })
+    )
   }
 
   // Окончание перетаскивания
@@ -47,18 +69,39 @@ export function DraggableBlock({
   const handleMouseOut = () => {
     setIsEditing(false)
   }
-  // Подтверждение ввода текста
+
+  // Обновление текста блока
+  const updateBlockContent = (id: number, newContent: string | string[]) => {
+    console.log('update', id, newContent)
+    dispatch(blockContentUpdate({ id, newContent }))
+  }
+
+  // начало редактирования текста
   const startEditing = (item: Block) => {
     if (!item) return <p>SomeThing Wrong</p>
     console.log('начало редактирования', item)
+
     return (
-      <>
-        {item.content === 'paragraph' ||
-          (item.content === 'header' && (
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: '#fff',
+          padding: '20px',
+          border: '1px solid #000',
+          zIndex: 1000,
+        }}
+      >
+        <h3>Редактирование</h3>
+
+        {item.type === 'paragraph' ||
+          (item.type === 'header' && (
             <input
               type="text"
-              value={item.content}
-              onChange={(e) => updateContent(block.id, e.target.value)}
+              value={item.type}
+              onChange={(e) => updateBlockContent(block.id, e.target.value)}
               style={{ width: '100%' }}
             />
           ))}
@@ -71,7 +114,7 @@ export function DraggableBlock({
                 : item.content
             }
             onChange={(e) =>
-              updateContent(block.id, e.target.value.split('\n'))
+              updateBlockContent(block.id, e.target.value.split('\n'))
             }
             style={{ width: '100%', minHeight: '100px' }}
           />
@@ -80,26 +123,15 @@ export function DraggableBlock({
             <input
               type="text"
               value={item.content}
-              onChange={(e) => updateContent(block.id, e.target.value)}
+              onChange={(e) => updateBlockContent(block.id, e.target.value)}
               placeholder="Введите URL изображения"
               style={{ width: '100%' }}
             />
           )
         )}
         {setIsEditing(false)}
-      </>
+      </div>
     )
-  }
-
-  //удаление блока
-
-  const handleDeletedBlok = (id: number) => {
-    deleteBlock(id)
-  }
-
-  const style = {
-    left: block.x,
-    top: block.y,
   }
 
   // блок - редактирование блока
@@ -111,7 +143,8 @@ export function DraggableBlock({
       >
         <button
           className="cursor-no-drop"
-          onClick={() => handleDeletedBlok(block.id)}
+          onClick={() => dispatch(blockDelete(block.id))}
+          style={{ marginRight: '5px' }}
         >
           <img src={cancel} alt="cancel" />
         </button>
@@ -137,7 +170,6 @@ export function DraggableBlock({
   return (
     <div
       style={style}
-      className="p-2 m-2 bg-white  absolute "
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
     >

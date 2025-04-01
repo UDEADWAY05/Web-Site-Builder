@@ -1,15 +1,15 @@
 export interface Block {
-  content?: string | number | readonly string[]
+  content: string | number
   id: number
   type: string
-  layout: { title: string; bgColor: string }
-  width?: number | string
-  height?: number | string
-  styles?: object
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  x: string | number | any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  y: string | number | any
+  title: string
+  bgColor: string
+  styles?: {
+    width?: number | string
+    height?: number | string
+    left: string | number
+    top: string | number
+  }
 }
 
 export interface BlockButtonProp {
@@ -19,6 +19,11 @@ export interface BlockButtonProp {
   img: string
 }
 export interface LayoutSiteState {
-  data: Block[] | null
+  entities: {
+    id: number
+    title: string
+    bgColor: string
+    data: Block[] | []
+  }
   error: null
 }

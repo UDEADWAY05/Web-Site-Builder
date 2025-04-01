@@ -1,6 +1,23 @@
 import { Block } from './types'
-import { layoutSiteCreate, layoutSiteDelete } from './layoutSiteSlice'
+import {
+  blockTitleUpdate,
+  blockBgColorUpdate,
+  blockCreate,
+  blockDelete,
+  blockPositionUpdate,
+  blockSizeUpdate,
+  blockContentUpdate,
+} from './layoutSiteSlice'
 import reducer from './layoutSiteSlice'
 
 export type { Block }
-export { layoutSiteCreate, layoutSiteDelete, reducer }
+export {
+  reducer,
+  blockTitleUpdate,
+  blockBgColorUpdate,
+  blockCreate,
+  blockDelete,
+  blockPositionUpdate,
+  blockSizeUpdate,
+  blockContentUpdate,
+}

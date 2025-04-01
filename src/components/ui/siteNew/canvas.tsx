@@ -1,23 +1,45 @@
+import { useDispatch } from 'react-redux'
 import { DraggableBlock } from './draggableBlock/draggableBlock'
-import { Block } from '../../../store/slices/layoutSite/types'
+import { useAppSelector } from 'src/hooks/redux-hooks'
+import {
+  selectorLayoutSiteBgColor,
+  selectorLayoutSiteData,
+} from 'src/store/slices/layoutSite/selectors'
+import { blockCreate } from 'src/store/slices/layoutSite'
+import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
 
-export function Canvas({
-  blocks,
-  onDrop,
-  onDragOver,
-  bgColor,
-  updateBlockPosition,
-  updateBlockContent,
-  deleteBlock,
-}: {
-  blocks: Block[]
-  onDrop: (e: React.DragEvent<HTMLDivElement>) => void
-  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
-  bgColor: string
-  updateBlockPosition: (id: number, newX: number, newY: number) => void
-  updateBlockContent: (id: number, value: string | string[]) => void
-  deleteBlock: (id: number) => void
-}) {
+export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
+  const blocks = useAppSelector(selectorLayoutSiteData)
+  const bgColor = useAppSelector(selectorLayoutSiteBgColor)
+  const dispatch = useDispatch()
+  console.log(blocks)
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const blockType = e.dataTransfer?.getData('blockType')
+    const canvastRest = e.currentTarget.getBoundingClientRect()
+    const left = e.clientX - canvastRest.left
+    const top = e.clientY - canvastRest.top
+
+    const newBlock = {
+      id: Date.now(),
+      type: blockType,
+      styles: {
+        left,
+        top,
+        width: 'auto',
+        height: 'auto',
+      },
+      content: blockTypes.find((item) => item.type === blockType)
+        ?.defaultContent,
+    }
+    dispatch(blockCreate(newBlock))
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
   return (
     <div
       style={{
@@ -26,17 +48,11 @@ export function Canvas({
         backgroundColor: bgColor,
         overflow: 'hidden',
       }}
-      onDrop={onDrop}
-      onDragOver={onDragOver}
+      onDrop={(e) => handleDrop(e)}
+      onDragOver={(e) => handleDragOver(e)}
     >
       {blocks.map((block) => (
-        <DraggableBlock
-          key={block.id}
-          block={block}
-          updatePosition={updateBlockPosition}
-          updateContent={updateBlockContent}
-          deleteBlock={deleteBlock}
-        />
+        <DraggableBlock key={block.id} {...block} />
       ))}
     </div>
   )
