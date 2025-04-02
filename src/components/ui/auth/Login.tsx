@@ -2,21 +2,20 @@ import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
 import { Input } from "../input"
 import { Button } from "../button"
-import { useAuth } from "src/hooks/useAuth"
-import { setUser } from "src/store/slices/userSlice"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppDispatch } from "src/hooks/redux-hooks"
 import { Link,useNavigate } from "react-router-dom"
+import { FirebaseError } from "firebase/app"
+import { useFirebase } from "src/hooks/useFirebase"
+import { setUser } from "src/store/slices/userSlice"
 import { z } from 'zod'
-
-
 
 export const Login = () => {
     const authSchema = generateAuthSchema({ isRegister:false })
     
     const form = useForm<z.infer<typeof authSchema>>({
-      mode:'onChange',
+      mode:'onTouched',
       defaultValues:{
         email:'',
         password:'',
@@ -26,24 +25,30 @@ export const Login = () => {
 
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
-    
-    const { signIn } = useAuth()
+    const navigate = useNavigate()    
+    const serverError =	errors.root?.message
         
+    const { signIn,getUserById } = useFirebase()
+
     const onSubmit = async ({ email,password }:{email:string,password:string}) => {  
       try {
-        const userDoc = await signIn(email,password)
-
-        if (userDoc){
-          dispatch(setUser({ email:userDoc.email,id:userDoc.id,name:userDoc.name }))
-          navigate('/site/new')
+        const user = await signIn(email,password)        
+        const userData = await getUserById(user.uid)
+        if (userData){
+          dispatch(setUser({ email,id:user.uid,name:userData.name,surname:userData.surname }))
+          navigate('/sites/new')
         }
       }
       catch (e) {
-        if (e instanceof Error){
-          setError('root',{type:'root',message:e.message})  
-        }  
-      }}    
+        if (e instanceof FirebaseError){
+          setError('root', { type:'firebase_error',message:e.message })
+        }
+        else if (e instanceof Error){
+            console.error(e)
+            setError('root', { type:'root_error',message:e.message })
+          }
+      }
+    }    
     
     return (
     <Form {...form}>
@@ -82,4 +87,4 @@ export const Login = () => {
     </form>
   </Form>
 )
-    }
+}
