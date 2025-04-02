@@ -3,4 +3,4 @@ import { setUser,removeUser } from "./userSlice";
 import reducer from './userSlice'
 
 export type { User }
-export { setUser,reducer }
+export { setUser,reducer,removeUser }

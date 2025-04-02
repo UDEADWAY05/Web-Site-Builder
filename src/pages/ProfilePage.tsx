@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/hooks/redux-hooks";
 import { removeUser } from "src/store/slices/userSlice";
+import { checkUserData } from "src/store/slices/userSlice/thunks";
 import { selectUserData } from "src/store/slices/userSlice/selectors";
 import { selectUserId } from "src/store/slices/userSlice/selectors";
 import { useFirebase } from "src/hooks/useFirebase";
@@ -18,8 +19,11 @@ const profileSchema = z.object({
 });
 
 export const ProfilePage = () => {
+  const [isEditing, setIsEditing] = useState(false);
   const userData = useAppSelector(selectUserData)
   const userId = useAppSelector(selectUserId)
+  const dispatch = useAppDispatch()
+  const { updateUser,signOutUser,getUserById } = useFirebase()
 
   const form = useForm<z.infer<typeof profileSchema>>({
     mode:'onTouched',
@@ -31,12 +35,9 @@ export const ProfilePage = () => {
     resolver:zodResolver(profileSchema)
   })
   
-  const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
+  const { register,formState:{ errors,isValid,isSubmitting },setError } = form 
   const serverError =	errors.root?.message
 
-  const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useAppDispatch()
-  const { updateUser,signOutUser } = useFirebase()
   const handleSignOut = async () => {
       await signOutUser()
       dispatch(removeUser())
@@ -45,12 +46,13 @@ export const ProfilePage = () => {
   const onSubmit = async ({ name,surname }:{name:string,surname:string,}) => {
     try {
       if (!userId){
-        throw new Error('User ID is unknown')
+        return
       }
-      const user = await updateUser(userId,name,surname)
+      await updateUser(userId,name,surname)
+      dispatch(checkUserData({id:userId,getUserById}))
+      
     } catch (e) {
       if (e instanceof Error){
-        console.log('error caught',e.message)
         setError('root',{type:'root',message:e.message})  
       }  
     }
@@ -61,7 +63,7 @@ export const ProfilePage = () => {
 
     <Form {...form} >  
     <form onSubmit={form.handleSubmit(onSubmit) } className="px-2 py-4 flex flex-col sm:w-1/2 md:w-1/3 gap-1">
-        <h1 className="font-semibold size-sm w-full">Your profile</h1>
+        <h1 className="font-semibold size-sm w-full">Ваши данные:</h1>
         <FormField
         control={form.control}
         name="name"
@@ -88,10 +90,10 @@ export const ProfilePage = () => {
         )} />
         
         {isEditing ? (
-            <Button variant="default" type='submit' className="w-full" disabled={!isValid}>Сохранить</Button>
+            <Button variant="default" type='submit' className="w-full" disabled={!isValid || isSubmitting}>Сохранить</Button>
           ) : (
-            <Button variant="secondary" type="button" onClick={() => setIsEditing(true)} className="w-full hover:bg-gray-300" >Редактировать</Button>
-          )}
+            <Button variant="secondary" onClick={() => setIsEditing(true)} className="w-full hover:bg-gray-300" >Редактировать</Button>
+        )}
         <Button variant="destructive" onClick={handleSignOut} className="w-full mt-2">Выйти из системы</Button>
         {serverError && <span className="text-red-500">{ serverError }</span>}
     </form>

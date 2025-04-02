@@ -2,13 +2,13 @@ import { generateAuthSchema } from "src/utils/generateAuthSchema"
 import { Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from '../form'
 import { Input } from "../input"
 import { Button } from "../button"
-import { setUser } from "src/store/slices/userSlice"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAppDispatch } from "src/hooks/redux-hooks"
 import { Link,useNavigate } from "react-router-dom"
 import { FirebaseError } from "firebase/app"
 import { useFirebase } from "src/hooks/useFirebase"
+import { setUser } from "src/store/slices/userSlice"
 import { z } from 'zod'
 
 export const Login = () => {
@@ -25,20 +25,15 @@ export const Login = () => {
 
     const { register,formState:{ errors,isDirty,isValid,isSubmitting },setError} = form
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
-    
+    const navigate = useNavigate()    
     const serverError =	errors.root?.message
-    console.log(errors)
         
     const { signIn,getUserById } = useFirebase()
 
     const onSubmit = async ({ email,password }:{email:string,password:string}) => {  
       try {
-        const user = await signIn(email,password)
-        console.log(user)
-        
+        const user = await signIn(email,password)        
         const userData = await getUserById(user.uid)
-        console.log('ud',userData)
         if (userData){
           dispatch(setUser({ email,id:user.uid,name:userData.name,surname:userData.surname }))
           navigate('/sites/new')

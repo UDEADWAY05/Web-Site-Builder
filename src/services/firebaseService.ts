@@ -1,12 +1,11 @@
-import { Auth, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { Auth } from "firebase/auth";
 import { Firestore } from "firebase/firestore";
-import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateEmail } from "firebase/auth";
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut } from "firebase/auth";
 import { getDoc,setDoc,updateDoc,doc } from "firebase/firestore";
 import { FirebaseApi } from "src/contexts/firebaseContext";
 
 class FirebaseService implements FirebaseApi {
     constructor(public auth:Auth, public db:Firestore) {
-
       this.auth = auth;
       this.db = db;
       this.signIn = this.signIn.bind(this);
@@ -19,19 +18,16 @@ class FirebaseService implements FirebaseApi {
     async signUp(email:string, password:string, name:string, surname:string) {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
       const user = userCredential.user
-    
-      console.log('is signUp',user)
-    
+        
       await setDoc(doc(this.db, 'users', user.uid), { name, surname, email });
-      console.log(userCredential)
+    
       return userCredential;
     }
   
     async signIn(email:string, password:string) {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       const user = userCredential.user
-      
-      console.log(user)
+    
       return user
     }
   
@@ -40,7 +36,7 @@ class FirebaseService implements FirebaseApi {
       
       if (userDoc.exists()){  
         const userData = userDoc.data()
-        console.log(userData)
+    
         return userData 
       }
     }

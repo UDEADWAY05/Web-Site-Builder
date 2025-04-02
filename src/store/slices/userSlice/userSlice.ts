@@ -1,5 +1,6 @@
 import { createSlice,PayloadAction } from '@reduxjs/toolkit';
 import { User, UserState } from './types'
+import { checkUserData } from './thunks';
 
 const initialState:UserState = {
     error:null,
@@ -20,6 +21,11 @@ const userSlice = createSlice({
             state.isLoggedIn = false
         }
     },
+    extraReducers:(builder) => {
+        builder.addCase(checkUserData.fulfilled,(state,action) => {
+            state.data = action.payload
+        })
+    }
 });
 
 export const { setUser,removeUser } = userSlice.actions

@@ -1,10 +1,18 @@
-import { isUserAuthenticated } from "src/store/slices/userSlice/selectors";
+import { isUserLoggedIn } from "src/store/slices/userSlice/selectors";
 import { RootState } from "src/store/store";
 
 describe('userSlice selectors',() => {
     test('should select if user is authenticated',() => {
-        const user:RootState['user'] = {id:'testId',email:'test_email'}
-        const result = isUserAuthenticated({ user })
+        const user:RootState['user'] = { 
+            error:null,
+            isLoggedIn:true,
+            data:{
+                id:'test',
+                email:'test',
+                name:'test',
+                surname:'test'
+            }}
+        const result = isUserLoggedIn({user})
 
         expect(result).toBe(true)
     })

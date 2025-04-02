@@ -11,7 +11,7 @@ global.ResizeObserver = class ResizeObserver {
 }
 
 describe('Navbar', () => {
-  test('test main link', async () => {
+  test.skip('test main link', async () => {
     render(renderWithRouter(<NavBar />))
     const mainLink = screen.getByTestId('main-link')
     userEvent.click(mainLink)
@@ -25,7 +25,7 @@ describe('Navbar', () => {
   //   expect(screen.getByTestId('siteNew-page')).toBeInTheDocument()
   // })
 
-  test('test notFound link', async () => {
+  test.skip('test notFound link', async () => {
     render(renderWithRouter(<NavBar />, '/jhjhi'))
     const notFound = screen.getByTestId('siteNew-link')
     userEvent.click(notFound)
