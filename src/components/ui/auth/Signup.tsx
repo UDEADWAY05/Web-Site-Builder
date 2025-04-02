@@ -28,7 +28,7 @@ export const SignUp = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const serverError =	errors.root?.message
-    console.log(errors)
+
     const { signUp } = useFirebase()    
 
     const onSubmit = async ({ email,password,name,surname }:{email:string,password:string,name:string,surname:string}) => {
