@@ -11,21 +11,24 @@ import { SignUp } from 'src/components/ui/auth/Signup'
 
 export const AppRoutes = () => {
   return (
-      <Routes>
-        <Route element={<ProtectedRoute auth={true} />}>
-          <Route path={RoutePaths.MAIN} element={<Main />} />
-          <Route path={RoutePaths.SITE_NEW} element={<SiteNew />} />
-          <Route path={RoutePaths.USER} element={<ProfilePage />}/>
+    <Routes>
+      <Route element={<ProtectedRoute auth={true} />}>
+        <Route path={RoutePaths.MAIN} element={<Main />} />
+        <Route
+          path={`${RoutePaths.SITES}/:idSite?/:type?`}
+          element={<SiteNew />}
+        />
+        <Route path={RoutePaths.USER} element={<ProfilePage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute auth={false} />}>
+        <Route path={RoutePaths.AUTH} element={<AuthWrapper />}>
+          <Route path="" element={<NotFound />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
         </Route>
-        
-        <Route element={<ProtectedRoute auth={ false } />}>
-          <Route path={RoutePaths.AUTH} element={<AuthWrapper />}>
-            <Route path='' element={ <NotFound/> } />
-            <Route path='login' element={<Login />}/>
-            <Route path='signup' element={<SignUp /> }/>
-          </Route>
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   )
 }
