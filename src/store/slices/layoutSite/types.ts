@@ -19,11 +19,13 @@ export interface BlockButtonProp {
   img: string
 }
 export interface LayoutSiteState {
-  entities: {
-    id: number
-    title: string
-    bgColor: string
-    data: Block[] | []
-  }
+  entities: Site
   error: null
+}
+
+export interface Site {
+  id: string
+  title: string
+  bgColor: string
+  data: Block[] | []
 }
