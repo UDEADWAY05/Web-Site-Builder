@@ -19,8 +19,7 @@ export interface BlockButtonProp {
   img: string
 }
 export interface LayoutSiteState {
-  entities: Site
-  error: null
+  entities: Site | null
 }
 
 export interface Site {
