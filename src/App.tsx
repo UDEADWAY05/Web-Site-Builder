@@ -8,6 +8,7 @@ import { getDatabase, ref, set, onValue } from 'firebase/database'
 import { firebaseContext } from './contexts/firebaseContext'
 import { FirebaseService } from './services/firebaseService'
 import { firebaseConfig } from './firebase'
+import { Site } from './store/slices/layoutSite/types'
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -18,6 +19,9 @@ const firebaseService = new FirebaseService(auth, db)
 //временное решение
 // eslint-disable-next-line react-refresh/only-export-components
 export { dbSite, ref, set, onValue }
+// eslint-disable-next-line react-refresh/only-export-components
+export const saveSite = (siteId: string, data: Site) =>
+  set(ref(dbSite, `sites/${siteId}`), data)
 ///
 
 const FirebaseApiProvider = ({ children }: { children: React.ReactNode }) => {
