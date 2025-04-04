@@ -14,8 +14,10 @@ export const AppRoutes = () => {
     <Routes>
       <Route element={<ProtectedRoute auth={true} />}>
         <Route path={RoutePaths.MAIN} element={<Main />} />
-
-        <Route path={RoutePaths.SITES_NEW} element={<SiteNew />} />
+        <Route
+          path={`${RoutePaths.SITES}/:siteId?/:edit?`}
+          element={<SiteNew />}
+        />
         <Route path={RoutePaths.USER} element={<ProfilePage />} />
       </Route>
 
