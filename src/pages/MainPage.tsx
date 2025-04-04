@@ -1,4 +1,4 @@
-import { child, get, getDatabase, ref } from 'firebase/database'
+import { child, get, getDatabase, off, ref } from 'firebase/database'
 import { useEffect, useState } from 'react'
 import { transformData } from 'src/utils/transformData'
 
@@ -17,6 +17,7 @@ export const Main = () => {
         }
       })
       .catch((err) => console.log(err))
+    return off(dbRef) // Функция для отписки
   }, [])
 
   console.log(transformData(sites))

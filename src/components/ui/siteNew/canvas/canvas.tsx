@@ -9,7 +9,7 @@ import { blockCreate } from 'src/store/slices/layoutSite'
 import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { onValue, ref } from 'firebase/database'
+import { off, onValue, ref } from 'firebase/database'
 import { dbSite } from 'src/App'
 import { setSite } from 'src/store/slices/layoutSite/layoutSiteSlice'
 
@@ -28,6 +28,7 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
       const data = snapshot.val()
       dispatch(setSite(data))
     })
+    return off(siteRef) // Функция для отписки
   }, [siteId])
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {

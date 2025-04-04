@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Block, LayoutSiteState } from './types'
 import { ref, set } from 'firebase/database'
-import { dbSite } from 'src/App'
+import { dbSite, saveSite } from 'src/App'
 
 const initialState: LayoutSiteState = {
   entities: null,
@@ -15,12 +15,16 @@ const layoutSite = createSlice({
       state.entities = action.payload
     },
     blockTitleUpdate: (state, action) => {
-      if (state.entities) state.entities.title = action.payload
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
+      if (state.entities) {
+        state.entities.title = action.payload
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockBgColorUpdate: (state, action) => {
-      if (state.entities) state.entities.bgColor = action.payload
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
+      if (state.entities) {
+        state.entities.bgColor = action.payload
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockCreate: (state, action) => {
       if (state.entities) {
@@ -28,18 +32,20 @@ const layoutSite = createSlice({
           state.entities.data = []
         }
         state.entities.data.push(action.payload)
+
+        saveSite(state.entities?.id, state.entities)
       }
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
     },
     blockDelete: (state, action: PayloadAction<Block['id']>) => {
-      if (state.entities)
+      if (state.entities) {
         state.entities.data = state.entities.data.filter(
           (block) => block.id !== action.payload
         )
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockPositionUpdate: (state, action) => {
-      if (state.entities)
+      if (state.entities) {
         state.entities.data = state.entities.data
           .map((block) =>
             block.id === action.payload.id
@@ -60,13 +66,14 @@ const layoutSite = createSlice({
               block.styles?.left < 800 && //максимальная ширина рабочей области
               block.styles?.top < 600 //максимальная высота рабочей области
           )
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockSizeUpdate: (state, action) => {
       console.log(state, action)
     },
     blockContentUpdate: (state, action) => {
-      if (state.entities)
+      if (state.entities) {
         state.entities.data = state.entities.data.map((block) => {
           if (block.id === action.payload.id) {
             return {
@@ -83,7 +90,8 @@ const layoutSite = createSlice({
           }
           return block
         })
-      set(ref(dbSite, `sites/${state.entities?.id}`), state.entities)
+        saveSite(state.entities?.id, state.entities)
+      }
     },
   },
 })
