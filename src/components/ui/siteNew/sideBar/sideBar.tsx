@@ -18,6 +18,7 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
     e: React.DragEvent<HTMLDivElement>,
     blockType: string
   ) => {
+    console.log('dt',e.dataTransfer)
     e.dataTransfer?.setData('blockType', blockType)
   }
 

@@ -12,14 +12,17 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   const blocks = useAppSelector(selectorLayoutSiteData)
   const bgColor = useAppSelector(selectorLayoutSiteBgColor)
   const dispatch = useDispatch()
-  console.log(blocks)
+  console.log('blocks in canvas',blocks)
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('on canvas dt',e.dataTransfer.getData('blockType'))
     e.preventDefault()
     const blockType = e.dataTransfer?.getData('blockType')
-    const canvastRest = e.currentTarget.getBoundingClientRect()
-    const left = e.clientX - canvastRest.left
-    const top = e.clientY - canvastRest.top
+    const canvasRect = e.currentTarget.getBoundingClientRect()
+    const left = e.clientX - canvasRect.left
+    const top = e.clientY - canvasRect.top
+    console.log('canvas lt',canvasRect.left,canvasRect.top)
+    console.log('component left,top',left,top)
 
     const newBlock = {
       id: Date.now(),

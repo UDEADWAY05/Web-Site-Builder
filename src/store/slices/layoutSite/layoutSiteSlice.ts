@@ -16,23 +16,28 @@ const layoutSite = createSlice({
   initialState,
   reducers: {
     blockTitleUpdate: (state, action) => {
+      console.log('block title updata',action.payload)
       state.entities.title = action.payload
     },
     blockBgColorUpdate: (state, action) => {
+      console.log('block bgcolor update',action.payload)
       state.entities.bgColor = action.payload
     },
     blockCreate: (state, action) => {
+      console.log('block create',action.payload)
       if (!Array.isArray(state.entities.data)) {
         state.entities.data = []
       }
       state.entities.data.push(action.payload)
     },
     blockDelete: (state, action: PayloadAction<Block['id']>) => {
+      console.log('block delete',action.payload)
       state.entities.data = state.entities.data.filter(
         (block) => block.id !== action.payload
       )
     },
     blockPositionUpdate: (state, action) => {
+      console.log('block position updatate',action.payload)
       state.entities.data = state.entities.data
         .map((block) =>
           block.id === action.payload.id
@@ -55,9 +60,11 @@ const layoutSite = createSlice({
         )
     },
     blockSizeUpdate: (state, action) => {
+      console.log('block size updata',action.payload)
       console.log(state, action)
     },
     blockContentUpdate: (state, action) => {
+      console.log('block content updata',action.payload)
       console.log(action.payload)
 
       state.entities.data = state.entities.data.map((block) => {

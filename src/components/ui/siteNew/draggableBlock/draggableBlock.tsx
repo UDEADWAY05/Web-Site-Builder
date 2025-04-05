@@ -15,9 +15,13 @@ interface OffsetProp {
 
 export function DraggableBlock(block: Block) {
   const [isEditing, setIsEditing] = useState(false)
+  const [newText,setNewText] = useState('')
   const [dragging, setDragging] = useState(false)
   const [offset, setOffset] = useState<OffsetProp>({ x: 0, y: 0 })
 
+  console.log('isEditing:',isEditing,dragging)
+  console.log('block type',block.type)
+  
   const style = {
     left: `${block.styles?.left}px`,
     top: `${block.styles?.top}px`,
@@ -75,27 +79,25 @@ export function DraggableBlock(block: Block) {
     console.log('update', id, newContent)
     dispatch(blockContentUpdate({ id, newContent }))
   }
-
+  
   // начало редактирования текста
   const startEditing = (item: Block) => {
     if (!item) return <p>SomeThing Wrong</p>
-    console.log('начало редактирования', item)
-
+    console.log('начало редактирования', item,isEditing)
+   
     return (
       <div
         style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: '#fff',
+          // position: 'fixed',
+          // top: '50%',
+          // left: '50%',
+          // transform: 'translate(-50%, -50%)',
+          backgroundColor: '#c93c3c',
           padding: '20px',
           border: '1px solid #000',
           zIndex: 1000,
-        }}
-      >
+        }}>
         <h3>Редактирование</h3>
-
         {item.type === 'paragraph' ||
           (item.type === 'header' && (
             <input
@@ -127,15 +129,15 @@ export function DraggableBlock(block: Block) {
               placeholder="Введите URL изображения"
               style={{ width: '100%' }}
             />
-          )
-        )}
-        {setIsEditing(false)}
-      </div>
+          ))
+        // )} 
+        //  {setIsEditing(false)}
+  }</div>
     )
   }
 
   // блок - редактирование блока
-  const controls = (item: Block) => {
+  const controls = (block: Block) => {
     return (
       <div
         className="flex justy justify-between content-center absolute"
@@ -149,7 +151,7 @@ export function DraggableBlock(block: Block) {
           <img src={cancel} alt="cancel" />
         </button>
         <button
-          onClick={() => startEditing(item)}
+          onClick={() => {setIsEditing(true);startEditing(block)}}
           style={{ marginRight: '5px' }}
         >
           <img src={edit} alt="edit" />
@@ -158,7 +160,7 @@ export function DraggableBlock(block: Block) {
           style={{ cursor: 'move', padding: '5px' }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
+          // onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
         >
           ⠿
@@ -167,14 +169,69 @@ export function DraggableBlock(block: Block) {
     )
   }
 
-  return (
-    <div
-      style={style}
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
-    >
-      {isEditing && controls(block)}
+  const renderEditableField = (block:Block) => {
+    switch (block.type) {
+      case "textbox":
+        return (
+          <input
+            type="text"
+            value={'new'}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder="Edit text here"
+          />
+        );
+      case "button":
+        return (
+          <input
+            type="text"
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder="Edit button text"
+          />
+        );
+      case "p":
+        return (
+          <textarea
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder="Edit paragraph text"
+          />
+        );
+      case "ul":
+      case "ol":
+        return (
+          <textarea
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder="Edit list content"
+          />
+        );
+      default:
+        return (
+          <textarea className='bg-white'
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            placeholder="Edit text"
+          />
+        );
+    }
+  };
 
+  return isEditing 
+        ? <div className='border rounded' style={style}>
+          
+            <button onClick={() => {
+              setIsEditing(false);
+              updateBlockContent(block.id,newText)}}>Save</button>
+          {renderEditableField(block)}
+        </div>
+        : <div style={style}
+          // onMouseOver={handleMouseOver}
+          // onMouseOut={handleMouseOut}
+       >
+      {controls(block)}
+
+      {/* TODO turn into map */}
       {block.type === 'header' && <h1>{block.content}</h1>}
       {block.type === 'paragraph' && <p>{block.content}</p>}
       {block.type === 'listUl' && (
@@ -196,7 +253,7 @@ export function DraggableBlock(block: Block) {
         </ol>
       )}
       {block.type === 'image' && <img src="#" alt="image" />}
-      {block.type === 'divider' && <hr />}
+      {block.type === 'divider' && <div><hr/ >Divider</div>}
       {block.type === 'button' && <button>{block.content}</button>}
       {block.type === 'quote' && (
         <div>
@@ -211,6 +268,5 @@ export function DraggableBlock(block: Block) {
           </p>
         </div>
       )}
-    </div>
-  )
+    </div>  
 }
