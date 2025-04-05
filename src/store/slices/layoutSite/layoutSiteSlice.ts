@@ -1,86 +1,102 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Block, LayoutSiteState } from './types'
+import { saveSite } from 'src/App'
+import type { Block, LayoutSiteState } from './types'
 
 const initialState: LayoutSiteState = {
-  entities: {
-    id: Date.now(),
-    title: 'My Project',
-    bgColor: '#5C90FF',
-    data: [],
-  },
-  error: null,
+  entities: null,
 }
 
 const layoutSite = createSlice({
   name: 'layoutSite',
   initialState,
   reducers: {
+    setSite: (state, action) => {
+      state.entities = action.payload
+    },
     blockTitleUpdate: (state, action) => {
-      state.entities.title = action.payload
+      if (state.entities) {
+        state.entities.title = action.payload
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockBgColorUpdate: (state, action) => {
-      state.entities.bgColor = action.payload
+      if (state.entities) {
+        state.entities.bgColor = action.payload
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockCreate: (state, action) => {
-      if (!Array.isArray(state.entities.data)) {
-        state.entities.data = []
+      if (state.entities) {
+        if (!Array.isArray(state.entities.data)) {
+          state.entities.data = []
+        }
+        state.entities.data.push(action.payload)
+
+        saveSite(state.entities?.id, state.entities)
       }
-      state.entities.data.push(action.payload)
     },
     blockDelete: (state, action: PayloadAction<Block['id']>) => {
-      state.entities.data = state.entities.data.filter(
-        (block) => block.id !== action.payload
-      )
+      if (state.entities) {
+        state.entities.data = state.entities.data.filter(
+          (block) => block.id !== action.payload
+        )
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockPositionUpdate: (state, action) => {
-      state.entities.data = state.entities.data
-        .map((block) =>
-          block.id === action.payload.id
-            ? {
-                ...block,
-                styles: {
-                  ...block.styles,
-                  left: action.payload.newX,
-                  top: action.payload.newY,
-                },
-              }
-            : block
-        )
-        .filter(
-          (block) =>
-            block.styles?.left >= 0 &&
-            block.styles?.top >= 0 &&
-            block.styles?.left < 800 && //максимальная ширина рабочей области
-            block.styles?.top < 600 //максимальная высота рабочей области
-        )
+      if (state.entities) {
+        state.entities.data = state.entities.data
+          .map((block) =>
+            block.id === action.payload.id
+              ? {
+                  ...block,
+                  styles: {
+                    ...block.styles,
+                    left: action.payload.newX,
+                    top: action.payload.newY,
+                  },
+                }
+              : block
+          )
+          .filter(
+            (block) =>
+              block.styles?.left >= 0 &&
+              block.styles?.top >= 0 &&
+              block.styles?.left < 800 && //максимальная ширина рабочей области
+              block.styles?.top < 600 //максимальная высота рабочей области
+          )
+        saveSite(state.entities?.id, state.entities)
+      }
     },
     blockSizeUpdate: (state, action) => {
       console.log(state, action)
     },
     blockContentUpdate: (state, action) => {
-      console.log(action.payload)
-
-      state.entities.data = state.entities.data.map((block) => {
-        if (block.id === action.payload.id) {
-          return {
-            ...block,
-            content: action.payload.newContent,
+      if (state.entities) {
+        state.entities.data = state.entities.data.map((block) => {
+          if (block.id === action.payload.id) {
+            return {
+              ...block,
+              content: action.payload.newContent,
+            }
           }
-        }
-        if (block.type === 'paragraph' || block.type === 'quote') {
-          return {
-            ...block.styles,
-            fontWeight: 'bold',
-            fontStyle: 'italic',
+          if (block.type === 'paragraph' || block.type === 'quote') {
+            return {
+              ...block.styles,
+              fontWeight: 'bold',
+              fontStyle: 'italic',
+            }
           }
-        }
-        return block
-      })
+          return block
+        })
+        saveSite(state.entities?.id, state.entities)
+      }
     },
   },
 })
 
 export const {
+  setSite,
   blockTitleUpdate,
   blockBgColorUpdate,
   blockCreate,
