@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Block, LayoutSiteState } from './types'
-import { ref, set } from 'firebase/database'
-import { dbSite, saveSite } from 'src/App'
+import { saveSite } from 'src/App'
+import type { Block, LayoutSiteState } from './types'
 
 const initialState: LayoutSiteState = {
   entities: null,
