@@ -45,7 +45,7 @@ export function DraggableBlock(block: Block) {
 
       {block.type === 'header' && <h1>{block.content}</h1>}
       {block.type === 'paragraph' && <p>{block.content}</p>}
-      {block.type === 'listUl' && (
+      {block.type === 'ul' && (
         <ul>
           {Array.isArray(block.content) ? (
             block.content.map((item, index) => <li key={index}>{item}</li>)
@@ -54,7 +54,7 @@ export function DraggableBlock(block: Block) {
           )}
         </ul>
       )}
-      {block.type === 'listOl' && (
+      {block.type === 'ol' && (
         <ol>
           {Array.isArray(block.content) ? (
             block.content.map((item, index) => <li key={index}>{item}</li>)

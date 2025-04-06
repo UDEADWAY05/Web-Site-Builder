@@ -32,7 +32,7 @@
 export interface BlockButton {
   type: Block['type']
   label: string
-  defaultContent: string | string[]
+  // defaultContent: Block['content']
   img: string
 }
 export interface LayoutSiteState {
@@ -66,14 +66,17 @@ export type Styles = {
 
 export interface BaseBlock {
   id:string
-  // type:string
-  content: string | Array<string>
   styles: Styles
 } 
 
 export type TextBlock = BaseBlock & {
   type:'text'
   content: string
+}
+
+export type HeaderBlock = BaseBlock & {
+  type:'header',
+  content:string
 }
 
 export type ParagraphBlock = BaseBlock & {
@@ -92,8 +95,8 @@ export type ImageBlock = BaseBlock & {
 export type ButtonBlock = BaseBlock & {
   type: 'button'
   content: {
-    label: string
-    onClick?: string
+    text:string
+    onClick?: () => void
   }
 }
 
@@ -111,6 +114,16 @@ export type OrderedListBlock = BaseBlock & {
   }
 }
 
+export type DividerBlock = BaseBlock & {
+  type:'divider'
+  content:string
+}
+
+export type QuoteBlock = BaseBlock & {
+  type:'quote'
+  content:string
+}
+
 // export type ListItemBlock = BlockBase & {
 //   type: 'li';
 //   content: {
@@ -121,10 +134,13 @@ export type OrderedListBlock = BaseBlock & {
 export type Block =
   | TextBlock
   | ParagraphBlock
+  | HeaderBlock
   | ImageBlock
   | ButtonBlock
   | UnorderedListBlock
   | OrderedListBlock
+  | DividerBlock
+  | QuoteBlock
 
 export interface Site {
   id: string
