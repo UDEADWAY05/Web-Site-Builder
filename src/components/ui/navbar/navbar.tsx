@@ -11,6 +11,9 @@ import { useAppSelector } from 'src/hooks/redux-hooks'
 import { isUserLoggedIn } from 'src/store/slices/userSlice/selectors'
 import { removeUser } from 'src/store/slices/userSlice/userSlice'
 import { Button } from '../button'
+import { ButtonNewSite } from '../siteNew/buttonNewSite/buttonNewSite'
+// import { useAuth } from 'src/hooks/useAuth'
+// import { removeUser } from 'src/store/slices/userSlice'
 
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(' ')
@@ -31,24 +34,20 @@ export function NavBar() {
       current: true,
       id: 'main',
     },
-    {
-      name: 'Новый проект',
-      href: `${RoutePaths.SITE_NEW}`,
-      current: false,
-      id: 'siteNew',
-    },
   ]
 
   const isLoggedIn = useAppSelector(isUserLoggedIn)
-  
+
   const dispatch = useAppDispatch()
   const { signOutUser } = useFirebase()
-  
+
   const handleSignOut = async () => {
     await signOutUser()
     dispatch(removeUser())
   }
-  
+  // const { signOutUser } = useAuth()
+  // const { signOutUser } = useFirebase()
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -102,26 +101,39 @@ export function NavBar() {
                     key={item.name}
                     to={item.href}
                     data-testid={`${item.id}-link`}
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium'
-                    )}
+                    aria-current="page"
+                    className="bg-gray-900 text-white
+                        hover:bg-gray-700 hover:text-white
+                      rounded-md px-3 py-2 text-sm font-medium"
                   >
                     {item.name}
                   </Link>
                 ))}
+                {<ButtonNewSite />}
               </div>
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <button
+              type="button"
+              className="relative rounded-full bg-gray-500 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
+            >
+              <span className="absolute -inset-1.5" />
+              <span className="sr-only">View notifications</span>
+            </button>
             {isLoggedIn && (
               <>
-                <Link to='/user'><Button className='hover:bg-gray-700'>Профиль</Button></Link>
-                <Button variant='default' className='hover:bg-gray-700' onClick={handleSignOut}>Выйти</Button>
-              </>                   
+                <Link to="/user">
+                  <Button className="hover:bg-gray-700">Профиль</Button>
+                </Link>
+                <Button
+                  variant="default"
+                  className="hover:bg-gray-700"
+                  onClick={handleSignOut}
+                >
+                  Выйти
+                </Button>
+              </>
             )}
           </div>
         </div>

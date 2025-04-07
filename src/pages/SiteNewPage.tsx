@@ -10,7 +10,7 @@ import {
   paragraf,
 } from '../assets'
 import { SideBar } from 'src/components/ui/siteNew'
-import { Canvas } from 'src/components/ui/siteNew/canvas'
+import { Canvas } from 'src/components/ui/siteNew'
 
 export function SiteNew() {
   // Кнопки для бокового меню
