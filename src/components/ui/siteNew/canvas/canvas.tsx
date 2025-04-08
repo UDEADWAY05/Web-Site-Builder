@@ -8,9 +8,8 @@ import {
 import { blockCreate } from 'src/store/slices/layoutSite'
 import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
 import { useParams } from 'react-router-dom'
-import { useEffect, useLayoutEffect } from 'react'
-import { child, get, off, onValue, ref } from 'firebase/database'
-import { dbSite } from 'src/App'
+import { useEffect } from 'react'
+import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/layoutSite/layoutSiteSlice'
 
 export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
@@ -19,14 +18,9 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   const dispatch = useDispatch()
   const { siteId } = useParams()
 
-  const test = useAppSelector((state) => state.layoutSite.entities)
-
-  console.log(blocks, test)
-
   //загрузка данных из FireBase
   useEffect(() => {
     const siteRef = ref(dbSite)
-    console.log('siteRef')
     get(child(siteRef, `sites/${siteId}`))
       .then((snapsot) => {
         if (snapsot.exists()) {
