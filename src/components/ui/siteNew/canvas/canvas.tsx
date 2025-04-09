@@ -8,8 +8,8 @@ import {
 import { blockCreate } from 'src/store/slices/layoutSite'
 import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
 import { useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { off, onValue, ref } from 'firebase/database'
+import { useEffect, useLayoutEffect } from 'react'
+import { child, get, off, onValue, ref } from 'firebase/database'
 import { dbSite } from 'src/App'
 import { setSite } from 'src/store/slices/layoutSite/layoutSiteSlice'
 
@@ -19,17 +19,27 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   const dispatch = useDispatch()
   const { siteId } = useParams()
 
-  console.log(blocks)
+  const test = useAppSelector((state) => state.layoutSite.entities)
+
+  console.log(blocks, test)
 
   //загрузка данных из FireBase
   useEffect(() => {
-    const siteRef = ref(dbSite, `sites/${siteId}`)
-    onValue(siteRef, (snapshot) => {
-      const data = snapshot.val()
-      dispatch(setSite(data))
-    })
+    const siteRef = ref(dbSite)
+    console.log('siteRef')
+    get(child(siteRef, `sites/${siteId}`))
+      .then((snapsot) => {
+        if (snapsot.exists()) {
+          // setSites(snapsot.val())
+          dispatch(setSite(snapsot.val()))
+        } else {
+          // заглушка - сохранить состояние в slice
+          console.log('No data')
+        }
+      })
+      .catch((err) => console.log(err))
     return off(siteRef) // Функция для отписки
-  }, [siteId])
+  }, [dispatch, siteId])
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
