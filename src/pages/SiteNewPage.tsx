@@ -85,14 +85,18 @@ export function SiteNew() {
         <Canvas blockTypes={blockTypes} />
       </div>
       <Dialog open={isModal}>
-        <DialogContent className="w-min p-2">
+        <DialogContent className=" p-2 sm:max-w-[825px]">
           <DialogHeader>
             <DialogTitle>Layout Web Site</DialogTitle>
             <DialogDescription>Здесь представлен Ваш код</DialogDescription>
           </DialogHeader>
-          <div className="flex gap-4 py-2">
-            <GenerateHTML />
-            <GenerateCSS />
+          <div className="flex justify-between gap-4 py-2 ">
+            <pre>
+              <GenerateHTML />
+            </pre>
+            <pre>
+              <GenerateCSS />
+            </pre>
           </div>
           <DialogFooter onClick={() => dispatch(setModalClose())}>
             <Button>Вернуться в режим редактирования</Button>
