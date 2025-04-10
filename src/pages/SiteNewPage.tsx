@@ -85,7 +85,7 @@ export function SiteNew() {
         <Canvas blockTypes={blockTypes} />
       </div>
       <Dialog open={isModal}>
-        <DialogContent className=" p-2 sm:max-w-[825px]">
+        <DialogContent className="p-2 sm:max-w-[1025px] w-full overflow-x-auto break-words">
           <DialogHeader>
             <DialogTitle>Layout Web Site</DialogTitle>
             <DialogDescription>Здесь представлен Ваш код</DialogDescription>
