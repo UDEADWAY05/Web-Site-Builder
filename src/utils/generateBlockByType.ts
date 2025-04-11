@@ -1,7 +1,6 @@
+import { CSSProperties } from "react";
 import { Block } from "src/store/slices/layoutSite"
-// type BlockFactory = {
-//     [K in Block['type']]: (left: number, top: number) => Extract<Block, { type: K }>
-//   }
+import { BlockStyles } from "src/store/slices/layoutSite/types";
 
 // const blockContentMap = new Map<Block['type'],Block['content']>([
 //   ['text','New text'],
@@ -13,11 +12,20 @@ import { Block } from "src/store/slices/layoutSite"
 // ])  
 
 export function generateBlockByType(type: Block['type'], left: number, top: number): Block {
-  const styles = {
+  const styles:CSSProperties = {
     left: `${left}px`,
     top: `${top}px`,
+    // width: `${block.styles?.width}px`,
+    // height: `${block.styles?.height}px`,
     width: 'auto',
     height: 'auto',
+    position: 'absolute',
+    minHeight: '30px',
+    backgroundColor: '#bcbabd',
+    border: '2px solid #ddd',
+    padding: '10px',
+    cursor: 'move',
+    zIndex: 10,
   };
 
   switch (type) {
@@ -85,42 +93,3 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       throw new Error(`Unknown block type: ${type}`);
   }
 }
-
-  // const createBlock: BlockFactory = {
-  //   text: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'text',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: 'New text',
-  //   }),
-  //   paragraph: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'paragraph',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: 'New paragraph',
-  //   }),
-  //   image: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'image',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: { src: '', alt: '' },
-  //   }),
-  //   button: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'button',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: { label: 'Click me', onClick: '' },
-  //   }),
-  //   ul: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'ul',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: { items: ['Item 1', 'Item 2'] },
-  //   }),
-  //   ol: (left, top) => ({
-  //     id: Date.now().toString(),
-  //     type: 'ol',
-  //     styles: { left, top, width: 'auto', height: 'auto' },
-  //     content: { items: ['Item 1', 'Item 2'] },
-  //   }),
-  // }

@@ -17,6 +17,7 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
   const dispatch = useAppDispatch()
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, blockType: BlockButton['type']) => {
+    console.log('bt',blockType)
     e.dataTransfer.setData('blockType', blockType)
   }
 

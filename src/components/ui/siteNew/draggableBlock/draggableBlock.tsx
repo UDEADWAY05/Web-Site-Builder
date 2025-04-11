@@ -1,132 +1,149 @@
 import { useState } from 'react'
 import { Controls } from './Controls'
-import { Styles,Block } from 'src/store/slices/siteSlice/types'
+import { Block } from 'src/store/slices/siteSlice'
+import { useAppDispatch } from 'src/hooks/redux-hooks'
+import { deleteBlock,updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
+import { Button } from '../../button'
 
 export function DraggableBlock(block: Block) {
   const [isEditing, setIsEditing] = useState(false)
+  const [editingContent, setEditingContent] = useState(block.content)
 
-  const style:Styles = {
-    left: `${block.styles?.left}px`,
-    top: `${block.styles?.top}px`,
-    width: `${block.styles?.width}px`,
-    height: `${block.styles?.height}px`,
-    position: 'absolute',
-    minHeight: '30px',
-    backgroundColor: '#fff',
-    border: '1px solid #ddd',
-    padding: '10px',
-    cursor: 'move',
-    zIndex: 10,
-    ...block.styles,
-  }
+  console.log('isEditing',isEditing)
+  console.log('content',block.content)
 
-  // Изменение параметров блока
-  const handleMouseOver = () => {
-    setIsEditing(true)
-  }
+  const dispatch = useAppDispatch()
 
-  const handleMouseOut = () => {
+  const handleSave = () => {
+    console.log('save content:', editingContent)
+    dispatch(updateBlockContent({ id: String(block.id), content:editingContent }))
     setIsEditing(false)
   }
 
-  return (
-    <div
-      style={style}
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
-    >
-      {isEditing && (
-        <Controls
-          block={block}
-          onMouseLeave={handleMouseOver}
-          onMouseUp={handleMouseOut}
-        />
-      )}
+  const startEditing = () => setIsEditing(true)
 
-      {block.type === 'header' && <h1>{block.content}</h1>}
-      {block.type === 'paragraph' && <p>{block.content}</p>}
-      {block.type === 'ul' && (
-        <ul>
-          {Array.isArray(block.content) ? (
-            block.content.map((item, index) => <li key={index}>{item}</li>)
-          ) : (
-            <li>{block.content}</li>
+  const handleCancel = () => {
+    setIsEditing(false)
+    setEditingContent(block.content) // Reset changes
+  }
+
+  return (
+    <div style={block.styles}>
+      {isEditing 
+        ? <>
+            <Button variant='secondary' onClick={handleSave}>Save</Button>
+            <Button variant='secondary' onClick={handleCancel}>Cancel</Button>
+            {renderEditableField(block, editingContent, setEditingContent)}
+          </>
+        : <>
+          <Controls
+            block={block}
+            onEdit={startEditing}
+            onDelete={() => {dispatch(deleteBlock(block.id))}}
+          />
+          {block.type === 'paragraph' && <p>{block.content}</p>}
+          {block.type === 'text' && <span>{block.content}</span>}
+          {block.type === 'button' && <button>{block.content}</button>}
+          {block.type === 'header' && <h1>{block.content}</h1>}
+          {block.type === 'ul' && (
+            <ul>
+              {block.content.items.map((item: string, index: number) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
           )}
-        </ul>
-      )}
-      {block.type === 'ol' && (
-        <ol>
-          {Array.isArray(block.content) ? (
-            block.content.map((item, index) => <li key={index}>{item}</li>)
-          ) : (
-            <li>{block.content}</li>
+          {block.type === 'ol' && (
+            <ol>
+              {block.content.items.map((item: string, index: number) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ol>
           )}
-        </ol>
-      )}
-      {block.type === 'image' && <img src="#" alt="image" />}
-      {block.type === 'divider' && <hr />}
-      {block.type === 'button' && <button>{block.content}</button>}
-      {block.type === 'quote' && (
-        <div>
-          <blockquote cite="https://www.huxley.net/bnw/four.html">
-            <p>
-              Words can be like X-rays, if you use them properly—they’ll go
-              through anything. You read and you’re pierced.
-            </p>
-          </blockquote>
-          <p>
-            —Aldous Huxley, <cite>Brave New World</cite>
-          </p>
-        </div>
-      )}
+        
+        </>
+      }
     </div>
   )
 }
 
-const renderEditableField = (block:Block) => {
-  switch (block.type) {
-    case "textbox":
-      return (
-        <input
-          type="text"
-          value={'new'}
-          onChange={(e) => setNewText(e.target.value)}
-          placeholder="Edit text here"
-        />
-      );
-    case "button":
-      return (
-        <input
-          type="text"
-          value={newText}
-          onChange={(e) => setNewText(e.target.value)}
-          placeholder="Edit button text"
-        />
-      );
-    case "p":
-      return (
-        <textarea
-          value={newText}
-          onChange={(e) => setNewText(e.target.value)}
-          placeholder="Edit paragraph text"
-        />
-      );
-    case "ul":
-    case "ol":
-      return (
-        <textarea
-          value={newText}
-          onChange={(e) => setNewText(e.target.value)}
-          placeholder="Edit list content"
-        />
-      );
-    default:
-      return (
-        <textarea className='bg-white'
-          value={newText}
-          onChange={(e) => setNewText(e.target.value)}
-          placeholder="Edit text"
-        />
-      );
+const renderEditableField = (
+    block: Block,
+    editingContent: any,
+    setEditingContent: (content: any) => void
+  ) => {
+    switch (block.type) {
+      case 'text':
+      case 'button':
+        return (
+          <input
+            type="text"
+            value={editingContent}
+            onChange={(e) => setEditingContent(e.target.value)}
+            placeholder="Edit text"
+          />
+        )
+  
+      case 'paragraph':
+        return (
+          <textarea
+            value={editingContent}
+            onChange={(e) => setEditingContent(e.target.value)}
+            placeholder="Edit paragraph"
+          />
+        )
+  
+      case 'ul':
+      case 'ol':
+        return (
+          <div className="space-y-2">
+            {editingContent.items.map((item: string, index: number) => (
+              <div key={index} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) => {
+                    const updatedItems = [...editingContent.items]
+                    updatedItems[index] = e.target.value
+                    setEditingContent({ ...editingContent, items: updatedItems })
+                  }}
+                  className="border p-1 rounded"
+                />
+                <button
+                  onClick={() => {
+                    const updatedItems = editingContent.items.filter(
+                      (_: string, i: number) => i !== index
+                    )
+                    setEditingContent({ ...editingContent, items: updatedItems })
+                  }}
+                  className="text-red-500 hover:underline"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+  
+            <button
+              onClick={() =>
+                setEditingContent({
+                  ...editingContent,
+                  items: [...editingContent.items, '']
+                })
+              }
+              className="text-blue-600 hover:underline"
+            >
+              + Add item
+            </button>
+          </div>
+        )
+  
+      default:
+        return (
+          <textarea
+            value={editingContent}
+            onChange={(e) => setEditingContent(e.target.value)}
+            placeholder="Edit content"
+          />
+        )
+    }
   }
-};
+  

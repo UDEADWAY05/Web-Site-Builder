@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux'
 import { DraggableBlock } from '../'
 import { useAppSelector } from '../../../../store/store'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
-import { Block, BlockButton } from 'src/store/slices/siteSlice/types'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { child, dbSite, get, off, ref } from 'src/App'
@@ -10,8 +9,10 @@ import { setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { addBlock, setBlocks } from 'src/store/slices/siteSlice/siteSlice'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
+import { Block } from 'src/store/slices/siteSlice'
+import { generateBlockByType } from 'src/utils/generateBlockByType'
 
-export function Canvas({ blockTypes }: { blockTypes: BlockButton[] }) {
+export function Canvas() {
   const { siteId } = useParams()
   const blocks = useAppSelector(selectBlocks)
   const bgColor = useAppSelector(selectSiteBgColor)
@@ -39,24 +40,13 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButton[] }) {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const blockType = e.dataTransfer.getData('blockType')
-    const canvastRect = e.currentTarget.getBoundingClientRect()
-    const left = e.clientX - canvastRect.left
-    const top = e.clientY - canvastRect.top
+    const blockType = e.dataTransfer.getData('blockType') as Block['type'] //TODO how to make it better?
+    const canvasRect = e.currentTarget.getBoundingClientRect()
+    const left = e.clientX - canvasRect.left
+    const top = e.clientY - canvasRect.top
 
-    const newBlock:Block = {
-      id: Date.now().toString(), //TODO
-      type: blockType,
-      styles: {
-        left,
-        top,
-        width: 'auto',
-        height: 'auto',
-      },
-      
-      content: blockTypes.find((item) => item.type === blockType)?.defaultContent,
-    }
-    // dispatch(blockCreate(newBlock))
+    const newBlock = generateBlockByType(blockType,left,top)
+   
     dispatch(addBlock(newBlock))
   }
 

@@ -12,6 +12,8 @@
 //   }
 // }
 
+import { CSSProperties } from "react";
+
 // export interface BlockButtonProp {
 //   type: string
 //   label: string
@@ -41,7 +43,7 @@ export interface LayoutSiteState {
   isModalOpen: boolean
 }
 
-export type Styles = {
+export type BlockStyles = {
   padding?: string
   margin?: string
   backgroundColor?: string
@@ -50,9 +52,9 @@ export type Styles = {
   color?: string
   position?:string
   responsive?: { //maybe we will make responsive sizes
-    mobile?: Partial<Styles>
-    tablet?: Partial<Styles>
-    desktop?: Partial<Styles>
+    mobile?: Partial<BlockStyles>
+    tablet?: Partial<BlockStyles>
+    desktop?: Partial<BlockStyles>
   };
   width?: string //TODO maybe number is better?
   height?: string //
@@ -66,7 +68,8 @@ export type Styles = {
 
 export interface BaseBlock {
   id:string
-  styles: Styles
+  // styles: BlockStyles
+  styles:CSSProperties
 } 
 
 export type TextBlock = BaseBlock & {
@@ -123,13 +126,6 @@ export type QuoteBlock = BaseBlock & {
   type:'quote'
   content:string
 }
-
-// export type ListItemBlock = BlockBase & {
-//   type: 'li';
-//   content: {
-//     text: string;
-//   };
-// };
 
 export type Block =
   | TextBlock

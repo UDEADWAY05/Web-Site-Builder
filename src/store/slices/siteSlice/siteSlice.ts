@@ -4,7 +4,7 @@ import type { Block, Site } from './types'
  
 const initialState: Site = {
   id:new Date().getTime().toString(), //TODO, it's shit
-  bgColor:'#fff',
+  bgColor:'#ffffff',
   title:'New_title',
   blocks:[],
   isPreview: false,
@@ -118,25 +118,7 @@ const siteSlice = createSlice({
     },
     updateBlockContent: (state, action:PayloadAction<{id:Block['id'],content:Block['content']}>) => {
       console.log(action.payload.id,action.payload.content)
-      // if (state.entities) {
-      //   state.entities.data = state.entities.data.map((block) => {
-      //     if (block.id === action.payload.id) {
-      //       return {
-      //         ...block,
-      //         content: action.payload.newContent,
-      //       }
-      //     }
-      //     if (block.type === 'paragraph' || block.type === 'quote') {
-      //       return {
-      //         ...block.styles,
-      //         fontWeight: 'bold',
-      //         fontStyle: 'italic',
-      //       }
-      //     }
-      //     return block
-      //   })
-      //   saveSite(state.entities?.id, state.entities)
-      // }
+      
     },
   },
 })
