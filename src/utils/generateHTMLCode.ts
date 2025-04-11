@@ -19,9 +19,9 @@ export const generateHTMLCode = (block: Block) => {
   )}
 </ol>`
     case 'image':
-      return `<img src=${block.content} alt=${block.content} class="${block.type}-${block.id}"/>`
+      return `<img src=${block.content} alt='image' class="${block.type}-${block.id}"/>`
     case 'divider':
-      return '<hr/>'
+      return `<hr class="${block.type}-${block.id}"/>`
     case 'button':
       return `<button class="${block.type}-${block.id}">${block.content}</button>`
     case 'quote':

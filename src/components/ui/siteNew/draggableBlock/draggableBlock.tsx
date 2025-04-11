@@ -11,7 +11,8 @@ export function DraggableBlock(block: Block) {
     width: `${block.styles?.width}px`,
     heigth: `${block.styles?.height}px`,
     position: 'absolute',
-    minHeight: '30px',
+    minHeight: `${block.type === 'image' ? '100px' : '10px'}`,
+    minWidth: `${block.type === 'image' ? '300px' : '10px'}`,
     backgroundColor: '#fff',
     border: '1px solid #ddd',
     padding: '10px',
@@ -63,7 +64,7 @@ export function DraggableBlock(block: Block) {
           )}
         </ol>
       )}
-      {block.type === 'image' && <img src="#" alt="image" />}
+      {block.type === 'image' && <img src={block.content} alt="image" />}
       {block.type === 'divider' && <hr />}
       {block.type === 'button' && <button>{block.content}</button>}
       {block.type === 'quote' && (

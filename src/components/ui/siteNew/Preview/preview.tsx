@@ -44,39 +44,19 @@ export function Preview() {
     <style>
       body {
         position: relative;
+        box-sizing: border-box;
         min-height: 100vh;
         margin: 0;
-        padding: 0;
+        padding: 2px;
         background-color: ${siteById?.bgColor || '#ffffff'};
       }
-      .block {
-        position: absolute;
-        box-sizing: border-box;
-      }
-        ${blocks
-          ?.map(
-            (block) => `
-        #block-${block.id} {
-          left: ${block.styles?.left || 0}px;
-          top: ${block.styles?.top || 0}px;
-          width: ${block.styles?.width || 300}px;
-          ${block.styles ? generateCSSCode(block) : ''}
-        }
-      `
-          )
-          .join('')}
+             ${blocks
+               ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
+               .join('')}
     </style>
   </head>
   <body>
-    ${blocks
-      ?.map(
-        (block) => `
-      <div id="block-${block.id}" class="block">
-        ${generateHTMLCode(block)}
-      </div>
-    `
-      )
-      .join('\n')}
+    ${blocks?.map((block) => ` ${generateHTMLCode(block)} `).join('\n')}
   </body>
   </html>`
 

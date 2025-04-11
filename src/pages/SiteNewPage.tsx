@@ -27,6 +27,7 @@ import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTM
 import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
 import { useAppSelector } from 'src/store/store'
 import { selectorModalOpen } from 'src/store/slices/layoutSite/selectors'
+import musical from '../assets/icons8-musical-note-48.png'
 
 export function SiteNew() {
   const isModal = useAppSelector(selectorModalOpen)
@@ -60,7 +61,7 @@ export function SiteNew() {
     {
       type: 'image',
       label: 'Изображение',
-      defaultContent: '',
+      defaultContent: musical,
       img: photo,
     },
     {
