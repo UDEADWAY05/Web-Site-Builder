@@ -36,41 +36,16 @@ const siteSlice = createSlice({
     updateSiteTitle: (state, action:PayloadAction<Site['title']>) => {
       console.log(action.payload)
       state.title = action.payload
-      // if (state.entities) {
-      //   state.entities.title = action.payload
-      //   console.log(state.entities.title)
-      //   saveSite(state.entities?.id, state.entities)
-      // }
     },
     updateSiteBgColor: (state, action:PayloadAction<Site['bgColor']>) => {
       console.log(action.payload)
       state.bgColor = action.payload
-      // if (state.entities) {
-        
-      //   state.entities.bgColor = action.payload
-      //   console.log(state.entities.bgColor)
-      //   saveSite(state.entities?.id, state.entities)
-      // }
     },
     addBlock: (state, action:PayloadAction<Block>) => {
       state.blocks.push(action.payload)
-      // if (state.entities) {
-      //   if (!Array.isArray(state.entities.data)) {
-      //     state.entities.data = []
-      //   }
-      //   state.entities.data.push(action.payload)
-
-      //   saveSite(state.entities?.id, state.entities)
-      // }
     },
     deleteBlock: (state, action: PayloadAction<Block['id']>) => {
       state.blocks = state.blocks.filter(block => block.id !== action.payload)
-      // if (state.entities) {
-      //   state.entities.data = state.entities.data.filter(
-      //     (block) => block.id !== action.payload
-      //   )
-      //   saveSite(state.entities?.id, state.entities)
-      // }
     },
     updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
@@ -87,38 +62,21 @@ const siteSlice = createSlice({
           ? blockToUpdate
           : block
       })
-
-      console.log(state.blocks)
-      // if (state.entities) {
-      //   state.entities.data = state.entities.data
-      //     .map((block) =>
-      //       block.id === action.payload.id
-      //         ? {
-      //             ...block,
-      //             styles: {
-      //               ...block.styles,
-      //               left: action.payload.newX,
-      //               top: action.payload.newY,
-      //             },
-      //           }
-      //         : block
-      //     )
-      //     .filter(
-      //       (block) =>
-      //         block.styles?.left >= 0 &&
-      //         block.styles?.top >= 0 &&
-      //         block.styles?.left < 800 && //максимальная ширина рабочей области
-      //         block.styles?.top < 600 //максимальная высота рабочей области
-      //     )
-      //   saveSite(state.entities?.id, state.entities)
-      // }
     },
     updateBlockSize: (state, action) => {
       console.log(state, action)
     },
     updateBlockContent: (state, action:PayloadAction<{id:Block['id'],content:Block['content']}>) => {
       console.log(action.payload.id,action.payload.content)
+      const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
       
+      if (!blockToUpdate){
+        throw new Error('Updating block not found')
+      }
+
+      blockToUpdate.content = action.payload.content
+
+      state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
   },
 })

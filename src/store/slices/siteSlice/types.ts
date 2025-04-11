@@ -1,35 +1,4 @@
-// export interface Block {
-//   content: string | number
-//   id: number
-//   type: string
-//   title: string
-//   bgColor: string
-//   styles?: {
-//     width?: number | string
-//     height?: number | string
-//     left: string | number
-//     top: string | number
-//   }
-// }
-
 import { CSSProperties } from "react";
-
-// export interface BlockButtonProp {
-//   type: string
-//   label: string
-//   defaultContent: string | string[]
-//   img: string
-// }
-// export interface LayoutSiteState {
-//   entities: Site | null
-// }
-
-// export interface Site {
-//   id: string
-//   title: string
-//   bgColor: string
-//   data: Block[] | []
-// }
 
 export interface BlockButton {
   type: Block['type']
@@ -66,28 +35,27 @@ export type BlockStyles = {
   zIndex?:number
 };
 
-export interface BaseBlock {
+export interface BaseBlockType {
   id:string
-  // styles: BlockStyles
   styles:CSSProperties
 } 
 
-export type TextBlock = BaseBlock & {
+export type TextBlockType = BaseBlockType & {
   type:'text'
   content: string
 }
 
-export type HeaderBlock = BaseBlock & {
+export type HeaderBlockType = BaseBlockType & {
   type:'header',
   content:string
 }
 
-export type ParagraphBlock = BaseBlock & {
+export type ParagraphBlockType = BaseBlockType & {
   type:'paragraph',
   content:string
 }
 
-export type ImageBlock = BaseBlock & {
+export type ImageBlockType = BaseBlockType & {
   type: 'image'
   content: {
     src: string
@@ -95,48 +63,40 @@ export type ImageBlock = BaseBlock & {
   }
 }
 
-export type ButtonBlock = BaseBlock & {
+export type ButtonBlockType = BaseBlockType & {
   type: 'button'
-  content: {
-    text:string
-    onClick?: () => void
-  }
+  content: string
 }
 
-export type UnorderedListBlock = BaseBlock & {
+export type UnorderedListBlockType = BaseBlockType & {
   type: 'ul'
-  content: {
-    items: string[]
-  }
+  content: string[]
 };
 
-export type OrderedListBlock = BaseBlock & {
+export type OrderedListBlockType = BaseBlockType & {
   type: 'ol'
-  content: {
-    items: string[]
-  }
+  content: string[]
 }
 
-export type DividerBlock = BaseBlock & {
+export type DividerBlockType = BaseBlockType & {
   type:'divider'
   content:string
 }
 
-export type QuoteBlock = BaseBlock & {
+export type QuoteBlockType = BaseBlockType & {
   type:'quote'
   content:string
 }
 
 export type Block =
-  | TextBlock
-  | ParagraphBlock
-  | HeaderBlock
-  | ImageBlock
-  | ButtonBlock
-  | UnorderedListBlock
-  | OrderedListBlock
-  | DividerBlock
-  | QuoteBlock
+  | ParagraphBlockType
+  | HeaderBlockType
+  // | ImageBlockType
+  | ButtonBlockType
+  | UnorderedListBlockType
+  | OrderedListBlockType
+  // | DividerBlockType
+  | QuoteBlockType
 
 export interface Site {
   id: string

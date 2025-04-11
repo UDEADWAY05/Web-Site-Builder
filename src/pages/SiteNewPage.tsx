@@ -36,49 +36,40 @@ export function SiteNew() {
     {
       type: 'header',
       label: 'Заголовок',
-      // defaultContent: 'Новый заголовок',
       img: title,
     },
     {
       type: 'paragraph',
       label: 'Параграф',
-      // defaultContent: 'Текст параграфа',
       img: paragraf,
     },
     {
-      // type: 'listUl',
       type:'ul',
       label: 'Маркированный',
-      // defaultContent: [' -Элемент ', '-Элемент '],
       img: list_ul,
     },
     {
       type: 'ol',
       label: 'Нумерованный',
-      // defaultContent: ['Элемент 1', 'Элемент 2'],
       img: list_ol,
     },
-    {
-      type: 'image',
-      label: 'Изображение',
-      // defaultContent: '',
-      img: photo,
-    },
-    {
-      type: 'divider',
-      label: 'Разделитель',
-      // defaultContent: '',
-      img: horozontal,
-    },
+    // {
+    //   type: 'image',
+    //   label: 'Изображение',
+    //   img: photo,
+    // },
+    // {
+    //   type: 'divider',
+    //   label: 'Разделитель',
+    //   img: horozontal,
+    // },
     { type: 'button',
       label: 'Кнопка',
-      // defaultContent: 'Нажать',
       img: button 
     },
     {
       type: 'quote',
       label: 'Цитата',
-      // defaultContent: 'Текст цитаты',
       img: quote,
     },
   ]

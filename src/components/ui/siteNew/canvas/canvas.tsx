@@ -1,15 +1,15 @@
-import { useDispatch } from 'react-redux'
-import { DraggableBlock } from '../'
-import { useAppSelector } from '../../../../store/store'
-import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
-import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useAppDispatch } from 'src/hooks/redux-hooks'
+import { useAppSelector } from '../../../../store/store'
+import { Block } from 'src/store/slices/siteSlice'
+import { DraggableBlock } from '../draggableBlock/DraggableBlock'
+import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
+import { useParams } from 'react-router-dom'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock, setBlocks } from 'src/store/slices/siteSlice/siteSlice'
-import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
-import { Block } from 'src/store/slices/siteSlice'
+import { addBlock,deleteBlock,updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 
 export function Canvas() {
@@ -17,7 +17,7 @@ export function Canvas() {
   const blocks = useAppSelector(selectBlocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   //загрузка данных из FireBase
   useEffect(() => {
@@ -46,7 +46,6 @@ export function Canvas() {
     const top = e.clientY - canvasRect.top
 
     const newBlock = generateBlockByType(blockType,left,top)
-   
     dispatch(addBlock(newBlock))
   }
 
@@ -54,26 +53,34 @@ export function Canvas() {
     e.preventDefault()
   }
 
+  const onDelete = (id:string) => {dispatch(deleteBlock(id))}
+  const onSave = (id:string,content:Block['content']) => {dispatch(updateBlockContent({id,content}))}
+
   return (
     <>
       {isPreview ? (
         <Preview />
       ) : (
         <div
-          style={{
-            flex: 1,
-            position: 'relative',
-            backgroundColor: bgColor,
-            overflow: 'hidden',
-          }}
-          onDrop={(e) => handleDrop(e)}
-          onDragOver={(e) => handleDragOver(e)}
-        >
-          {blocks.map((block) => (
-            <DraggableBlock key={block.id} {...block} />
-          ))}
-        </div>
+        style={{
+        flex: 1,
+        position: 'relative',
+        backgroundColor: bgColor,
+        overflow: 'hidden',
+      }}
+      onDrop={(e) => handleDrop(e)}
+      onDragOver={(e) => handleDragOver(e)}
+    >
+      {blocks.map((block) => (
+        <DraggableBlock 
+          key={block.id} 
+          block={block} 
+          onDelete={() => onDelete(block.id)}
+          onSave={onSave} />
+      ))}
+    </div>
       )}
     </>
+    
   )
 }
