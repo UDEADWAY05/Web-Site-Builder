@@ -1,51 +1,43 @@
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
-import { BlockButtonProp } from '../../../../store/slices/layoutSite/types'
-import {
-  selectorLayoutSiteBgColor,
-  selectorLayoutSiteTitle,
-  selectorPreview,
-} from 'src/store/slices/layoutSite/selectors'
-import {
-  blockBgColorUpdate,
-  blockTitleUpdate,
-} from 'src/store/slices/layoutSite'
 import { Button } from '../../button'
 import {
   setModalOpen,
   togglePreview,
-} from 'src/store/slices/layoutSite/layoutSiteSlice'
+} from 'src/store/slices/siteSlice/siteSlice'
+import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectSiteTitle,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
+import { updateSiteTitle,updateSiteBgColor } from 'src/store/slices/siteSlice/siteSlice'
+import { BlockButton } from '../../../../store/slices/siteSlice/types'
 
-export function SideBar({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
+export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
+  const projectName = useAppSelector(selectSiteTitle)
+  const bgColor = useAppSelector(selectSiteBgColor)
   const isPreviewCode = useAppSelector(selectorPreview)
-  const projectName = useAppSelector(selectorLayoutSiteTitle)
-  const bgColor = useAppSelector(selectorLayoutSiteBgColor)
+
   const dispatch = useAppDispatch()
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    blockType: string
-  ) => {
-    e.dataTransfer?.setData('blockType', blockType)
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, blockType: BlockButton['type']) => {
+    e.dataTransfer.setData('blockType', blockType)
   }
 
   return (
-    <div className="p-2 w-[250px] bg-[#f4f4f4] flex flex-col">
-      <div className={isPreviewCode ? 'invisible' : ''}>
-        <p className="py-2 text-xs opacity-25">Название сайта</p>
+    <>
+      <div className="px-3 py-2 w-[250px] bg-[#f4f4f4]">
+        <p className="p-2 text-xs opacity-25">Название сайта</p>
         <input
           type="text"
           value={projectName}
-          onChange={(e) => dispatch(blockTitleUpdate(e.target.value))}
+          onChange={(e) => dispatch(updateSiteTitle(e.target.value))}
         />
         <hr />
-        <p className="py-2 text-xs opacity-25">Цвет фона страницы</p>
+        <p className="p-2 text-xs opacity-25">Цвет фона страницы</p>
         <input
           type="color"
           value={bgColor}
-          onChange={(e) => dispatch(blockBgColorUpdate(e.target.value))}
+          onChange={(e) => dispatch(updateSiteBgColor(e.target.value))}
         />
         <hr />
-        <p className="py-2 text-xs opacity-25">Базовый</p>
+        <p className="p-2 text-xs opacity-25">Базовый</p>
         <div className="grid grid-cols-2 gap-1">
           {blockTypes.map((block) => (
             <div
@@ -58,30 +50,29 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
               <div className="flex flex-col">
                 <img className="m-auto" src={block.img} alt={block.type} />
 
-                <div className="text-center ">
-                  <p className=" text-xs ">{block.label}</p>
+                  <div className="text-center ">
+                    <p className=" text-xs ">{block.label}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <hr />
+          <p className="py-2 text-xs opacity-25">Форма</p>
+          <div className="py-2 flex justify-between items-center">
+          {
+            <>
+              <Button className="px-1" onClick={() => dispatch(togglePreview())}>
+                {isPreviewCode ? 'Редактировать' : 'Предпросмотр'}
+              </Button>
+              <Button className="px-1" onClick={() => dispatch(setModalOpen())}>
+                Посмотреть код
+              </Button>
+            </>
+          }
         </div>
-        <hr />
-        <p className="py-2 text-xs opacity-25">Форма</p>
       </div>
       <hr />
-
-      <div className=" py-2 flex justify-between items-center">
-        {
-          <>
-            <Button className="px-1" onClick={() => dispatch(togglePreview())}>
-              {isPreviewCode ? 'Редактировать' : 'Предпросмотр'}
-            </Button>
-            <Button className="px-1" onClick={() => dispatch(setModalOpen())}>
-              Посмотреть код
-            </Button>
-          </>
-        }
-      </div>
-    </div>
+    </>
   )
 }

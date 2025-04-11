@@ -1,4 +1,4 @@
-import { Block } from 'src/store/slices/layoutSite'
+import { Block } from 'src/store/slices/siteSlice'
 
 export const generateHTMLCode = (block: Block) => {
   switch (block.type) {
