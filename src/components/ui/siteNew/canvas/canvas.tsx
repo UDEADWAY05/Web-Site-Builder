@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../../store/store'
 import {
   selectorLayoutSiteBgColor,
   selectorLayoutSiteData,
+  selectorPreview,
 } from 'src/store/slices/layoutSite/selectors'
 import { blockCreate } from 'src/store/slices/layoutSite'
 import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
@@ -11,10 +12,12 @@ import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/layoutSite/layoutSiteSlice'
+import { Preview } from '../Preview/preview'
 
 export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   const blocks = useAppSelector(selectorLayoutSiteData)
   const bgColor = useAppSelector(selectorLayoutSiteBgColor)
+  const isPreview = useAppSelector(selectorPreview)
   const dispatch = useDispatch()
   const { siteId } = useParams()
 
@@ -62,19 +65,25 @@ export function Canvas({ blockTypes }: { blockTypes: BlockButtonProp[] }) {
   }
 
   return (
-    <div
-      style={{
-        flex: 1,
-        position: 'relative',
-        backgroundColor: bgColor,
-        overflow: 'hidden',
-      }}
-      onDrop={(e) => handleDrop(e)}
-      onDragOver={(e) => handleDragOver(e)}
-    >
-      {blocks?.map((block) => (
-        <DraggableBlock key={block.id} {...block} />
-      ))}
-    </div>
+    <>
+      {isPreview ? (
+        <Preview />
+      ) : (
+        <div
+          style={{
+            flex: 1,
+            position: 'relative',
+            backgroundColor: bgColor,
+            overflow: 'hidden',
+          }}
+          onDrop={(e) => handleDrop(e)}
+          onDragOver={(e) => handleDragOver(e)}
+        >
+          {blocks?.map((block) => (
+            <DraggableBlock key={block.id} {...block} />
+          ))}
+        </div>
+      )}
+    </>
   )
 }
