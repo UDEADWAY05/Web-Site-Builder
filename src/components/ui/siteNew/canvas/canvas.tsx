@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { useAppDispatch } from 'src/hooks/redux-hooks'
 import { useAppSelector } from '../../../../store/store'
 import { Block } from 'src/store/slices/siteSlice'
 import { DraggableBlock } from '../draggableBlock/DraggableBlock'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
-import { useParams } from 'react-router-dom'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock,deleteBlock,updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
+import { addBlock,deleteBlock,updateBlockContent,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 
 export function Canvas() {
@@ -38,12 +38,24 @@ export function Canvas() {
     return off(siteRef) // Функция для отписки
   }, [dispatch, siteId])
 
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     const blockType = e.dataTransfer.getData('blockType') as Block['type'] //TODO how to make it better?
     const canvasRect = e.currentTarget.getBoundingClientRect()
     const left = e.clientX - canvasRect.left
     const top = e.clientY - canvasRect.top
+
+    const blockId = e.dataTransfer.getData('blockId')
+
+    if (blockId){ //block exists already
+      dispatch(updateBlockPosition({
+        id:blockId,
+        left:e.clientX - canvasRect.x -80, //TODO, must be 1/2 from component width,height
+        top:e.clientY - canvasRect.y - 50
+      }))
+      return
+    }
 
     const newBlock = generateBlockByType(blockType,left,top)
     dispatch(addBlock(newBlock))
@@ -76,7 +88,8 @@ export function Canvas() {
           key={block.id} 
           block={block} 
           onDelete={() => onDelete(block.id)}
-          onSave={onSave} />
+          onSave={onSave} 
+        />
       ))}
     </div>
       )}

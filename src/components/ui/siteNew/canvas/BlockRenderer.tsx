@@ -25,7 +25,7 @@ export const BlockRenderer = ({
   content,
   isEditing,
   onChange,
-  styles,
+  // styles,
 }: BlockRendererProps) => {
   const Component = blockComponentMap[type]
 
@@ -36,7 +36,7 @@ export const BlockRenderer = ({
       content={content}
       isEditing={isEditing}
       onChange={onChange}
-      styles={styles}
+      // styles={styles}
     />
   )
 }

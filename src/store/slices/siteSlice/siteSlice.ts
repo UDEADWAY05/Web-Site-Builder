@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { saveSite } from 'src/App'
 import type { Block, Site } from './types'
  
 const initialState: Site = {
@@ -34,11 +33,9 @@ const siteSlice = createSlice({
       state.isModalOpen = false
     },
     updateSiteTitle: (state, action:PayloadAction<Site['title']>) => {
-      console.log(action.payload)
       state.title = action.payload
     },
     updateSiteBgColor: (state, action:PayloadAction<Site['bgColor']>) => {
-      console.log(action.payload)
       state.bgColor = action.payload
     },
     addBlock: (state, action:PayloadAction<Block>) => {
@@ -54,8 +51,8 @@ const siteSlice = createSlice({
         return
       }
       
-      blockToUpdate.styles.left = action.payload.left
-      blockToUpdate.styles.top = action.payload.top
+      blockToUpdate.styles.left = `${action.payload.left}px`
+      blockToUpdate.styles.top = `${action.payload.top}px`
 
       state.blocks = state.blocks.map(block => {
         return block.id === blockToUpdate.id 
@@ -67,7 +64,6 @@ const siteSlice = createSlice({
       console.log(state, action)
     },
     updateBlockContent: (state, action:PayloadAction<{id:Block['id'],content:Block['content']}>) => {
-      console.log(action.payload.id,action.payload.content)
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
       
       if (!blockToUpdate){
