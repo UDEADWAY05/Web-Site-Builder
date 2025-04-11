@@ -4,6 +4,8 @@ import type { Block, LayoutSiteState } from './types'
 
 const initialState: LayoutSiteState = {
   entities: null,
+  isPreview: false,
+  isModalOpen: false,
 }
 
 const layoutSite = createSlice({
@@ -12,6 +14,16 @@ const layoutSite = createSlice({
   reducers: {
     setSite: (state, action) => {
       state.entities = action.payload
+    },
+    resetLayout: () => initialState,
+    togglePreview: (state) => {
+      state.isPreview = !state.isPreview
+    },
+    setModalOpen: (state) => {
+      state.isModalOpen = true
+    },
+    setModalClose: (state) => {
+      state.isModalOpen = false
     },
     blockTitleUpdate: (state, action) => {
       if (state.entities) {
@@ -97,6 +109,10 @@ const layoutSite = createSlice({
 
 export const {
   setSite,
+  resetLayout,
+  togglePreview,
+  setModalClose,
+  setModalOpen,
   blockTitleUpdate,
   blockBgColorUpdate,
   blockCreate,

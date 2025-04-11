@@ -20,6 +20,8 @@ export interface BlockButtonProp {
 }
 export interface LayoutSiteState {
   entities: Site | null
+  isPreview: boolean
+  isModalOpen: boolean
 }
 
 export interface Site {

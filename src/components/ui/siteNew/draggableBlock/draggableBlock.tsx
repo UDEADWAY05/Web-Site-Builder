@@ -16,7 +16,7 @@ export function DraggableBlock(block: Block) {
     border: '1px solid #ddd',
     padding: '10px',
     cursor: 'move',
-    zIndex: 100,
+    zIndex: 10,
     ...block.styles,
   }
 
