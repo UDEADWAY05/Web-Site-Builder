@@ -1,4 +1,4 @@
-import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
+import { BlockButton } from 'src/store/slices/siteSlice/types'
 import {
   button,
   horozontal,
@@ -22,17 +22,17 @@ import {
 } from '../components/ui/dialog'
 
 import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { setModalClose } from 'src/store/slices/layoutSite/layoutSiteSlice'
+import { setModalClose } from 'src/store/slices/siteSlice/siteSlice'
 import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTML'
 import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
 import { useAppSelector } from 'src/store/store'
-import { selectorModalOpen } from 'src/store/slices/layoutSite/selectors'
+import { selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
 
 export function SiteNew() {
   const isModal = useAppSelector(selectorModalOpen)
   const dispatch = useAppDispatch()
   // Кнопки для бокового меню
-  const blockTypes: BlockButtonProp[] = [
+  const blockTypes: BlockButton[] = [
     {
       type: 'header',
       label: 'Заголовок',

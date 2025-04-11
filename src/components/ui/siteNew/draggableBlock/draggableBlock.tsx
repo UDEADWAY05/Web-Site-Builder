@@ -1,15 +1,15 @@
-import type { Block } from '../../../../store/slices/layoutSite/types'
 import { useState } from 'react'
 import { Controls } from './Controls'
+import { Styles,Block } from 'src/store/slices/siteSlice/types'
 
 export function DraggableBlock(block: Block) {
   const [isEditing, setIsEditing] = useState(false)
 
-  const style = {
+  const style:Styles = {
     left: `${block.styles?.left}px`,
     top: `${block.styles?.top}px`,
     width: `${block.styles?.width}px`,
-    heigth: `${block.styles?.height}px`,
+    height: `${block.styles?.height}px`,
     position: 'absolute',
     minHeight: '30px',
     backgroundColor: '#fff',
@@ -82,3 +82,51 @@ export function DraggableBlock(block: Block) {
     </div>
   )
 }
+
+const renderEditableField = (block:Block) => {
+  switch (block.type) {
+    case "textbox":
+      return (
+        <input
+          type="text"
+          value={'new'}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="Edit text here"
+        />
+      );
+    case "button":
+      return (
+        <input
+          type="text"
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="Edit button text"
+        />
+      );
+    case "p":
+      return (
+        <textarea
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="Edit paragraph text"
+        />
+      );
+    case "ul":
+    case "ol":
+      return (
+        <textarea
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="Edit list content"
+        />
+      );
+    default:
+      return (
+        <textarea className='bg-white'
+          value={newText}
+          onChange={(e) => setNewText(e.target.value)}
+          placeholder="Edit text"
+        />
+      );
+  }
+};

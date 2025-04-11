@@ -16,7 +16,7 @@ import {
 import { firebaseContext } from './contexts/firebaseContext'
 import { FirebaseService } from './services/firebaseService'
 import { firebaseConfig } from './firebase'
-import { Site } from './store/slices/layoutSite/types'
+import { Site } from './store/slices/siteSlice/types'
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)

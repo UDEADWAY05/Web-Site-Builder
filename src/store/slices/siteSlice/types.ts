@@ -1,0 +1,136 @@
+// export interface Block {
+//   content: string | number
+//   id: number
+//   type: string
+//   title: string
+//   bgColor: string
+//   styles?: {
+//     width?: number | string
+//     height?: number | string
+//     left: string | number
+//     top: string | number
+//   }
+// }
+
+// export interface BlockButtonProp {
+//   type: string
+//   label: string
+//   defaultContent: string | string[]
+//   img: string
+// }
+// export interface LayoutSiteState {
+//   entities: Site | null
+// }
+
+// export interface Site {
+//   id: string
+//   title: string
+//   bgColor: string
+//   data: Block[] | []
+// }
+
+export interface BlockButton {
+  type: Block['type']
+  label: string
+  defaultContent: string | string[]
+  img: string
+}
+export interface LayoutSiteState {
+  entities: Site | null
+  isPreview: boolean
+  isModalOpen: boolean
+}
+
+export type Styles = {
+  padding?: string
+  margin?: string
+  backgroundColor?: string
+  fontSize?: string
+  fontWeight?: string
+  color?: string
+  position?:string
+  responsive?: { //maybe we will make responsive sizes
+    mobile?: Partial<Styles>
+    tablet?: Partial<Styles>
+    desktop?: Partial<Styles>
+  };
+  width?: string //TODO maybe number is better?
+  height?: string //
+  minHeight?:string //
+  left?: string //
+  top?: string //
+  border?:string
+  cursor?:string
+  zIndex?:number
+};
+
+export interface BaseBlock {
+  id:string
+  // type:string
+  content: string | Array<string>
+  styles: Styles
+} 
+
+export type TextBlock = BaseBlock & {
+  type:'text'
+  content: string
+}
+
+export type ParagraphBlock = BaseBlock & {
+  type:'paragraph',
+  content:string
+}
+
+export type ImageBlock = BaseBlock & {
+  type: 'image'
+  content: {
+    src: string
+    alt?: string
+  }
+}
+
+export type ButtonBlock = BaseBlock & {
+  type: 'button'
+  content: {
+    label: string
+    onClick?: string
+  }
+}
+
+export type UnorderedListBlock = BaseBlock & {
+  type: 'ul'
+  content: {
+    items: string[]
+  }
+};
+
+export type OrderedListBlock = BaseBlock & {
+  type: 'ol'
+  content: {
+    items: string[]
+  }
+}
+
+// export type ListItemBlock = BlockBase & {
+//   type: 'li';
+//   content: {
+//     text: string;
+//   };
+// };
+
+export type Block =
+  | TextBlock
+  | ParagraphBlock
+  | ImageBlock
+  | ButtonBlock
+  | UnorderedListBlock
+  | OrderedListBlock
+
+export interface Site {
+  id: string
+  title: string
+  bgColor: string
+  blocks: Array<Block>
+  isPreview: boolean
+  isModalOpen: boolean
+}

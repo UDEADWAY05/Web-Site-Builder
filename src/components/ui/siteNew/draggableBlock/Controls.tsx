@@ -1,28 +1,27 @@
 import { useState } from 'react'
 import { cancel, edit } from 'src/assets'
 import { useAppDispatch } from 'src/hooks/redux-hooks'
-import {
-  Block,
-  blockContentUpdate,
-  blockDelete,
-  blockPositionUpdate,
-} from 'src/store/slices/layoutSite'
-
+// import {
+//   Block,
+//   blockContentUpdate,
+//   blockDelete,
+//   blockPositionUpdate,
+// } from 'src/store/slices/layoutSite'
+import { Block } from 'src/store/slices/siteSlice'
+import { updateBlockContent,deleteBlock,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 interface OffsetProp {
   x: number
   y: number
 }
 
+interface ControlsProps {
+  block:Block
+  onMouseUp:() => void
+  onMouseLeave:() => void
+}
+
 // блок - редактирование блока
-export function Controls({
-  block,
-  onMouseLeave,
-  onMouseUp,
-}: {
-  block: Block
-  onMouseUp: () => void
-  onMouseLeave: () => void
-}) {
+export function Controls({ block, onMouseLeave, onMouseUp }:ControlsProps) {
   const [dragging, setDragging] = useState(false)
   const [offset, setOffset] = useState<OffsetProp>({ x: 0, y: 0 })
   const dispatch = useAppDispatch()
@@ -40,17 +39,20 @@ export function Controls({
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!dragging) return
     dispatch(
-      blockPositionUpdate({
+      updateBlockPosition({
         id: block.id,
-        newX: e.clientX - offset.x,
-        newY: e.clientY - offset.y,
+        // newX: e.clientX - offset.x,
+        // newY: e.clientY - offset.y,
+        left: e.clientX - offset.x,
+        top: e.clientY - offset.y,
       })
     )
   }
 
-  // Обновление текста блока
-  const updateBlockContent = (id: number, newContent: string | string[]) => {
-    dispatch(blockContentUpdate({ id, newContent }))
+  // const updateContent = (id: number, newContent: string | string[]) => {
+  const updateContent = (id: number, newContent: Block['content']) => { //TODO convert id
+    // dispatch(blockContentUpdate({ id, newContent }))
+    dispatch(updateBlockContent({ id: String(id), content:newContent }))
   }
 
   // начало редактирования текста
@@ -68,7 +70,7 @@ export function Controls({
           backgroundColor: '#fff',
           padding: '20px',
           border: '1px solid #000',
-          zIndex: 1000,
+          zIndex: 20,
         }}
       >
         <h3>Редактирование</h3>
@@ -78,7 +80,7 @@ export function Controls({
             <input
               type="text"
               value={item.type}
-              onChange={(e) => updateBlockContent(block.id, e.target.value)}
+              onChange={(e) => updateContent(block.id, e.target.value)}
               style={{ width: '100%' }}
             />
           ))}
@@ -91,7 +93,7 @@ export function Controls({
                 : item.content
             }
             onChange={(e) =>
-              updateBlockContent(block.id, e.target.value.split('\n'))
+              updateContent(block.id, e.target.value.split('\n'))
             }
             style={{ width: '100%', minHeight: '100px' }}
           />
@@ -100,7 +102,7 @@ export function Controls({
             <input
               type="text"
               value={item.content}
-              onChange={(e) => updateBlockContent(block.id, e.target.value)}
+              onChange={(e) => updateContent(block.id, e.target.value)}
               placeholder="Введите URL изображения"
               style={{ width: '100%' }}
             />
@@ -110,6 +112,7 @@ export function Controls({
       </div>
     )
   }
+
   return (
     <div
       className="flex justy justify-between content-center absolute"
@@ -117,7 +120,8 @@ export function Controls({
     >
       <button
         className="cursor-no-drop"
-        onClick={() => dispatch(blockDelete(block.id))}
+        // onClick={() => dispatch(blockDelete(block.id))}
+        onClick={() => dispatch(deleteBlock(block.id))}
         style={{ marginRight: '5px' }}
       >
         <img src={cancel} alt="cancel" />
