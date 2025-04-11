@@ -1,21 +1,29 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
-import { ref, set } from 'firebase/database'
-import { dbSite } from 'src/App'
+import { dbSite, ref, set } from 'src/App'
+import { useAppDispatch } from 'src/hooks/redux-hooks'
+import { resetLayout } from 'src/store/slices/layoutSite/layoutSiteSlice'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const handleCreateSite = async () => {
-    const siteId = Date.now().toString()
-    const newSite = {
-      id: siteId,
-      title: 'My Project',
-      bgColor: '#5C90FF',
-      data: [],
-    }
-    await set(ref(dbSite, `sites/${siteId}`), newSite)
+    try {
+      const siteId = Date.now().toString()
+      const newSite = {
+        id: siteId,
+        title: 'My Project',
+        bgColor: '#5C90FF',
+        data: [],
+      }
+      dispatch(resetLayout())
+      await set(ref(dbSite, `sites/${siteId}`), newSite)
 
-    navigate(`/sites/${siteId}`)
+      navigate(`/sites/${siteId}`)
+    } catch (error) {
+      // временная заглушка - перенести в slice
+      console.log('Ошибка при создании макета сайта:', error)
+    }
   }
   return (
     <Button

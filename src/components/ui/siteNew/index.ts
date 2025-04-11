@@ -2,5 +2,14 @@ import { DraggableBlock } from './draggableBlock/draggableBlock.tsx'
 import { SideBar } from './sideBar/sideBar.tsx'
 import { Canvas } from './canvas/canvas.tsx'
 import { ButtonNewSite } from './buttonNewSite/buttonNewSite.tsx'
+import { GenerateHTML } from './generateHTML/generateHTML.tsx'
+import { GenerateCSS } from './generateCSS/generateCSS.tsx'
 
-export { DraggableBlock, SideBar, Canvas, ButtonNewSite }
+export {
+  DraggableBlock,
+  SideBar,
+  Canvas,
+  ButtonNewSite,
+  GenerateHTML,
+  GenerateCSS,
+}
