@@ -2,9 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
 import { ref, set } from 'firebase/database'
 import { dbSite } from 'src/App'
+import { useAppSelector } from 'src/store/store'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
+  const user = useAppSelector(store => store.user.data)
   const handleCreateSite = async () => {
     const siteId = Date.now().toString()
     const newSite = {
@@ -12,6 +14,7 @@ export function ButtonNewSite() {
       title: 'My Project',
       bgColor: '#5C90FF',
       data: [],
+      userId: user?.id
     }
     await set(ref(dbSite, `sites/${siteId}`), newSite)
 
