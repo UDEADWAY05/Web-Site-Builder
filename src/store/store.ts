@@ -1,12 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import {
-  FLUSH,
-  PAUSE,
-  PERSIST,
-  persistReducer,
-  PURGE,
-  REGISTER,
-  REHYDRATE,
+    FLUSH,
+    PAUSE,
+    PERSIST,
+    persistReducer,
+    PURGE,
+    REGISTER,
+    REHYDRATE,
 } from 'redux-persist'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
@@ -14,26 +14,28 @@ import userReducer from './slices/userSlice/userSlice'
 import siteReducer from './slices/siteSlice/siteSlice'
 
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
+import { siteReducer } from './slices/siteSlice'
 
 const rootReducer = combineReducers({
-  user: userReducer,
-  site: siteReducer,
+    user: userReducer,
+    layoutSite: layoutSiteReducer,
+    site: siteReducer
 })
 
 const persistedReducer = persistReducer(
-  { key: 'redux', storage: storage },
-  rootReducer
+    { key: 'redux', storage: storage },
+    rootReducer
 )
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }).concat([])
-  },
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }).concat([])
+    },
 })
 
 export const persistor = persistStore(store)
