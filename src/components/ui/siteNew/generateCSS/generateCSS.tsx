@@ -1,4 +1,4 @@
-import { selectorLayoutSiteData } from 'src/store/slices/layoutSite/selectors'
+import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
 import { useAppSelector } from 'src/store/store'
 import { generateCSSCode } from 'src/utils/generateCSSCode'
 

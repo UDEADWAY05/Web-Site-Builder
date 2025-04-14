@@ -11,13 +11,13 @@ import {
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import userReducer from './slices/userSlice/userSlice'
-import layoutSiteReducer from './slices/layoutSite/layoutSiteSlice'
+import siteReducer from './slices/siteSlice/siteSlice'
 
 import { TypedUseSelectorHook, useSelector } from 'react-redux'
 
 const rootReducer = combineReducers({
   user: userReducer,
-  layoutSite: layoutSiteReducer,
+  site: siteReducer,
 })
 
 const persistedReducer = persistReducer(

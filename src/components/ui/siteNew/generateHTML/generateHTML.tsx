@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { selectorLayoutSiteData } from 'src/store/slices/layoutSite/selectors'
-import { Site } from 'src/store/slices/layoutSite/types'
+import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
+import { Site } from 'src/store/slices/siteSlice/types'
 import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 

@@ -1,4 +1,4 @@
-import { BlockButtonProp } from 'src/store/slices/layoutSite/types'
+import { BlockButton } from 'src/store/slices/siteSlice/types'
 import {
   button,
   horozontal,
@@ -22,58 +22,54 @@ import {
 } from '../components/ui/dialog'
 
 import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { setModalClose } from 'src/store/slices/layoutSite/layoutSiteSlice'
+import { setModalClose } from 'src/store/slices/siteSlice/siteSlice'
 import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTML'
 import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
 import { useAppSelector } from 'src/store/store'
-import { selectorModalOpen } from 'src/store/slices/layoutSite/selectors'
+import { selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
 
 export function SiteNew() {
   const isModal = useAppSelector(selectorModalOpen)
   const dispatch = useAppDispatch()
   // Кнопки для бокового меню
-  const blockTypes: BlockButtonProp[] = [
+  const blockTypes: BlockButton[] = [
     {
       type: 'header',
       label: 'Заголовок',
-      defaultContent: 'Новый заголовок',
       img: title,
     },
     {
       type: 'paragraph',
       label: 'Параграф',
-      defaultContent: 'Текст параграфа',
       img: paragraf,
     },
     {
-      type: 'listUl',
+      type:'ul',
       label: 'Маркированный',
-      defaultContent: [' -Элемент ', '-Элемент '],
       img: list_ul,
     },
     {
-      type: 'listOl',
+      type: 'ol',
       label: 'Нумерованный',
-      defaultContent: ['Элемент 1', 'Элемент 2'],
       img: list_ol,
     },
-    {
-      type: 'image',
-      label: 'Изображение',
-      defaultContent: '',
-      img: photo,
+    // {
+    //   type: 'image',
+    //   label: 'Изображение',
+    //   img: photo,
+    // },
+    // {
+    //   type: 'divider',
+    //   label: 'Разделитель',
+    //   img: horozontal,
+    // },
+    { type: 'button',
+      label: 'Кнопка',
+      img: button 
     },
-    {
-      type: 'divider',
-      label: 'Разделитель',
-      defaultContent: '',
-      img: horozontal,
-    },
-    { type: 'button', label: 'Кнопка', defaultContent: 'Нажать', img: button },
     {
       type: 'quote',
       label: 'Цитата',
-      defaultContent: 'Текст цитаты',
       img: quote,
     },
   ]
