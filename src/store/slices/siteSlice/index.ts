@@ -1,35 +1,28 @@
 import { Block } from './types'
 import {
-  updateSiteTitle,
-  updateSiteBgColor,
-  addBlock,
-  deleteBlock,
-  updateBlockPosition,
-  updateBlockSize,
-  updateBlockContent,
-  resetLayout,
-  setBlocks,
-  setModalClose,
-  setModalOpen,
-  setSite,
-  togglePreview,
-} from './siteSlice'
-import reducer from './siteSlice'
+    updateSiteTitle,
+    updateSiteBgColor,
+    addBlock,
+    deleteBlock,
+    updateBlockPosition,
+    updateBlockSize,
+    updateBlockContent,
+} from './layoutSiteSlice'
+import reducer from './layoutSiteSlice'
+import { SiteSlice } from './slice'
+
+
+export const siteReducer = SiteSlice.reducer
 
 export type { Block }
+
 export {
-  reducer,
-  updateSiteTitle as blockTitleUpdate,
-  updateSiteBgColor as blockBgColorUpdate,
-  addBlock as blockCreate,
-  deleteBlock as blockDelete,
-  updateBlockPosition as blockPositionUpdate,
-  updateBlockSize as blockSizeUpdate,
-  updateBlockContent as blockContentUpdate,
-  resetLayout,
-  setBlocks,
-  setModalClose,
-  setModalOpen,
-  setSite,
-  togglePreview,
+    reducer as layoutSiteReducer,
+    updateSiteTitle as blockTitleUpdate,
+    updateSiteBgColor as blockBgColorUpdate,
+    addBlock as blockCreate,
+    deleteBlock as blockDelete,
+    updateBlockPosition as blockPositionUpdate,
+    updateBlockSize as blockSizeUpdate,
+    updateBlockContent as blockContentUpdate,
 }
