@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
 import { dbSite, ref, set } from 'src/App'
 import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { resetLayout } from 'src/store/slices/siteSlice/siteSlice'
+import { resetLayout } from 'src/store/slices/siteSlice/layoutSiteSlice'
 import { useAppSelector } from 'src/store/store'
 
 export function ButtonNewSite() {
