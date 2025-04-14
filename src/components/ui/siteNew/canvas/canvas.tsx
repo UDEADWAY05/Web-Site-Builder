@@ -1,23 +1,15 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import {} from 'src/hooks/redux-hooks'
-import { useAppSelector, useAppDispatch } from '../../../../store/store'
+import { useAppDispatch } from 'src/store/store'
+import { useAppSelector } from '../../../../store/store'
 import { Block } from 'src/store/slices/siteSlice'
 import { DraggableBlock } from '../draggableBlock/DraggableBlock'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
-import {
-  selectBlocks,
-  selectSiteBgColor,
-} from 'src/store/slices/siteSlice/selectors'
+import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import {
-  addBlock,
-  deleteBlock,
-  updateBlockContent,
-  updateBlockPosition,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { addBlock,deleteBlock,updateBlockContent,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 
 export function Canvas() {
@@ -27,14 +19,14 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const dispatch = useAppDispatch()
 
-  //загрузка данных из FireBase
   useEffect(() => {
     const siteRef = ref(dbSite)
-
+    
     get(child(siteRef, `sites/${siteId}`))
       .then((snapsot) => {
         if (snapsot.exists()) {
-          // console.log('sval',snapsot.val())
+          // setSites(snapsot.val())
+          console.log('sval',snapsot.val())
           dispatch(setSite(snapsot.val()))
         } else {
           // заглушка - сохранить состояние в slice
@@ -45,6 +37,7 @@ export function Canvas() {
     return off(siteRef) // Функция для отписки
   }, [dispatch, siteId])
 
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     const blockType = e.dataTransfer.getData('blockType') as Block['type'] //TODO how to make it better?
@@ -52,21 +45,7 @@ export function Canvas() {
     const left = e.clientX - canvasRect.left
     const top = e.clientY - canvasRect.top
 
-    const blockId = e.dataTransfer.getData('blockId')
-
-    if (blockId) {
-      //block exists already
-      dispatch(
-        updateBlockPosition({
-          id: blockId,
-          left: e.clientX - canvasRect.x - 80, //TODO, must be 1/2 from component width,height
-          top: e.clientY - canvasRect.y - 50,
-        })
-      )
-      return
-    }
-
-    const newBlock = generateBlockByType(blockType, left, top)
+    const newBlock = generateBlockByType(blockType,left,top)
     dispatch(addBlock(newBlock))
   }
 
@@ -74,38 +53,34 @@ export function Canvas() {
     e.preventDefault()
   }
 
-  const onDelete = (id: string) => {
-    dispatch(deleteBlock(id))
-  }
-  const onSave = (id: string, content: Block['content']) => {
-    dispatch(updateBlockContent({ id, content }))
-  }
+  const onDelete = (id:string) => {dispatch(deleteBlock(id))}
+  const onSave = (id:string,content:Block['content']) => {dispatch(updateBlockContent({id,content}))}
 
   return (
     <>
-      {isPreview ? (
-        <Preview />
-      ) : (
-        <div
-          style={{
+      { isPreview 
+        ? (<Preview />)
+        : (<div
+            style={{
             flex: 1,
             position: 'relative',
             backgroundColor: bgColor,
             overflow: 'hidden',
-          }}
-          onDrop={(e) => handleDrop(e)}
-          onDragOver={(e) => handleDragOver(e)}
-        >
-          {blocks.map((block) => (
-            <DraggableBlock
-              key={block.id}
-              block={block}
-              onDelete={() => onDelete(block.id)}
-              onSave={onSave}
-            />
-          ))}
-        </div>
-      )}
+            }}
+            onDrop={(e) => handleDrop(e)}
+            onDragOver={(e) => handleDragOver(e)}
+          >
+            {blocks.map((block) => (
+              <DraggableBlock 
+                key={block.id} 
+                block={block} 
+                onDelete={() => onDelete(block.id)}
+                onSave={onSave} 
+              />
+            ))}
+          </div>
+          )}
     </>
+    
   )
 }

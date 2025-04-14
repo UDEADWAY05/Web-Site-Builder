@@ -25,10 +25,17 @@ export type BlockStyles = {
     mobile?: Partial<BlockStyles>
     tablet?: Partial<BlockStyles>
     desktop?: Partial<BlockStyles>
+<<<<<<< HEAD
   }
   width?: string //TODO maybe number is better?
   height?: string //
   minHeight?: string //
+=======
+  };
+  width: number //TODO maybe number is better?
+  height: number //
+  minHeight?:string //
+>>>>>>> 810003e (fix:драг+svg_иконки)
   left?: string //
   top?: string //
   border?: string

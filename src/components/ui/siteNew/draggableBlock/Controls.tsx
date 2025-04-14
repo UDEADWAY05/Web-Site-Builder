@@ -1,33 +1,83 @@
-import { Button } from '../../button'
+import { Block } from 'src/store/slices/siteSlice'
 
 type ControlsProps = {
   isEditing: boolean
+  isDragging: boolean
   onEdit: () => void
   onDelete: () => void
   onSave: () => void
   onCancel: () => void
+  onMouseDown: (e: React.MouseEvent) => void
+  onMouseUp: (e: React.MouseEvent) => void
+  onMouseMove: (e: React.MouseEvent) => void
+  onMouseLeave: () => void
+  block:Block
 }
 
-export const Controls = ({ isEditing, onEdit, onDelete, onSave, onCancel }: ControlsProps) => {
+export const Controls = ({
+  isEditing,
+  onEdit,
+  onDelete,
+  onSave,
+  onCancel,
+  onMouseDown,
+  onMouseUp,
+  onMouseMove,
+  onMouseLeave,
+}: ControlsProps) => {
+
+  const iconClass = 'w-8 h-8 cursor-pointer p-1'
+
   return (
-    <div className="flex gap-0.2 text-xs">
+    <div className='px-4 py-2 flex gap-4 justify-center'>
+      <svg        
+        xmlns="http://www.w3.org/2000/svg"
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+        viewBox='0 0 32'
+        className={iconClass}  
+      >
+        <path d="M6.5 6C7.32843 6 8 5.32843 8 4.5C8 3.67157 7.32843 3 6.5 3C5.67157 3 5 3.67157 5 4.5C5 5.32843 5.67157 6 6.5 6ZM6.5 11C7.32843 11 8 10.3284 8 9.5C8 8.67157 7.32843 8 6.5 8C5.67157 8 5 8.67157 5 9.5C5 10.3284 5.67157 11 6.5 11ZM8 14.5C8 15.3284 7.32843 16 6.5 16C5.67157 16 5 15.3284 5 14.5C5 13.6716 5.67157 13 6.5 13C7.32843 13 8 13.6716 8 14.5ZM13.5 6C14.3284 6 15 5.32843 15 4.5C15 3.67157 14.3284 3 13.5 3C12.6716 3 12 3.67157 12 4.5C12 5.32843 12.6716 6 13.5 6ZM15 9.5C15 10.3284 14.3284 11 13.5 11C12.6716 11 12 10.3284 12 9.5C12 8.67157 12.6716 8 13.5 8C14.3284 8 15 8.67157 15 9.5ZM13.5 16C14.3284 16 15 15.3284 15 14.5C15 13.6716 14.3284 13 13.5 13C12.6716 13 12 13.6716 12 14.5C12 15.3284 12.6716 16 13.5 16Z" fill="#212121"/>
+      </svg>
+
       {isEditing ? (
         <>
-          <Button variant='ghost'onClick={onSave}>
-            Save
-          </Button>
-          <Button variant='ghost' onClick={onCancel}>
-            Cancel
-          </Button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            className={iconClass}
+            onClick={onSave}
+          >
+            <path d="M12.16,28a3,3,0,0,1-2.35-1.13L3.22,18.62a1,1,0,0,1,1.56-1.24l6.59,8.24A1,1,0,0,0,13,25.56L27.17,4.44a1,1,0,1,1,1.66,1.12L14.67,26.67A3,3,0,0,1,12.29,28Z"/>
+          </svg>
+
+          <svg 
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            className={iconClass}
+            onClick={onCancel}
+          >
+            <path d="M4,29a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l24-24a1,1,0,1,1,1.42,1.42l-24,24A1,1,0,0,1,4,29Z"/><path d="M28,29a1,1,0,0,1-.71-.29l-24-24A1,1,0,0,1,4.71,3.29l24,24a1,1,0,0,1,0,1.42A1,1,0,0,1,28,29Z"/>
+          </svg>
         </>
       ) : (
         <>
-          <Button variant='secondary' onClick={onEdit}>
-            Edit
-          </Button>
-          <Button variant='ghost' onClick={onDelete}>
-            Delete
-          </Button>
+          <svg xmlns="http://www.w3.org/2000/svg"
+            onClick={onEdit}
+            className={iconClass}
+            viewBox="0 0 500 600">
+            <path d="M467.476,146.438l-21.445,21.455L317.35,39.23l21.445-21.457c23.689-23.692,62.104-23.692,85.795,0l42.886,42.897C491.133,84.349,491.133,122.748,467.476,146.438z M167.233,403.748c-5.922,5.922-5.922,15.513,0,21.436c5.925,5.955,15.521,5.955,21.443,0L424.59,189.335l-21.469-21.457L167.233,403.748z M60,296.54c-5.925,5.927-5.925,15.514,0,21.44c5.922,5.923,15.518,5.923,21.443,0L317.35,82.113L295.914,60.67L60,296.54z M338.767,103.54L102.881,339.421c-11.845,11.822-11.815,31.041,0,42.886c11.85,11.846,31.038,11.901,42.914-0.032l235.886-235.837L338.767,103.54z M145.734,446.572c-7.253-7.262-10.749-16.465-12.05-25.948c-3.083,0.476-6.188,0.919-9.36,0.919c-16.202,0-31.419-6.333-42.881-17.795c-11.462-11.491-17.77-26.687-17.77-42.887c0-2.954,0.443-5.833,0.859-8.703c-9.803-1.335-18.864-5.629-25.972-12.737c-0.682-0.677-0.917-1.596-1.538-2.338L0,485.216l147.748-36.986C147.097,447.637,146.36,447.193,145.734,446.572z"/>
+          </svg>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            onClick={onDelete}
+            className={iconClass}
+            viewBox="0 0 90 170">
+            <path d="M75.6,44.8v73c0,3.4-2.8,6.2-6.2,6.2H21.3c-3.4,0-6.2-2.8-6.2-6.2v-73H75.6L75.6,44.8z M59.9,52.9v62.8h3.6V52.9H59.9  L59.9,52.9z M43.6,52.9v62.8h3.6V52.9H43.6L43.6,52.9z M27.3,52.9v62.8h3.6V52.9H27.3L27.3,52.9z M31.3,27.9v-5.2  c0-3.3,2.6-5.9,5.9-5.9h16.4c3.3,0,5.9,2.6,5.9,5.9v5.2h18.1c3.4,0,6.2,2.8,6.2,6.2v4.3H7V34c0-3.4,2.8-6.2,6.2-6.2H31.3L31.3,27.9z   M37.2,20.8c-1,0-1.8,0.8-1.8,1.8v5.2h20.1v-5.2c0-1-0.8-1.8-1.8-1.8H37.2L37.2,20.8z"/>
+          </svg>
         </>
       )}
     </div>

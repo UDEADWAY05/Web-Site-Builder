@@ -8,18 +8,14 @@ export function generateBlockByType(
   top: number
 ): Block {
   const styles: CSSProperties = {
-    left: `${left}px`,
-    top: `${top}px`,
-    width: 'auto',
-    height: 'auto',
+    left,
+    top,
+    // width: 'auto',
+    
     position: 'absolute',
     // minHeight: '40px',
     // maxWidth:'100%',
     backgroundColor: '#fafafa',
-    border: '1px',
-    padding: '1.2rem 0.8rem',
-    cursor: 'move',
-    zIndex: 10,
   }
 
   switch (type) {

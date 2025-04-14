@@ -38,7 +38,7 @@ type BlockRendererProps = {
   content: Block['content']
   isEditing: boolean
   onChange: (value: unknown) => void
-  styles?: React.CSSProperties
+  styles: React.CSSProperties
 }
 
 export const BlockRenderer = ({
@@ -46,8 +46,8 @@ export const BlockRenderer = ({
   content,
   isEditing,
   onChange,
-}: // styles,
-BlockRendererProps) => {
+  styles
+}: BlockRendererProps) => {
   const Component = blockComponentMap[type]
 
   if (!Component) return <div>Unsupported block: {type}</div>
@@ -57,7 +57,7 @@ BlockRendererProps) => {
       content={content}
       isEditing={isEditing}
       onChange={onChange}
-      // styles={styles}
+      styles={styles}
     />
   )
 }

@@ -20,13 +20,14 @@ const rootReducer = combineReducers({
   site: siteReducer,
 })
 
-const persistedReducer = persistReducer(
-  { key: 'redux', storage: storage },
-  rootReducer
-)
+// const persistedReducer = persistReducer(
+//   { key: 'redux', storage: storage },
+//   rootReducer
+// )
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  // reducer: persistedReducer,
+  reducer:rootReducer,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: {
@@ -39,7 +40,7 @@ export const store = configureStore({
 export const persistor = persistStore(store)
 
 //only for dev mode,for convenience
-window.persistor = persistor
+// window.persistor = persistor
 
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>

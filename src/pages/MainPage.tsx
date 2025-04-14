@@ -7,6 +7,7 @@ export const Main = () => {
   const [sites, setSites] = useState([])
 
   useEffect(() => {
+    console.log('useEffect to load sites')
     const dbRef = ref(getDatabase())
     get(child(dbRef, 'sites'))
       .then((snapsot) => {
