@@ -12,7 +12,6 @@ export const UlListBlock = ({
   isEditing,
   onChange,
 }: ListBlockProps) => {
-  console.log(content)
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
