@@ -6,28 +6,26 @@ export const generateHTMLCode = (block: Block) => {
       return `<h1 class="${block.type}-${block.id}">${block.content}</h1>`
     case 'paragraph':
       return `<p class="${block.type}-${block.id}">${block.content}</p>`
-    case 'listUl':
-      return `<ul>
-  ${block.content.map(
-    (item) => `<li class="${block.type}-${block.id}">${item}</li>`
-  )}
+    case 'ul':
+      return `<ul class="${block.type}-${block.id}">
+  ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ul>`
-    case 'listOl':
-      return `<ol>
-  ${block.content.map(
-    (item) => `<li class="${block.type}-${block.id}">${item}</li>`
-  )}
+    case 'ol':
+      return `<ol class="${block.type}-${block.id}">
+  ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ol>`
     case 'image':
-      return `<img src=${block.content} alt=${block.content} class="${block.type}-${block.id}"/>`
+      return `<img src=${block.content.src} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
     case 'divider':
-      return '<hr/>'
+      return `<hr class="${block.type}-${block.id}"/>`
     case 'button':
       return `<button class="${block.type}-${block.id}">${block.content}</button>`
     case 'quote':
       return `
-       <blockquote cite="https://www.huxley.net/bnw/four.html">
-    <p>
+       <blockquote 
+          cite="https://www.huxley.net/bnw/four.html"
+          class="${block.type}-${block.id}">
+    <p >
       Words can be like X-rays, if you use them properly—they’ll go
       through anything. You read and you’re pierced.
     </p>

@@ -42,7 +42,9 @@ export function GenerateHTML() {
   <title>${siteById?.title}</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body style="background-color: ${siteById?.bgColor}">
+<body 
+  style="background-color: ${siteById?.bgColor};position: relative;
+   min-height: 100vh;">
   ${blocks?.map((block) => `${generateHTMLCode(block)}`).join('\n')}
 </body>
 </html>`

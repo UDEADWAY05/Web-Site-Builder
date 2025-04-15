@@ -40,26 +40,24 @@ export function Preview() {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${siteById?.title}</title>
+    <title>${siteById?.title || 'My project'}</title>
     <style>
       body {
         position: relative;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
+         margin:5px;
+         width: 100wh;
+        padding: 5px;
         background-color: ${siteById?.bgColor || '#ffffff'};
       }
-      .block {
+      .container {
         position: absolute;
         box-sizing: border-box;
+        min-height: 100vh;
+        width:100%
       }
         ${blocks
           ?.map(
             (block) => `
-        #block-${block.id} {
-          left: ${block.styles?.left || 0}px;
-          top: ${block.styles?.top || 0}px;
-          width: ${block.styles?.width || 300}px;
           ${block.styles ? generateCSSCode(block) : ''}
         }
       `
@@ -68,15 +66,9 @@ export function Preview() {
     </style>
   </head>
   <body>
-    ${blocks
-      ?.map(
-        (block) => `
-      <div id="block-${block.id}" class="block">
-        ${generateHTMLCode(block)}
-      </div>
-    `
-      )
-      .join('\n')}
+  <div class="container">
+    ${blocks?.map((block) => `${generateHTMLCode(block)}`).join('\n')}
+    </div>  
   </body>
   </html>`
 
