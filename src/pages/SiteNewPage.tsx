@@ -11,7 +11,7 @@ import {
 } from '../assets'
 import { SideBar } from 'src/components/ui/siteNew'
 import { Canvas } from 'src/components/ui/siteNew'
-import { Button } from '../components/ui/button'
+import { Button } from 'src/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -20,12 +20,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../components/ui/dialog'
-
-import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { setModalClose } from 'src/store/slices/siteSlice/siteSlice'
+import { setModalClose } from 'src/store/slices/siteSlice'
 import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTML'
 import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
-import { useAppSelector } from 'src/store/store'
+import { useAppSelector, useAppDispatch } from 'src/store/store'
 import { selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
 
 export function SiteNew() {
@@ -75,7 +73,7 @@ export function SiteNew() {
     <>
       <div className="flex h-screen">
         <SideBar blockTypes={blockTypes} />
-        <Canvas blockTypes={blockTypes} />
+        <Canvas />
       </div>
       <Dialog open={isModal}>
         <DialogContent className="p-2 sm:max-w-[1025px] w-full overflow-x-auto overflow-y-auto max-h-[80vh] break-words">

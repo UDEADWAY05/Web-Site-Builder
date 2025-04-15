@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
 import { dbSite, ref, set } from 'src/App'
-import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { resetLayout } from 'src/store/slices/siteSlice/siteSlice'
+import { useAppDispatch } from 'src/store/store'
+import { resetLayout } from 'src/store/slices/siteSlice'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()

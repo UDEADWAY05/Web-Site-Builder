@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from 'src/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { Button } from '../../button'
 import {
   setModalOpen,

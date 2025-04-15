@@ -6,12 +6,12 @@ import {
 } from '@headlessui/react'
 import { RoutePaths } from 'src/routes/paths'
 import { useFirebase } from 'src/hooks/useFirebase'
-import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { useAppSelector } from 'src/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { isUserLoggedIn } from 'src/store/slices/userSlice/selectors'
-import { removeUser } from 'src/store/slices/userSlice/userSlice'
+import { removeUser } from 'src/store/slices/userSlice'
 import { Button } from '../button'
 import { ButtonNewSite } from '../siteNew/buttonNewSite/buttonNewSite'
+
 // import { useAuth } from 'src/hooks/useAuth'
 // import { removeUser } from 'src/store/slices/userSlice'
 
