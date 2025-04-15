@@ -44,7 +44,7 @@ export function SiteNew() {
       img: paragraf,
     },
     {
-      type:'ul',
+      type: 'ul',
       label: 'Маркированный',
       img: list_ul,
     },
@@ -53,20 +53,17 @@ export function SiteNew() {
       label: 'Нумерованный',
       img: list_ol,
     },
-    // {
-    //   type: 'image',
-    //   label: 'Изображение',
-    //   img: photo,
-    // },
-    // {
-    //   type: 'divider',
-    //   label: 'Разделитель',
-    //   img: horozontal,
-    // },
-    { type: 'button',
-      label: 'Кнопка',
-      img: button 
+    {
+      type: 'image',
+      label: 'Изображение',
+      img: photo,
     },
+    {
+      type: 'divider',
+      label: 'Разделитель',
+      img: horozontal,
+    },
+    { type: 'button', label: 'Кнопка', img: button },
     {
       type: 'quote',
       label: 'Цитата',
