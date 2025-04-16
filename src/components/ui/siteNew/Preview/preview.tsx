@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
-import { Site } from 'src/store/slices/siteSlice/types'
 import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
-import { transformData } from 'src/utils/transformData'
-
 import { generateCSSCode } from 'src/utils/generateCSSCode'
+import type { Site } from 'src/store/slices/siteSlice/types'
 
 export function Preview() {
   const blocks = useAppSelector(selectorLayoutSiteData)
@@ -15,23 +13,21 @@ export function Preview() {
 
   // логику получения siteById вынести в slice
   // временная заглушка
-  const [sites, setSites] = useState([])
+  const [siteById, setSiteById] = useState<Site>()
 
   useEffect(() => {
     const dbRef = ref(dbSite)
-    get(child(dbRef, 'sites'))
+    get(child(dbRef, `sites/${siteId}`))
       .then((snapsot) => {
         if (snapsot.exists()) {
-          setSites(snapsot.val())
+          setSiteById(snapsot.val())
         } else {
           console.log('No data')
         }
       })
       .catch((err) => console.log(err))
     return off(dbRef) // Функция для отписки
-  }, [])
-
-  const siteById: Site = transformData(sites).find((site) => site.id === siteId)
+  }, [siteId])
 
   //////////
 

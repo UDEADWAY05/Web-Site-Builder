@@ -1,4 +1,4 @@
-import { BlockButton } from 'src/store/slices/siteSlice/types'
+import type { BlockButton, Site } from 'src/store/slices/siteSlice/types'
 import {
   button,
   horozontal,
@@ -21,14 +21,46 @@ import {
   DialogTitle,
 } from '../components/ui/dialog'
 import { setModalClose } from 'src/store/slices/siteSlice'
-import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTML'
-import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
+import { generateHTML } from 'src/utils/generateHTML'
+import { generateCSS } from 'src/utils/generateCSS'
 import { useAppSelector, useAppDispatch } from 'src/store/store'
-import { selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
+import {
+  selectorLayoutSiteData,
+  selectorModalOpen,
+} from 'src/store/slices/siteSlice/selectors'
+import { exportSiteToZip } from 'src/utils/exportSiteToZip'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { child, dbSite, get, off, ref } from 'src/App'
 
 export function SiteNew() {
+  const blocks = useAppSelector(selectorLayoutSiteData)
   const isModal = useAppSelector(selectorModalOpen)
+  const { siteId } = useParams<{ siteId: string }>()
   const dispatch = useAppDispatch()
+
+  // временная заглушка
+  const [siteById, setSiteById] = useState<Site | null>(null)
+
+  useEffect(() => {
+    if (!siteId) return
+    const dbRef = ref(dbSite)
+    get(child(dbRef, `sites/${siteId}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setSiteById(snapshot.val() as Site)
+        } else {
+          console.log('No data')
+          setSiteById(null)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        setSiteById(null)
+      })
+    return () => off(dbRef) // Функция для отписки
+  }, [siteId])
+
   // Кнопки для бокового меню
   const blockTypes: BlockButton[] = [
     {
@@ -75,7 +107,7 @@ export function SiteNew() {
         <SideBar blockTypes={blockTypes} />
         <Canvas />
       </div>
-      <Dialog open={isModal}>
+      <Dialog open={isModal} onOpenChange={() => dispatch(setModalClose())}>
         <DialogContent className="p-2 sm:max-w-[1025px] w-full overflow-x-auto overflow-y-auto max-h-[80vh] break-words">
           <DialogHeader>
             <DialogTitle>Layout Web Site</DialogTitle>
@@ -83,14 +115,25 @@ export function SiteNew() {
           </DialogHeader>
           <div className="flex justify-between gap-4 py-2 ">
             <pre>
-              <GenerateHTML />
+              {siteById ? generateHTML(blocks, siteById) : 'загрузка данных'}
             </pre>
             <pre>
-              <GenerateCSS />
+              <div className=" outline-2 ">
+                <h3 className="text-center">CSS</h3>
+                {generateCSS(blocks)}
+              </div>
             </pre>
           </div>
-          <DialogFooter onClick={() => dispatch(setModalClose())}>
-            <Button>Вернуться в режим редактирования</Button>
+          <DialogFooter>
+            <Button onClick={() => dispatch(setModalClose())}>
+              Вернуться в режим редактирования
+            </Button>
+            <Button
+              onClick={() => siteById && exportSiteToZip(blocks, siteById)}
+              disabled={!siteById}
+            >
+              Экспорт сайта в виде ZIP архива
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
