@@ -1,8 +1,13 @@
-import { CSSProperties } from "react";
-import { Block } from "src/store/slices/layoutSite"
+import { CSSProperties } from 'react'
+import { Block } from 'src/store/slices/siteSlice'
+import musical from '../assets/musical.png'
 
-export function generateBlockByType(type: Block['type'], left: number, top: number): Block {
-  const styles:CSSProperties = {
+export function generateBlockByType(
+  type: Block['type'],
+  left: number,
+  top: number
+): Block {
+  const styles: CSSProperties = {
     left: `${left}px`,
     top: `${top}px`,
     width: 'auto',
@@ -15,7 +20,7 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
     padding: '1.2rem 0.8rem',
     cursor: 'move',
     zIndex: 10,
-  };
+  }
 
   switch (type) {
     case 'paragraph':
@@ -24,21 +29,21 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
         type,
         styles,
         content: 'new_paragraph',
-      };
+      }
     case 'header':
       return {
         id: Date.now().toString(),
         type,
         styles,
-        content: 'new_header', 
+        content: 'new_header',
       }
-    // case 'image':
-    //   return {
-    //     id: Date.now().toString(),
-    //     type,
-    //     styles,
-    //     content: { src: '', alt: '' }, 
-    //   }
+    case 'image':
+      return {
+        id: Date.now().toString(),
+        type,
+        styles,
+        content: { src: `${musical}`, alt: 'image' },
+      }
     case 'button':
       return {
         id: Date.now().toString(),
@@ -52,25 +57,25 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
         id: Date.now().toString(),
         type,
         styles,
-        content: ['item1','item2']
+        content: ['item1', 'item2'],
       }
 
-    // case 'divider':
-    //   return {
-    //     id: Date.now().toString(),
-    //     type,
-    //     styles,
-    //     content:'divider'
-    // }
+    case 'divider':
+      return {
+        id: Date.now().toString(),
+        type,
+        styles,
+        content: 'divider',
+      }
 
     case 'quote':
       return {
         id: Date.now().toString(),
         type,
         styles,
-        content:'Lorem ipsum dolor sir amet'
-    }
+        content: 'Lorem ipsum dolor sir amet',
+      }
     default:
-      throw new Error(`Unknown block type: ${type}`);
+      throw new Error(`Unknown block type: ${type}`)
   }
 }

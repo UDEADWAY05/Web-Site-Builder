@@ -9,6 +9,7 @@ import title from './title.svg'
 import paragraf from './paragraf.svg'
 import cancel from './cancel.svg'
 import edit from './edit.svg'
+import musical from './musical.png'
 
 export {
   button,
@@ -22,4 +23,5 @@ export {
   paragraf,
   cancel,
   edit,
+  musical,
 }

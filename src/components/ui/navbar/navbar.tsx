@@ -6,12 +6,12 @@ import {
 } from '@headlessui/react'
 import { RoutePaths } from 'src/routes/paths'
 import { useFirebase } from 'src/hooks/useFirebase'
-import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { useAppSelector } from 'src/hooks/redux-hooks'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { isUserLoggedIn } from 'src/store/slices/userSlice/selectors'
-import { removeUser } from 'src/store/slices/userSlice/userSlice'
+import { removeUser } from 'src/store/slices/userSlice'
 import { Button } from '../button'
 import { ButtonNewSite } from '../siteNew/buttonNewSite/buttonNewSite'
+
 // import { useAuth } from 'src/hooks/useAuth'
 // import { removeUser } from 'src/store/slices/userSlice'
 
@@ -114,13 +114,6 @@ export function NavBar() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
-              type="button"
-              className="relative rounded-full bg-gray-500 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-            >
-              <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-            </button>
             {isLoggedIn && (
               <>
                 <Link to="/user">

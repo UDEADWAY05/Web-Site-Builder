@@ -13,7 +13,7 @@ import storage from 'redux-persist/lib/storage'
 import userReducer from './slices/userSlice/userSlice'
 import siteReducer from './slices/siteSlice/siteSlice'
 
-import { TypedUseSelectorHook, useSelector } from 'react-redux'
+import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux'
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -44,3 +44,4 @@ window.persistor = persistor
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useAppDispatch = () => useDispatch<AppDispatch>()

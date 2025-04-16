@@ -1,5 +1,5 @@
-import { Button } from "src/components/ui/button"
-import { Input } from "src/components/ui/input"
+import { Button } from 'src/components/ui/button'
+import { Input } from 'src/components/ui/input'
 
 export type ListBlockProps = {
   content: string[]
@@ -7,8 +7,11 @@ export type ListBlockProps = {
   onChange: (items: string[]) => void
 }
 
-export const ListBlock = ({ content, isEditing, onChange }: ListBlockProps) => {
-  console.log(content)
+export const OlListBlock = ({
+  content,
+  isEditing,
+  onChange,
+}: ListBlockProps) => {
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
@@ -20,7 +23,7 @@ export const ListBlock = ({ content, isEditing, onChange }: ListBlockProps) => {
     onChange(content.filter((_, i) => i !== index))
 
   return isEditing ? (
-    <ul>
+    <ol>
       {content.map((item, index) => (
         <li key={index}>
           <Input
@@ -32,12 +35,12 @@ export const ListBlock = ({ content, isEditing, onChange }: ListBlockProps) => {
         </li>
       ))}
       <Button onClick={addItem}>+ Add item</Button>
-    </ul>
+    </ol>
   ) : (
-    <ul>
+    <ol>
       {content.map((item, i) => (
         <li key={i}>{item}</li>
       ))}
-    </ul>
+    </ol>
   )
 }

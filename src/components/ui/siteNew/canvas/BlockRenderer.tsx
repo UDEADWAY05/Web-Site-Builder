@@ -1,13 +1,24 @@
-import { Block } from 'src/store/slices/layoutSite'
-import { ButtonBlock, HeaderBlock, ListBlock, ParagraphBlock,QuoteBlock } from './blocks'
+import { Block } from 'src/store/slices/siteSlice'
+import {
+  ButtonBlock,
+  HeaderBlock,
+  OlListBlock,
+  UlListBlock,
+  ParagraphBlock,
+  QuoteBlock,
+  DividerBlock,
+  ImageBlock,
+} from './blocks'
 
 const blockComponentMap = {
   button: ButtonBlock,
   paragraph: ParagraphBlock,
-  ul: ListBlock,
-  ol: ListBlock,
-  header:HeaderBlock,
-  quote:QuoteBlock
+  ul: UlListBlock,
+  ol: OlListBlock,
+  header: HeaderBlock,
+  quote: QuoteBlock,
+  divider: DividerBlock,
+  image: ImageBlock,
 } as const
 
 type BlockType = keyof typeof blockComponentMap
@@ -25,8 +36,8 @@ export const BlockRenderer = ({
   content,
   isEditing,
   onChange,
-  // styles,
-}: BlockRendererProps) => {
+}: // styles,
+BlockRendererProps) => {
   const Component = blockComponentMap[type]
 
   if (!Component) return <div>Unsupported block: {type}</div>
