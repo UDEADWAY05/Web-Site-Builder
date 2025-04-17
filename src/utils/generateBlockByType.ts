@@ -35,7 +35,7 @@ export function generateBlockByType(
         id: Date.now().toString(),
         type,
         styles,
-        content: 'new_header',
+        content: { text: 'new_header', level: 1 },
       }
     case 'image':
       return {

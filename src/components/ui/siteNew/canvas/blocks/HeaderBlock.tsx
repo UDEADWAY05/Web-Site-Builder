@@ -1,4 +1,4 @@
-import { CSSProperties, JSX, useState } from 'react'
+import { CSSProperties, JSX } from 'react'
 import { Input } from 'src/components/ui/input'
 import {
   Select,
@@ -9,29 +9,26 @@ import {
 } from 'src/components/ui/select'
 
 export type HeaderBlockProps = {
-  content: string
+  content: { text: string; level: number }
   isEditing: boolean
-  onChange: (newContent: string) => void
+  onChange: (newContent: { text: string; level: number }) => void
   styles?: CSSProperties
-  onLevelChange?: (newLevel: number) => void
-  level?: number
 }
 
 export const HeaderBlock = ({
   content,
   isEditing,
   onChange,
-  level = 1,
-  onLevelChange,
 }: HeaderBlockProps) => {
-  const [currentLevel, setCurrentLevel] = useState(level)
   const levelMap: number[] = [1, 2, 3, 4, 5, 6] //TODO making better
-  const HeaderTag = `h${currentLevel}` as keyof JSX.IntrinsicElements
+  const HeaderTag = `h${content.level}` as keyof JSX.IntrinsicElements
 
   const handleLevelChange = (newLevel: string) => {
     const levelNum = parseInt(newLevel, 10)
-    setCurrentLevel(levelNum)
-    if (onLevelChange) onLevelChange(levelNum)
+    onChange({
+      text: content.text,
+      level: levelNum,
+    })
   }
 
   return (
@@ -40,17 +37,22 @@ export const HeaderBlock = ({
         <div className="flex">
           <Input
             type="text"
-            value={content}
-            onChange={(e) => onChange(e.target.value)}
+            value={content.text}
+            onChange={(e) =>
+              onChange({
+                text: e.target.value,
+                level: content.level,
+              })
+            }
             placeholder="Edit text"
             className="border p-2 w-full"
           />
           <Select
-            value={currentLevel.toString()}
+            value={content.level.toString()}
             onValueChange={handleLevelChange}
           >
             <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder={`h${currentLevel}`} />
+              <SelectValue placeholder={`h${content.level}`} />
             </SelectTrigger>
             <SelectContent>
               {levelMap.map((lvl) => (
@@ -62,7 +64,7 @@ export const HeaderBlock = ({
           </Select>
         </div>
       ) : (
-        <HeaderTag>{content}</HeaderTag>
+        <HeaderTag>{content.text}</HeaderTag>
       )}
     </div>
   )
