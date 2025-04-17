@@ -35,6 +35,8 @@ import { child, dbSite, get, off, ref } from 'src/App'
 
 export function SiteNew() {
   const blocks = useAppSelector(selectorLayoutSiteData)
+  console.log(blocks)
+
   const isModal = useAppSelector(selectorModalOpen)
   const { siteId } = useParams<{ siteId: string }>()
   const dispatch = useAppDispatch()

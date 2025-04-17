@@ -9,6 +9,7 @@ import {
   DividerBlock,
   ImageBlock,
 } from './blocks'
+import { useState } from 'react'
 
 const blockComponentMap = {
   button: ButtonBlock,
@@ -38,6 +39,7 @@ export const BlockRenderer = ({
   onChange,
 }: // styles,
 BlockRendererProps) => {
+  const [headerLevel, setHeaderLevel] = useState(1)
   const Component = blockComponentMap[type]
 
   if (!Component) return <div>Unsupported block: {type}</div>
@@ -48,6 +50,8 @@ BlockRendererProps) => {
       isEditing={isEditing}
       onChange={onChange}
       // styles={styles}
+      level={headerLevel}
+      onLevelChange={setHeaderLevel}
     />
   )
 }
