@@ -1,7 +1,7 @@
 export type ImageBlockProps = {
-  content: { src: string; alt: string }
+  content: { url: string; alt: string }
   isEditing: boolean
-  onChange: (newContent: string) => void
+  onChange: (newContent: { url: string; alt: string }) => void
 }
 
 export const ImageBlock = ({
@@ -12,12 +12,12 @@ export const ImageBlock = ({
   return isEditing ? (
     <input
       type="text"
-      value={content.src}
-      onChange={(e) => onChange(e.target.value)}
+      value={content.url}
+      onChange={(e) => onChange({ url: e.target.value, alt: 'image' })}
       placeholder="Edit src image"
       className="border p-2 w-full"
     />
   ) : (
-    <img src={`${content.src}`} alt={content.alt} />
+    <img src={`${content.url}`} alt={content.alt} />
   )
 }

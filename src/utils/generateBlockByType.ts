@@ -42,7 +42,7 @@ export function generateBlockByType(
         id: Date.now().toString(),
         type,
         styles,
-        content: { src: `${musical}`, alt: 'image' },
+        content: { url: `${musical}`, alt: 'image' },
       }
     case 'button':
       return {

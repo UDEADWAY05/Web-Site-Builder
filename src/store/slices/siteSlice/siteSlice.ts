@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Block, HeaderBlockType, Site } from './types'
+import type { Block, HeaderBlockType, ImageBlockType, Site } from './types'
 
 const initialState: Site = {
   id: new Date().getTime().toString(), //TODO, it's shit
@@ -88,14 +88,19 @@ const siteSlice = createSlice({
         throw new Error('Updating block not found')
       }
 
-      if (blockToUpdate.type === 'header') {
-        if (
-          typeof action.payload.content === 'object' &&
-          action.payload.content !== null
-        ) {
+      if (
+        typeof action.payload.content === 'object' &&
+        action.payload.content !== null
+      ) {
+        if (blockToUpdate.type === 'header') {
           const headerBlock = blockToUpdate as HeaderBlockType
           headerBlock.content.text = action.payload.content.text
           headerBlock.content.level = action.payload.content.level
+        }
+        if (blockToUpdate.type === 'image') {
+          const headerBlock = blockToUpdate as ImageBlockType
+          headerBlock.content.url = action.payload.content.url
+          headerBlock.content.alt = action.payload.content.alt
         }
       }
 

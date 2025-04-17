@@ -15,7 +15,7 @@ export const generateHTMLCode = (block: Block) => {
   ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ol>`
     case 'image':
-      return `<img src=${block.content.src} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
+      return `<img src=${block.content.url} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
     case 'divider':
       return `<hr class="${block.type}-${block.id}"/>`
     case 'button':

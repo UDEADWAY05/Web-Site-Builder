@@ -62,7 +62,7 @@ export type ParagraphBlockType = BaseBlockType & {
 export type ImageBlockType = BaseBlockType & {
   type: 'image'
   content: {
-    src: string
+    url: string
     alt?: string
   }
 }
