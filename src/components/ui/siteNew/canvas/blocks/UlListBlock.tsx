@@ -22,7 +22,9 @@ export const UlListBlock = ({
   const removeItem = (index: number) =>
     onChange(content.filter((_, i) => i !== index))
 
-  return isEditing ? (
+  return ( 
+    <article className="p-2 w-full resize-none overflow-hidden">
+      {isEditing ? (
     <ul>
       {content.map((item, index) => (
         <li key={index}>
@@ -31,10 +33,10 @@ export const UlListBlock = ({
             value={item}
             onChange={(e) => updateItem(index, e.target.value)}
           />
-          <Button onClick={() => removeItem(index)}>x</Button>
+          <button onClick={() => removeItem(index)}>x</button>
         </li>
       ))}
-      <Button onClick={addItem}>+ Add item</Button>
+      <button onClick={addItem}>+ Add item</button>
     </ul>
   ) : (
     <ul>
@@ -42,5 +44,7 @@ export const UlListBlock = ({
         <li key={i}>{item}</li>
       ))}
     </ul>
+  )}
+    </article>
   )
 }

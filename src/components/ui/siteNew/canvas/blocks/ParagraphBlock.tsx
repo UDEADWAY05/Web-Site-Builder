@@ -8,14 +8,14 @@ export type ParagraphBlockProps = {
   export const ParagraphBlock = ({ content, isEditing, onChange }: ParagraphBlockProps) => { 
     return (
     
-    <article className="p-2">
+    <article className="p-2 w-full resize-none overflow-hidden">
       { isEditing 
-        ? <textarea wrap='soft' className="w-full resize-none overflow-hidden h-[8rem]"
+        ? <textarea
             value={content}
             onChange={(e) => onChange(e.target.value)}
 
           /> 
-        : <p className="w-full resize-none overflow-auto">{content}</p>
+        : <p>{content}</p>
       }
     </article>
     )
