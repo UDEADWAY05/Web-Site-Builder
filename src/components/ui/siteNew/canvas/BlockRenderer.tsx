@@ -10,6 +10,9 @@ import {
   ImageBlock,
   CheckboxBlock,
   RadioboxBlock,
+  InputBlock,
+  TextareaBlock,
+  SelectBlock,
 } from './blocks'
 
 const blockComponentMap = {
@@ -23,6 +26,9 @@ const blockComponentMap = {
   image: ImageBlock,
   checkbox: CheckboxBlock,
   radiobox: RadioboxBlock,
+  input: InputBlock,
+  textarea: TextareaBlock,
+  select: SelectBlock,
 } as const
 
 type BlockType = keyof typeof blockComponentMap

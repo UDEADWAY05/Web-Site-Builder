@@ -104,7 +104,7 @@ export type TextAreaBlockType = BaseBlockType & {
 
 export type SelectBlockType = BaseBlockType & {
   type: 'select'
-  content: string
+  content: string[]
 }
 
 export type CheckBoxBlockType = BaseBlockType & {

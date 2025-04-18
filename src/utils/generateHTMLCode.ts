@@ -36,14 +36,14 @@ export const generateHTMLCode = (block: Block) => {
 
     /// form ///
     case 'checkbox':
-      return `form class="${block.type}-${block.id}">
+      return `<form class="${block.type}-${block.id}">
     <input 
       type="checkbox" 
       id='${block.id}'
       name='${block.id}'
       checked />
     <label for='${block.id}'>${block.content}</label>
-  </div>`
+  </form>`
 
     case 'radiobox':
       return `<form class="${block.type}-${block.id}">
@@ -60,6 +60,37 @@ export const generateHTMLCode = (block: Block) => {
    )
    .join('\n')}
 </form>`
+
+    case 'input':
+      return `<form class="${block.type}-${block.id}">
+    <input 
+      type="text" 
+      id='${block.id}'
+      
+    />
+    <label for='${block.id}'>${block.content}</label>
+  </form>`
+
+    case 'textarea':
+      return `<form class="${block.type}-${block.id}">
+    <textarea 
+      id='${block.id}'
+      rows='5'
+      cols='33'
+        >
+      ${block.content}
+      </textarea>
+      </form>`
+
+    case 'select':
+      return `<select 
+        name=${block.id} 
+        id=${block.id}
+        class="${block.type}-${block.id}"
+        >
+  <option value="">--Please choose an option--</option>
+${block.content.map((value) => `<option value=${value}>${value}</option>`)}
+</select>`
 
     default:
       return ''

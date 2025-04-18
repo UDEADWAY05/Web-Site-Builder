@@ -11,5 +11,8 @@ export function isBlockType(value: string): value is Block['type'] {
     'divider',
     'checkbox',
     'radiobox',
+    'input',
+    'textarea',
+    'select',
   ].includes(value)
 }

@@ -8,6 +8,9 @@ import { DividerBlock } from './DividerBlock'
 import { ImageBlock } from './ImageBlock'
 import { CheckboxBlock } from './CheckboxBlock'
 import { RadioboxBlock } from './RadioboxBlock'
+import { InputBlock } from './InputBlock'
+import { TextareaBlock } from './TextareaBlock'
+import { SelectBlock } from './Select'
 
 export {
   ButtonBlock,
@@ -20,4 +23,7 @@ export {
   ImageBlock,
   CheckboxBlock,
   RadioboxBlock,
+  InputBlock,
+  TextareaBlock,
+  SelectBlock,
 }
