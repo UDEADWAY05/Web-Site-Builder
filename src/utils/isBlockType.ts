@@ -9,5 +9,7 @@ export function isBlockType(value: string): value is Block['type'] {
     'ul',
     'ol',
     'divider',
+    'checkbox',
+    'radiobox',
   ].includes(value)
 }

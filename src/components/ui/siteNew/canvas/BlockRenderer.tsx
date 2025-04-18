@@ -8,6 +8,8 @@ import {
   QuoteBlock,
   DividerBlock,
   ImageBlock,
+  CheckboxBlock,
+  RadioboxBlock,
 } from './blocks'
 
 const blockComponentMap = {
@@ -19,6 +21,8 @@ const blockComponentMap = {
   quote: QuoteBlock,
   divider: DividerBlock,
   image: ImageBlock,
+  checkbox: CheckboxBlock,
+  radiobox: RadioboxBlock,
 } as const
 
 type BlockType = keyof typeof blockComponentMap
@@ -27,7 +31,7 @@ type BlockRendererProps = {
   type: BlockType
   content: Block['content']
   isEditing: boolean
-  onChange: (value: any) => void
+  onChange: (value: unknown) => void
   styles?: React.CSSProperties
 }
 

@@ -113,8 +113,8 @@ export type CheckBoxBlockType = BaseBlockType & {
 }
 
 export type RadioBoxBlockType = BaseBlockType & {
-  type: 'radio'
-  content: string
+  type: 'radiobox'
+  content: string[]
 }
 
 export type Block =

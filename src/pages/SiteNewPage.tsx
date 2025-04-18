@@ -126,7 +126,7 @@ export function SiteNew() {
       img: check_box,
     },
     {
-      type: 'radio',
+      type: 'radiobox',
       label: 'Переключатель',
       img: radio_button_checked,
     },

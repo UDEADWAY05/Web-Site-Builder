@@ -33,6 +33,34 @@ export const generateHTMLCode = (block: Block) => {
   <p>
     —Aldous Huxley, <cite>Brave New World</cite>
   </p> `
+
+    /// form ///
+    case 'checkbox':
+      return `form class="${block.type}-${block.id}">
+    <input 
+      type="checkbox" 
+      id='${block.id}'
+      name='${block.id}'
+      checked />
+    <label for='${block.id}'>${block.content}</label>
+  </div>`
+
+    case 'radiobox':
+      return `<form class="${block.type}-${block.id}">
+ ${block.content
+   .map(
+     (item) =>
+       ` <input 
+    type="radio" 
+    id='${item}'
+    name='${block.id}'
+    value='${item}'
+    checked />
+  <label for='${item}'>${item}</label>`
+   )
+   .join('\n')}
+</form>`
+
     default:
       return ''
   }

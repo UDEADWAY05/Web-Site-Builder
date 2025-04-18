@@ -6,6 +6,8 @@ import { ParagraphBlock } from './ParagraphBlock'
 import { QuoteBlock } from './QuoteBlock'
 import { DividerBlock } from './DividerBlock'
 import { ImageBlock } from './ImageBlock'
+import { CheckboxBlock } from './CheckboxBlock'
+import { RadioboxBlock } from './RadioboxBlock'
 
 export {
   ButtonBlock,
@@ -16,4 +18,6 @@ export {
   QuoteBlock,
   DividerBlock,
   ImageBlock,
+  CheckboxBlock,
+  RadioboxBlock,
 }

@@ -75,6 +75,23 @@ export function generateBlockByType(
         styles,
         content: 'Lorem ipsum dolor sir amet',
       }
+    ///// form////
+    case 'checkbox':
+      return {
+        id: Date.now().toString(),
+        type,
+        styles,
+        content: 'Accept terms and conditions',
+      }
+
+    case 'radiobox':
+      return {
+        id: Date.now().toString(),
+        type,
+        styles,
+        content: ['yes', 'no'],
+      }
+
     default:
       throw new Error(`Unknown block type: ${type}`)
   }
