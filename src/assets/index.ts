@@ -9,6 +9,8 @@ import title from './title.svg'
 import paragraf from './paragraf.svg'
 import cancel from './cancel.svg'
 import edit from './edit.svg'
+import check_box from './check_box.svg'
+import radio_button_checked from './radio_button_checked.svg'
 import musical from './musical.png'
 
 export {
@@ -23,5 +25,7 @@ export {
   paragraf,
   cancel,
   edit,
+  check_box,
+  radio_button_checked,
   musical,
 }
