@@ -3,7 +3,7 @@ import { Block } from 'src/store/slices/siteSlice'
 export const generateHTMLCode = (block: Block) => {
   switch (block.type) {
     case 'header':
-      return `<h1 class="${block.type}-${block.id}">${block.content}</h1>`
+      return `<h${block.content.level} class="${block.type}-${block.id}">${block.content.text}</h$>`
     case 'paragraph':
       return `<p class="${block.type}-${block.id}">${block.content}</p>`
     case 'ul':
@@ -15,7 +15,7 @@ export const generateHTMLCode = (block: Block) => {
   ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ol>`
     case 'image':
-      return `<img src=${block.content.src} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
+      return `<img src=${block.content.url} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
     case 'divider':
       return `<hr class="${block.type}-${block.id}"/>`
     case 'button':

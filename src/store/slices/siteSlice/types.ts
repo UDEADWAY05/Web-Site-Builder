@@ -48,7 +48,10 @@ export type TextBlockType = BaseBlockType & {
 
 export type HeaderBlockType = BaseBlockType & {
   type: 'header'
-  content: string
+  content: {
+    text: string
+    level: number
+  }
 }
 
 export type ParagraphBlockType = BaseBlockType & {
@@ -59,7 +62,7 @@ export type ParagraphBlockType = BaseBlockType & {
 export type ImageBlockType = BaseBlockType & {
   type: 'image'
   content: {
-    src: string
+    url: string
     alt?: string
   }
 }
