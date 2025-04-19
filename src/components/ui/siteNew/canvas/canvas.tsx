@@ -40,12 +40,26 @@ export function Canvas() {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const blockType = e.dataTransfer.getData('blockType') as Block['type'] //TODO how to make it better?
-    const canvasRect = e.currentTarget.getBoundingClientRect()
-    const left = e.clientX - canvasRect.left
-    const top = e.clientY - canvasRect.top
 
-    const newBlock = generateBlockByType(blockType,left,top)
+    const blockType = e.dataTransfer.getData('blockType') as Block['type']
+    const blockId = e.dataTransfer.getData('blockId')
+    const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
+    const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
+  
+    const canvasRect = e.currentTarget.getBoundingClientRect()
+    const left = e.clientX - canvasRect.left - offsetX
+    const top = e.clientY - canvasRect.top - offsetY
+  
+    if (blockId) {
+      dispatch(updateBlockPosition({
+        id: blockId,
+        left,
+        top,
+      }))
+      return
+    }
+  
+    const newBlock = generateBlockByType(blockType, left, top)
     dispatch(addBlock(newBlock))
   }
 

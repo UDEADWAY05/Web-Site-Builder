@@ -46,18 +46,19 @@ export const BlockRenderer = ({
   content,
   isEditing,
   onChange,
-  styles
 }: BlockRendererProps) => {
   const Component = blockComponentMap[type]
 
   if (!Component) return <div>Unsupported block: {type}</div>
 
   return (
-    <Component
-      content={content}
-      isEditing={isEditing}
-      onChange={onChange}
-      styles={styles}
-    />
+    <div>  
+      <Component 
+        content={content}
+        isEditing={isEditing}
+        onChange={onChange}
+      />    
+    </div>
+     
   )
 }

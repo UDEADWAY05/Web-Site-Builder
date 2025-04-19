@@ -48,7 +48,7 @@ const siteSlice = createSlice({
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
     updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate) {

@@ -2,8 +2,6 @@ import { useState,useRef } from 'react'
 import { Block } from 'src/store/slices/siteSlice/types'
 import { Controls } from './Controls'
 import { BlockRenderer } from '../canvas/BlockRenderer'
-import { useAppDispatch } from 'src/store/store'
-import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 
 interface DraggableBlockProps {
   block: Block
@@ -16,50 +14,37 @@ function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editingContent, setEditingContent] = useState(block.content)
 
-  const offset = useRef({ x: 0, y: 0 })
-  const dispatch = useAppDispatch()
-
   const handleSave = () => {
     setIsEditing(false)
     onSave(block.id,editingContent)
   }
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true)
-    offset.current = {
-      x: e.clientX - block.styles.left,
-      y: e.clientY - block.styles.top,
+  //don't drag if pressing on input or textarea for editing
+  const onDragStart = (e:React.DragEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement &&
+      (e.target.tagName === 'INPUT' ||
+      e.target.tagName === 'TEXTAREA' ||
+      e.target.isContentEditable)
+    ) {
+      e.preventDefault()
+      return
     }
-  }
 
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-  
-  const handleMouseLeave = () => {
-    setIsDragging(false)
-  }
+    const rect = e.currentTarget.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
+    const offsetY = e.clientY - rect.top
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return
-    const left = e.clientX - offset.current.x
-    const top = e.clientY - offset.current.y
-
-    console.log(e.clientX,offset.current.x)
-    console.log(e.clientY,offset.current.y)
-    console.log('ber ois upd')
-    dispatch(
-      updateBlockPosition({
-        id: block.id,
-        left,
-        top,
-      })
-    )
+    e.dataTransfer.setData('blockId', block.id)
+    e.dataTransfer.setData('offsetX', offsetX.toString())
+    e.dataTransfer.setData('offsetY', offsetY.toString())
   }
 
   return (
-    <div className='bg-gray-50 absolute rounded-sm max-w-[20%] w-fit'
+    <div 
+      draggable
+      className='px-3 py-1 bg-gray-100 absolute rounded-sm max-w-[20%] w-fit cursor-move'
       style={{ left:block.styles.left,top:block.styles.top }}
+      onDragStart={onDragStart}
     >
       <Controls
         isEditing={isEditing}
@@ -68,10 +53,6 @@ function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onDelete={onDelete}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
         block={block}
       />
       
@@ -85,5 +66,4 @@ function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
     </div>
   )
 }
-
 export { DraggableBlock }
