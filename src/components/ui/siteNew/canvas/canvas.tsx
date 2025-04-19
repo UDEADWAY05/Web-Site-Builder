@@ -9,7 +9,7 @@ import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selec
 import { child, dbSite, get, off, ref } from 'src/App'
 import { setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock,deleteBlock,updateBlockContent,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
+import { addBlock,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 
 export function Canvas() {
@@ -46,6 +46,7 @@ export function Canvas() {
     const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
     const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
   
+    // calculating correct position when user pressed to drag inside block
     const canvasRect = e.currentTarget.getBoundingClientRect()
     const left = e.clientX - canvasRect.left - offsetX
     const top = e.clientY - canvasRect.top - offsetY
@@ -67,34 +68,28 @@ export function Canvas() {
     e.preventDefault()
   }
 
-  const onDelete = (id:string) => {dispatch(deleteBlock(id))}
-  const onSave = (id:string,content:Block['content']) => {dispatch(updateBlockContent({id,content}))}
-
   return (
     <>
-      { isPreview 
-        ? (<Preview />)
-        : (<div
-            style={{
-            flex: 1,
-            position: 'relative',
-            backgroundColor: bgColor,
-            overflow: 'hidden',
-            }}
-            onDrop={(e) => handleDrop(e)}
-            onDragOver={(e) => handleDragOver(e)}
-          >
-            {blocks.map((block) => (
-              <DraggableBlock 
-                key={block.id} 
-                block={block} 
-                onDelete={() => onDelete(block.id)}
-                onSave={onSave} 
-              />
-            ))}
-          </div>
-          )}
-    </>
-    
+  { isPreview 
+    ? (<Preview />)
+    : (<div
+        style={{
+        flex: 1,
+        position: 'relative',
+        backgroundColor: bgColor,
+        overflow: 'hidden',
+        }}
+        onDrop={(e) => handleDrop(e)}
+        onDragOver={(e) => handleDragOver(e)}
+      >
+        {blocks.map((block) => (
+          <DraggableBlock 
+            key={block.id} 
+            block={block} 
+          />
+        ))}
+      </div>
+      )}
+    </> 
   )
 }

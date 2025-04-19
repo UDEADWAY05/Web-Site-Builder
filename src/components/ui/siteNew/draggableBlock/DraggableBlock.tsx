@@ -1,23 +1,11 @@
-import { useState,useRef } from 'react'
 import { Block } from 'src/store/slices/siteSlice/types'
-import { Controls } from './Controls'
 import { BlockRenderer } from '../canvas/BlockRenderer'
 
 interface DraggableBlockProps {
   block: Block
-  onDelete: () => void
-  onSave: (id:Block['id'],updatedContent: Block['content']) => void
 }
 
-function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
-  const [isDragging,setIsDragging] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const [editingContent, setEditingContent] = useState(block.content)
-
-  const handleSave = () => {
-    setIsEditing(false)
-    onSave(block.id,editingContent)
-  }
+function DraggableBlock({ block }: DraggableBlockProps) {
 
   //don't drag if pressing on input or textarea for editing
   const onDragStart = (e:React.DragEvent<HTMLDivElement>) => {
@@ -46,22 +34,9 @@ function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
       style={{ left:block.styles.left,top:block.styles.top }}
       onDragStart={onDragStart}
     >
-      <Controls
-        isEditing={isEditing}
-        isDragging={isDragging}
-        onEdit={() => setIsEditing(true)}
-        onSave={handleSave}
-        onCancel={() => setIsEditing(false)}
-        onDelete={onDelete}
+     
+      <BlockRenderer 
         block={block}
-      />
-      
-      <BlockRenderer
-        type={block.type}
-        content={editingContent}
-        isEditing={isEditing}
-        onChange={setEditingContent}
-        styles={block.styles}
       />
     </div>
   )

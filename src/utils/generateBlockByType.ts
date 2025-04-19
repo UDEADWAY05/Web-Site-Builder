@@ -2,19 +2,11 @@ import { CSSProperties } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import musical from '../assets/musical.png'
 
-export function generateBlockByType(
-  type: Block['type'],
-  left: number,
-  top: number
-): Block {
+export function generateBlockByType( type: Block['type'], left: number, top: number): Block {
   const styles: CSSProperties = {
     left,
-    top,
-    // width: 'auto',
-    
+    top,    
     position: 'absolute',
-    // minHeight: '40px',
-    // maxWidth:'100%',
     backgroundColor: '#fafafa',
   }
 

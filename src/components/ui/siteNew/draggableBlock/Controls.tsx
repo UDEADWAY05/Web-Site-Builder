@@ -1,5 +1,3 @@
-import { Block } from 'src/store/slices/siteSlice'
-
 type ControlsProps = {
   isEditing: boolean
   isDragging: boolean
@@ -7,7 +5,6 @@ type ControlsProps = {
   onDelete: () => void
   onSave: () => void
   onCancel: () => void
-  block:Block
 }
 
 export const Controls = ({
