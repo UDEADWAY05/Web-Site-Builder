@@ -46,7 +46,7 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
         <hr />
         <p className="py-2 text-xs opacity-25">Базовый</p>
         <div className="grid grid-cols-2 gap-1">
-          {blockTypes.map((block) => (
+          {blockTypes.slice(0, 8).map((block) => (
             <div
               draggable
               key={block.type}
@@ -65,6 +65,24 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
         </div>
         <hr />
         <p className="py-2 text-xs opacity-25">Форма</p>
+        <div className="grid grid-cols-2 gap-1">
+          {blockTypes.slice(8, 13).map((block) => (
+            <div
+              draggable
+              key={block.type}
+              className="col border-2 border-black rounded-md p-1"
+              style={{ cursor: 'pointer' }}
+              onDragStart={(e) => handleDragStart(e, block.type)}
+            >
+              <div className="flex flex-col">
+                <img className="m-auto" src={block.img} alt={block.type} />
+                <div className="text-center ">
+                  <p className=" text-xs ">{block.label}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <hr />
 

@@ -77,7 +77,7 @@ const siteSlice = createSlice({
           | string // paragraph
           | { text: string; level: number } // header
           | { url: string; alt?: string } // image
-          | string[]
+          | string[] //list[]
       }>
     ) => {
       const blockToUpdate = state.blocks.find(
@@ -102,6 +102,13 @@ const siteSlice = createSlice({
           headerBlock.content.url = action.payload.content.url
           headerBlock.content.alt = action.payload.content.alt
         }
+      }
+
+      if (
+        Array.isArray(blockToUpdate.content) &&
+        Array.isArray(action.payload.content)
+      ) {
+        blockToUpdate.content = [...action.payload.content]
       }
 
       state.blocks = state.blocks.map((block) =>

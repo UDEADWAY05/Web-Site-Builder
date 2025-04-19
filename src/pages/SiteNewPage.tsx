@@ -8,6 +8,9 @@ import {
   quote,
   title,
   paragraf,
+  form,
+  check_box,
+  radio_button_checked,
 } from '../assets'
 import { SideBar } from 'src/components/ui/siteNew'
 import { Canvas } from 'src/components/ui/siteNew'
@@ -100,6 +103,32 @@ export function SiteNew() {
       type: 'quote',
       label: 'Цитата',
       img: quote,
+    },
+    //////form///////
+    {
+      type: 'input',
+      label: 'Поле ввода',
+      img: form,
+    },
+    {
+      type: 'textarea',
+      label: 'Текстовая область',
+      img: form,
+    },
+    {
+      type: 'select',
+      label: 'Поле выбора',
+      img: form,
+    },
+    {
+      type: 'checkbox',
+      label: 'Флажкок',
+      img: check_box,
+    },
+    {
+      type: 'radiobox',
+      label: 'Переключатель',
+      img: radio_button_checked,
     },
   ]
 

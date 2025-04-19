@@ -92,6 +92,31 @@ export type QuoteBlockType = BaseBlockType & {
   content: string
 }
 
+export type InputBlockType = BaseBlockType & {
+  type: 'input'
+  content: string
+}
+
+export type TextAreaBlockType = BaseBlockType & {
+  type: 'textarea'
+  content: string
+}
+
+export type SelectBlockType = BaseBlockType & {
+  type: 'select'
+  content: string[]
+}
+
+export type CheckBoxBlockType = BaseBlockType & {
+  type: 'checkbox'
+  content: string
+}
+
+export type RadioBoxBlockType = BaseBlockType & {
+  type: 'radiobox'
+  content: string[]
+}
+
 export type Block =
   | ParagraphBlockType
   | HeaderBlockType
@@ -101,6 +126,11 @@ export type Block =
   | OrderedListBlockType
   | DividerBlockType
   | QuoteBlockType
+  | InputBlockType
+  | TextAreaBlockType
+  | SelectBlockType
+  | CheckBoxBlockType
+  | RadioBoxBlockType
 
 export interface Site {
   id: string

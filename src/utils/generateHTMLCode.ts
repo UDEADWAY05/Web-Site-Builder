@@ -33,6 +33,65 @@ export const generateHTMLCode = (block: Block) => {
   <p>
     —Aldous Huxley, <cite>Brave New World</cite>
   </p> `
+
+    /// form ///
+    case 'checkbox':
+      return `<form class="${block.type}-${block.id}">
+    <input 
+      type="checkbox" 
+      id='${block.id}'
+      name='${block.id}'
+      checked />
+    <label for='${block.id}'>${block.content}</label>
+  </form>`
+
+    case 'radiobox':
+      return `<form class="${block.type}-${block.id}">
+ ${block.content
+   .map(
+     (item) =>
+       ` <input 
+    type="radio" 
+    id='${item}'
+    name='${block.id}'
+    value='${item}'
+    checked />
+  <label for='${item}'>${item}</label>`
+   )
+   .join('\n')}
+</form>`
+
+    case 'input':
+      return `<form class="${block.type}-${block.id}">
+    <input 
+      type="text" 
+      id='${block.id}'
+      
+    />
+    <label for='${block.id}'>${block.content}</label>
+  </form>`
+
+    case 'textarea':
+      return `<form class="${block.type}-${block.id}">
+    <textarea 
+      id='${block.id}'
+      rows='5'
+      cols='33'
+        >
+      ${block.content}
+      </textarea>
+      </form>`
+
+    case 'select':
+      return `<select 
+        name=${block.id} 
+        id=${block.id}
+        class="${block.type}-${block.id}"
+        >
+  <option value="">--Please choose an option--</option>
+${block.content.map((value) => `<option value=${value}>${value}</option>`)}
+</select>`
+
     default:
       return ''
   }
