@@ -12,6 +12,13 @@ import edit from './edit.svg'
 import check_box from './check_box.svg'
 import radio_button_checked from './radio_button_checked.svg'
 import musical from './musical.png'
+import dragIcon from './drag_icon.png'
+import closeIcon from './close.png'
+import editIcon from './edit.png'
+import saveIcon from './save.png'
+import editSm from './edit-sm.png'
+import closeSm from './close-sm.png'
+import saveSm from './save-sm.png'
 
 export {
   button,
@@ -28,4 +35,11 @@ export {
   check_box,
   radio_button_checked,
   musical,
+  dragIcon,
+  closeIcon,
+  editIcon,
+  saveIcon,
+  editSm,
+  closeSm,
+  saveSm
 }

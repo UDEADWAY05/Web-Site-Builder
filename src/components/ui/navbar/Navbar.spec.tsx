@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import { renderWithRouter } from '../../../tests/helper/renderWithRoutes'
 import { NavBar } from 'src/components/ui/navbar/navbar'
 
-// В начале файла с тестами
 global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}

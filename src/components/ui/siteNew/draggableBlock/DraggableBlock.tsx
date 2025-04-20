@@ -1,46 +1,38 @@
-import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice/types'
-import { Controls } from './Controls'
 import { BlockRenderer } from '../canvas/BlockRenderer'
+import { calculateClickPosition } from 'src/utils/calculateClickPosition'
+
 interface DraggableBlockProps {
   block: Block
-  onDelete: () => void
-  onSave: (id:Block['id'],updatedContent: Block['content']) => void
 }
 
-function DraggableBlock({ block, onDelete, onSave }: DraggableBlockProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editingContent, setEditingContent] = useState(block.content)
-
+function DraggableBlock({ block }: DraggableBlockProps) {
+  //don't drag if pressing on input or textarea for editing
   const onDragStart = (e:React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData('blockId',block.id)
+    if (e.target instanceof HTMLElement &&
+      (e.target.tagName === 'INPUT' ||
+      e.target.tagName === 'TEXTAREA' ||
+      e.target.isContentEditable)
+    ) {
+      e.preventDefault()
+      return
+    }
+
+    const { offsetX, offsetY } = calculateClickPosition(e)
+    e.dataTransfer.setData('blockId', block.id)
+    e.dataTransfer.setData('offsetX', offsetX.toString())
+    e.dataTransfer.setData('offsetY', offsetY.toString())
   }
 
-  const handleSave = () => {
-    setIsEditing(false)
-    onSave(block.id,editingContent)
-  }
-
-  return (
-    <div style={block.styles}
-     className="p-2 border rounded mb-4"
-     draggable 
-     onDragStart={onDragStart}
+  return (      
+    <div 
+      draggable 
+      onDragStart={onDragStart}
+      style={{ position:'absolute', left:block.styles.left, top:block.styles.top }}
+      // style={block.styles}
+      className='bg-gray-100 rounded-sm '
     >
-      <Controls
-        isEditing={isEditing}
-        onEdit={() => setIsEditing(true)}
-        onSave={handleSave}
-        onCancel={() => setIsEditing(false)}
-        onDelete={onDelete}
-      />
-
-      <BlockRenderer
-        type={block.type}
-        content={editingContent}
-        isEditing={isEditing}
-        onChange={setEditingContent}
-      />
+      <BlockRenderer block={block} />
     </div>
   )
 }

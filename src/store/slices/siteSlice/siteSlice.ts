@@ -47,27 +47,37 @@ const siteSlice = createSlice({
     deleteBlock: (state, action: PayloadAction<Block['id']>) => {
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
-    updateBlockPosition: (
-      state,
-      action: PayloadAction<{ id: string; left: number; top: number }>
-    ) => {
-      const blockToUpdate = state.blocks.find(
-        (block) => block.id === action.payload.id
-      )
+    updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
+      // console.log(action.payload)
+      const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate) {
         return
       }
-
-      blockToUpdate.styles.left = `${action.payload.left}px`
-      blockToUpdate.styles.top = `${action.payload.top}px`
+      
+      // blockToUpdate.styles.left = `${action.payload.left}px`
+      // blockToUpdate.styles.top = `${action.payload.top}px`
+      blockToUpdate.styles.left = action.payload.left
+      blockToUpdate.styles.top = action.payload.top
 
       state.blocks = state.blocks.map((block) => {
         return block.id === blockToUpdate.id ? blockToUpdate : block
       })
     },
-    updateBlockSize: (state, action) => {
+    updateBlockSize: (state, action:PayloadAction<{id:Block['id'],width:number,height:number}>) => {
       console.log(state, action)
+      const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
+
+      if (!blockToUpdate){
+        throw new Error('Updating block not found')
+      }
+
+      blockToUpdate.styles.width = action.payload.width
+      blockToUpdate.styles.height = action.payload.height
+
+      state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
+
+
     },
     updateBlockContent: (
       state,
@@ -115,6 +125,25 @@ const siteSlice = createSlice({
         block.id === blockToUpdate.id ? blockToUpdate : block
       )
     },
+    updateBlockBgColor: (state, action:PayloadAction<{id:Block['id'],color: Block['styles']['backgroundColor']}>) => {
+      const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
+
+      if (!blockToUpdate){
+        throw new Error('Updating block not found')
+      }
+
+      blockToUpdate.styles.backgroundColor = action.payload.color
+      state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
+    },
+    updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
+      const block = state.blocks.find((b) => b.id === action.payload.id)
+      if (block) {
+        block.styles = {
+          ...block.styles,
+          ...action.payload.styles,
+        }
+      }
+    },
   },
 })
 
@@ -132,6 +161,8 @@ export const {
   updateBlockPosition,
   updateBlockSize,
   updateBlockContent,
+  updateBlockBgColor,
+  updateBlockStyles
 } = siteSlice.actions
 
 export default siteSlice.reducer

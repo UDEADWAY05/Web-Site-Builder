@@ -1,4 +1,8 @@
+import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
+import { Controls } from '../draggableBlock/Controls'
+import { useAppDispatch } from 'src/store/store'
+import { deleteBlock,updateBlockContent,updateBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -14,6 +18,7 @@ import {
   TextareaBlock,
   SelectBlock,
 } from './blocks'
+import { StylePanel } from '../StylePanel/StylePanel'
 
 const blockComponentMap = {
   button: ButtonBlock,
@@ -31,33 +36,51 @@ const blockComponentMap = {
   select: SelectBlock,
 } as const
 
-type BlockType = keyof typeof blockComponentMap
-
 type BlockRendererProps = {
-  type: BlockType
-  content: Block['content']
-  isEditing: boolean
-  onChange: (value: unknown) => void
-  styles?: React.CSSProperties
+  block:Block
 }
 
-export const BlockRenderer = ({
-  type,
-  content,
-  isEditing,
-  onChange,
-}: // styles,
-BlockRendererProps) => {
-  const Component = blockComponentMap[type]
+export const BlockRenderer = ({ block }: BlockRendererProps) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingContent, setEditingContent] = useState(block.content)
+  const dispatch = useAppDispatch()
 
-  if (!Component) return <div>Unsupported block: {type}</div>
+  const Component = blockComponentMap[block.type]
+
+  const onDelete = () => dispatch(deleteBlock(block.id))
+
+  const onSave = () => {
+    dispatch(updateBlockContent({id:block.id,content:editingContent}))
+    setIsEditing(false)
+  }
+
+  if (!Component) return <div>Unsupported block: {block.type}</div>
 
   return (
-    <Component
-      content={content}
-      isEditing={isEditing}
-      onChange={onChange}
-      // styles={styles}
-    />
+    <>  
+      <div className='flex'>
+        <StylePanel 
+          styles={block.styles} 
+          onChange={(newStyles) => dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))}
+        />
+        <Controls
+          isEditing={isEditing}
+          onEdit={() => setIsEditing(true)}
+          onSave={onSave}
+          onCancel={() => setIsEditing(false)}
+          onDelete={onDelete}
+        />
+      </div>
+      <div style={block.styles}>
+        <Component 
+          content={editingContent}
+          isEditing={isEditing}
+          onChange={setEditingContent}
+          styles={block.styles}
+        />  
+      </div>
+                   
+    </>
+     
   )
 }
