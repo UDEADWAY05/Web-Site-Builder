@@ -135,6 +135,15 @@ const siteSlice = createSlice({
       blockToUpdate.styles.backgroundColor = action.payload.color
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
+    updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
+      const block = state.blocks.find((b) => b.id === action.payload.id)
+      if (block) {
+        block.styles = {
+          ...block.styles,
+          ...action.payload.styles,
+        }
+      }
+    },
   },
 })
 
@@ -152,7 +161,8 @@ export const {
   updateBlockPosition,
   updateBlockSize,
   updateBlockContent,
-  updateBlockBgColor
+  updateBlockBgColor,
+  updateBlockStyles
 } = siteSlice.actions
 
 export default siteSlice.reducer

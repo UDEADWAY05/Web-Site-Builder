@@ -15,7 +15,7 @@ export const Controls = ({
   onCancel,
 }: ControlsProps) => {
 
-  const iconClass = 'w-8 h-8 cursor-pointer p-1 hover:bg-gray-200 rounded'
+  const iconClass = 'w-8 h-8 cursor-pointer p-1'
 
   return (
     <div className='px-4 py-2 flex gap-4 justify-center'>

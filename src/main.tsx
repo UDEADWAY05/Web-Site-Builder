@@ -5,7 +5,6 @@ import App from './App.tsx'
 import './firebase.ts'
 import './global.css'
 
-console.log('main')
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Providers>

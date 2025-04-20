@@ -24,7 +24,6 @@ const db = getFirestore(app)
 const dbSite = getDatabase(app)
 const firebaseService = new FirebaseService(auth, db)
 
-console.log('app')
 //временное решение
 // eslint-disable-next-line react-refresh/only-export-components
 export { dbSite, ref, set, onValue, child, get, off }

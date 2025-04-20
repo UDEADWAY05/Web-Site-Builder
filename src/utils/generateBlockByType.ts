@@ -1,13 +1,12 @@
-import { CSSProperties } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import musical from '../assets/musical.png'
 
 export function generateBlockByType( type: Block['type'], left: number, top: number): Block {
-  const styles: CSSProperties = {
+  const styles: Block['styles'] = {
     left,
     top,    
-    position: 'absolute',
     backgroundColor: '#fafafa',
+    borderRadius:'0.5em',
   }
 
   switch (type) {

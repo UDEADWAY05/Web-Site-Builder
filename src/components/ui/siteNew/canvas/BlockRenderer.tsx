@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import { Controls } from '../draggableBlock/Controls'
 import { useAppDispatch } from 'src/store/store'
-import { updateBlockContent,deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
+import { deleteBlock,updateBlockContent,updateBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -18,6 +18,7 @@ import {
   TextareaBlock,
   SelectBlock,
 } from './blocks'
+import { StylePanel } from '../StylePanel/StylePanel'
 
 const blockComponentMap = {
   button: ButtonBlock,
@@ -57,19 +58,28 @@ export const BlockRenderer = ({ block }: BlockRendererProps) => {
 
   return (
     <>  
-      <Controls
-        isEditing={isEditing}
-        onEdit={() => setIsEditing(true)}
-        onSave={onSave}
-        onCancel={() => setIsEditing(false)}
-        onDelete={onDelete}
-      />
-      <Component 
-        content={editingContent}
-        isEditing={isEditing}
-        onChange={setEditingContent}
-        styles={block.styles}
-      />    
+      <div className='flex'>
+        <StylePanel 
+          styles={block.styles} 
+          onChange={(newStyles) => dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))}
+        />
+        <Controls
+          isEditing={isEditing}
+          onEdit={() => setIsEditing(true)}
+          onSave={onSave}
+          onCancel={() => setIsEditing(false)}
+          onDelete={onDelete}
+        />
+      </div>
+      <div style={block.styles}>
+        <Component 
+          content={editingContent}
+          isEditing={isEditing}
+          onChange={setEditingContent}
+          styles={block.styles}
+        />  
+      </div>
+                   
     </>
      
   )

@@ -1,12 +1,15 @@
+import { Block } from "src/store/slices/siteSlice"
+
 export type ParagraphBlockProps = {
     content: string
     isEditing: boolean
     onChange: (newContent: string) => void
+    styles:Block['styles']
   }
   
 export const ParagraphBlock = ({ content, isEditing, onChange }: ParagraphBlockProps) => { 
   return (  
-  <article className="p-2 w-full resize-none overflow-hidden">
+  <article>
     { isEditing 
       ? <textarea
           value={content}

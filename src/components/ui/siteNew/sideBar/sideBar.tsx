@@ -12,6 +12,7 @@ import {
   selectorPreview,
 } from 'src/store/slices/siteSlice/selectors'
 import { BlockButton } from '../../../../store/slices/siteSlice/types'
+import { calculateClickPosition } from 'src/utils/calculateClickPosition'
 
 export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
   const projectName = useAppSelector(selectSiteTitle)
@@ -24,6 +25,10 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
     e: React.DragEvent<HTMLDivElement>,
     blockType: BlockButton['type']
   ) => {
+    const { offsetX, offsetY } = calculateClickPosition(e)
+
+    e.dataTransfer.setData('offsetX', offsetX.toString())
+    e.dataTransfer.setData('offsetY', offsetY.toString())
     e.dataTransfer.setData('blockType', blockType)
   }
 
