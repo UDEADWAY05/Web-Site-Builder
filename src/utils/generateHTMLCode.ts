@@ -18,6 +18,7 @@ export const generateHTMLCode = (block: Block) => {
       return `<img src=${block.content.url} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
     case 'divider':
       return `<hr class="${block.type}-${block.id}"/>`
+      return `<hr class="${block.type}-${block.id}"/>`
     case 'button':
       return `<button class="${block.type}-${block.id}">${block.content}</button>`
     case 'quote':

@@ -43,6 +43,10 @@ export function Preview() {
          margin:5px;
          width: 100wh;
         padding: 5px;
+        box-sizing: border-box;
+        min-height: 100vh;
+        margin: 0;
+        padding: 2px;
         background-color: ${siteById?.bgColor || '#ffffff'};
       }
       .container {
@@ -59,12 +63,16 @@ export function Preview() {
       `
           )
           .join('')}
+             ${blocks
+               ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
+               .join('')}
     </style>
   </head>
   <body>
   <div class="container">
     ${blocks?.map((block) => `${generateHTMLCode(block)}`).join('\n')}
     </div>  
+    ${blocks?.map((block) => ` ${generateHTMLCode(block)} `).join('\n')}
   </body>
   </html>`
 
