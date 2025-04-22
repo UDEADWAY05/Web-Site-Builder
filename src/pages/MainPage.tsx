@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from 'src/components/ui/button'
 import { useAppDispatch } from 'src/hooks/redux-hooks'
 import { useLastNode } from 'src/hooks/useLastNode'
-import { fetchSites } from 'src/store/slices/siteSlice/thunks'
+import { deleteSite, fetchSites } from 'src/store/slices/siteSlice/thunks'
 import { useAppSelector } from 'src/store/store'
 
 export const Main = () => {
@@ -20,6 +20,9 @@ export const Main = () => {
         }
     }, [dispatch, page])
 
+    const handleDelete = (id: string) => {
+        dispatch(deleteSite(id))
+    }
 
     return (
         <div data-testid="main-page" className='max-w-[1175px] w-full mx-auto p-5 flex flex-col gap-5'>
@@ -34,7 +37,7 @@ export const Main = () => {
                                 <Link to={`/sites/${el.id}`}>
                                     <Button >Редактировать</Button>
                                 </Link>
-                                <Button className='bg-red-500'>Удалить</Button>
+                                <Button className='bg-red-500' onClick={() => handleDelete(el.id)}>Удалить</Button>
                             </div>
                         </div>
                     })

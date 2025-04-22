@@ -1,11 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Site, SiteState } from './types'
-import { fetchSites } from './thunks';
+import { createSlice } from '@reduxjs/toolkit';
+import { SiteState } from './types'
+import { deleteSite, fetchSites, saveSite } from './thunks';
 
 const initialState: SiteState = {
     error: null,
     data: null,
     isLoading: false,
+    isFetching: false,
     lastKey: null,
     hasMore: true
 };
@@ -32,6 +33,26 @@ export const SiteSlice = createSlice({
             })
             .addCase(fetchSites.rejected, (state, action) => {
                 state.error = action.payload?.message || null
+            })
+            .addCase(saveSite.pending, (state) => {
+                state.isFetching = true
+            })
+            .addCase(saveSite.fulfilled, (state) => {
+                state.isFetching = false
+            })
+            .addCase(saveSite.rejected, (state, action) => {
+                state.error = action.payload?.message || null
+                state.isFetching = false
+            })
+            .addCase(deleteSite.pending, (state) => {
+                state.isFetching = true
+            })
+            .addCase(deleteSite.fulfilled, (state) => {
+                state.isFetching = false
+            })
+            .addCase(deleteSite.rejected, (state, action) => {
+                state.error = action.payload?.message || null
+                state.isFetching = false
             })
     }
 });

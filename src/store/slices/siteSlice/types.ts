@@ -113,6 +113,7 @@ export type SiteState = {
     hasMore: boolean,
     lastKey: string | null,
     error: string | null
+    isFetching: boolean
 }
 
 export interface FetchSitesParams {
