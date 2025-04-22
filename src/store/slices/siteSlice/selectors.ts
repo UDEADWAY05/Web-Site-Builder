@@ -1,20 +1,20 @@
 import { RootState } from 'src/store/store'
 
 export const selectorLayoutSiteData = (state: RootState) =>
-  state.site.blocks
+    state.layoutSite.blocks
 // export const selectorLayoutSiteTitle = (state: RootState) =>
 //   state.ties?.title
 // export const selectorLayoutSiteBgColor = (state: RootState) =>
 //   state.layoutSite.entities?.bgColor
 
-export const selectorPreview = (state: RootState) => state.site.isPreview
+export const selectorPreview = (state: RootState) => state.layoutSite.isPreview
 
 export const selectorModalOpen = (state: RootState) =>
-  state.site.isModalOpen
+    state.layoutSite.isModalOpen
 export const selectBlocks = (state: RootState) =>
-  state.site.blocks
-  // state.layoutSite.entities?.data
+    state.layoutSite.blocks
+// state.layoutSite.entities?.data
 export const selectSiteTitle = (state: RootState) =>
-  state.site.title
+    state.layoutSite.title
 export const selectSiteBgColor = (state: RootState) =>
-  state.site.bgColor
+    state.layoutSite.bgColor

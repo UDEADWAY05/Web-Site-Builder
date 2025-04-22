@@ -1,5 +1,19 @@
 import { Block } from './types'
-import {
+import { layoutSiteSlice } from './layoutSiteSlice'
+import { SiteSlice } from './slice'
+
+export const layoutSiteReducer = layoutSiteSlice.reducer
+export const siteReducer = SiteSlice.reducer
+
+export type { Block }
+
+export const {
+    setSite,
+    resetLayout,
+    togglePreview,
+    setModalClose,
+    setModalOpen,
+    setBlocks,
     updateSiteTitle,
     updateSiteBgColor,
     addBlock,
@@ -7,22 +21,6 @@ import {
     updateBlockPosition,
     updateBlockSize,
     updateBlockContent,
-} from './layoutSiteSlice'
-import reducer from './layoutSiteSlice'
-import { SiteSlice } from './slice'
-
-
-export const siteReducer = SiteSlice.reducer
-
-export type { Block }
-
-export {
-    reducer as layoutSiteReducer,
-    updateSiteTitle as blockTitleUpdate,
-    updateSiteBgColor as blockBgColorUpdate,
-    addBlock as blockCreate,
-    deleteBlock as blockDelete,
-    updateBlockPosition as blockPositionUpdate,
-    updateBlockSize as blockSizeUpdate,
-    updateBlockContent as blockContentUpdate,
-}
+    updateBlockBgColor,
+    updateBlockStyles
+} = layoutSiteSlice.actions

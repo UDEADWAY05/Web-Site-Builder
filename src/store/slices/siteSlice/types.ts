@@ -98,6 +98,7 @@ export type Block =
     // | DividerBlockType
     | QuoteBlockType
 
+
 export interface Site {
     id: string
     title: string

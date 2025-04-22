@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from 'src/components/ui/button'
-import { useAppDispatch } from 'src/hooks/redux-hooks'
 import { useLastNode } from 'src/hooks/useLastNode'
 import { deleteSite, fetchSites } from 'src/store/slices/siteSlice/thunks'
-import { useAppSelector } from 'src/store/store'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 
 export const Main = () => {
     // временная заглушка

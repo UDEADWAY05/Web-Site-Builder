@@ -21,8 +21,8 @@ import {
     DialogTitle,
 } from '../components/ui/dialog'
 
-import { useAppDispatch } from 'src/hooks/redux-hooks'
-import { setModalClose } from 'src/store/slices/siteSlice/layoutSiteSlice'
+import { useAppDispatch } from 'src/store/hooks'
+import { setModalClose } from 'src/store/slices/siteSlice'
 import { GenerateHTML } from 'src/components/ui/siteNew/generateHTML/generateHTML'
 import { GenerateCSS } from 'src/components/ui/siteNew/generateCSS/generateCSS'
 import { useAppSelector } from 'src/store/store'

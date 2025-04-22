@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice/userSlice'
 import { layoutSiteReducer, siteReducer } from './slices/siteSlice'
 
-import { TypedUseSelectorHook, useSelector } from 'react-redux'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 const rootReducer = combineReducers({
     user: userReducer,
