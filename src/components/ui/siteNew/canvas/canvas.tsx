@@ -7,9 +7,9 @@ import { DraggableBlock } from '../draggableBlock/DraggableBlock'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks, selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { setSite } from 'src/store/slices/siteSlice/layoutSiteSlice'
+import { setSite } from 'src/store/slices/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock, deleteBlock, updateBlockContent, updateBlockPosition } from 'src/store/slices/siteSlice/layoutSiteSlice'
+import { addBlock, deleteBlock, updateBlockContent, updateBlockPosition } from 'src/store/slices/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 
 export function Canvas() {

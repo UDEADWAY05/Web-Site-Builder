@@ -3,10 +3,10 @@ import { Button } from '../../button'
 import {
     setModalOpen,
     togglePreview,
-} from 'src/store/slices/siteSlice/layoutSiteSlice'
+} from 'src/store/slices/siteSlice'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectSiteTitle, selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
-import { updateSiteTitle, updateSiteBgColor } from 'src/store/slices/siteSlice/layoutSiteSlice'
+import { updateSiteTitle, updateSiteBgColor } from 'src/store/slices/siteSlice'
 import { BlockButton } from '../../../../store/slices/siteSlice/types'
 import { calculateClickPosition } from 'src/utils/calculateClickPosition'
 
