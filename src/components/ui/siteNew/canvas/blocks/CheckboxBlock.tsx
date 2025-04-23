@@ -22,10 +22,10 @@ export const CheckboxBlock = ({
       className="border p-2 w-full"
     />
   ) : (
-    <div className="flex text-center gap-3">
+    <form className="flex text-center gap-3">
       {/* заглушка, поправить id  */}
       <Checkbox id="checkbox" />
       <Label htmlFor="checkbox">{content}</Label>
-    </div>
+    </form>
   )
 }

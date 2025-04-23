@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import { Controls } from '../draggableBlock/Controls'
 import { useAppDispatch } from 'src/store/store'
-import { deleteBlock,updateBlockContent,updateBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
+import {
+  deleteBlock,
+  updateBlockContent,
+  updateBlockStyles,
+} from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -37,7 +41,7 @@ const blockComponentMap = {
 } as const
 
 type BlockRendererProps = {
-  block:Block
+  block: Block
 }
 
 export const BlockRenderer = ({ block }: BlockRendererProps) => {
@@ -50,18 +54,20 @@ export const BlockRenderer = ({ block }: BlockRendererProps) => {
   const onDelete = () => dispatch(deleteBlock(block.id))
 
   const onSave = () => {
-    dispatch(updateBlockContent({id:block.id,content:editingContent}))
+    dispatch(updateBlockContent({ id: block.id, content: editingContent }))
     setIsEditing(false)
   }
 
   if (!Component) return <div>Unsupported block: {block.type}</div>
 
   return (
-    <>  
-      <div className='flex'>
-        <StylePanel 
-          styles={block.styles} 
-          onChange={(newStyles) => dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))}
+    <>
+      <div className="flex">
+        <StylePanel
+          styles={block.styles}
+          onChange={(newStyles) =>
+            dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))
+          }
         />
         <Controls
           isEditing={isEditing}
@@ -71,16 +77,13 @@ export const BlockRenderer = ({ block }: BlockRendererProps) => {
           onDelete={onDelete}
         />
       </div>
-      <div style={block.styles}>
-        <Component 
-          content={editingContent}
-          isEditing={isEditing}
-          onChange={setEditingContent}
-          styles={block.styles}
-        />  
-      </div>
-                   
+
+      <Component
+        content={editingContent}
+        isEditing={isEditing}
+        onChange={setEditingContent}
+        styles={block.styles}
+      />
     </>
-     
   )
 }

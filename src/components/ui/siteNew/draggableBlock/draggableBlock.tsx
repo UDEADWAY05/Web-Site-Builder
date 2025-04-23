@@ -8,11 +8,12 @@ interface DraggableBlockProps {
 
 function DraggableBlock({ block }: DraggableBlockProps) {
   //don't drag if pressing on input or textarea for editing
-  const onDragStart = (e:React.DragEvent<HTMLDivElement>) => {
-    if (e.target instanceof HTMLElement &&
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    if (
+      e.target instanceof HTMLElement &&
       (e.target.tagName === 'INPUT' ||
-      e.target.tagName === 'TEXTAREA' ||
-      e.target.isContentEditable)
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.isContentEditable)
     ) {
       e.preventDefault()
       return
@@ -24,13 +25,17 @@ function DraggableBlock({ block }: DraggableBlockProps) {
     e.dataTransfer.setData('offsetY', offsetY.toString())
   }
 
-  return (      
-    <div 
-      draggable 
+  return (
+    <div
+      draggable
       onDragStart={onDragStart}
-      style={{ position:'absolute', left:block.styles.left, top:block.styles.top }}
+      style={{
+        position: 'absolute',
+        left: block.styles.left,
+        top: block.styles.top,
+      }}
       // style={block.styles}
-      className='bg-gray-100 rounded-sm '
+      className="bg-gray-100 rounded-sm flex"
     >
       <BlockRenderer block={block} />
     </div>

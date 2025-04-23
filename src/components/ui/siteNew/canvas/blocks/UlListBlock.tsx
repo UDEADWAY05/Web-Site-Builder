@@ -1,4 +1,3 @@
-import { Button } from 'src/components/ui/button'
 import { Input } from 'src/components/ui/input'
 
 export type ListBlockProps = {
@@ -22,9 +21,7 @@ export const UlListBlock = ({
   const removeItem = (index: number) =>
     onChange(content.filter((_, i) => i !== index))
 
-  return ( 
-    <article className="p-2 w-full resize-none overflow-hidden">
-      {isEditing ? (
+  return isEditing ? (
     <ul>
       {content.map((item, index) => (
         <li key={index}>
@@ -44,7 +41,5 @@ export const UlListBlock = ({
         <li key={i}>{item}</li>
       ))}
     </ul>
-  )}
-    </article>
   )
 }

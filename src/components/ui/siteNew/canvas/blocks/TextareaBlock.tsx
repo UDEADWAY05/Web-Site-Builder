@@ -21,8 +21,6 @@ export const TextareaBlock = ({
       className="border p-2 w-full"
     />
   ) : (
-    <form className="flex gap-2">
-      <Textarea placeholder="Type your message here." value={content} />
-    </form>
+    <Textarea placeholder="Type your message here." value={content} />
   )
 }
