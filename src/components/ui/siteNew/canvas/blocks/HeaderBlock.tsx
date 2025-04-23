@@ -19,6 +19,7 @@ export const HeaderBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: HeaderBlockProps) => {
   const levelMap: number[] = [1, 2, 3, 4, 5, 6] //TODO making better
   const HeaderTag = `h${content.level}` as keyof JSX.IntrinsicElements
@@ -62,6 +63,6 @@ export const HeaderBlock = ({
       </Select>
     </form>
   ) : (
-    <HeaderTag>{content.text}</HeaderTag>
+    <HeaderTag style={styles}>{content.text}</HeaderTag>
   )
 }

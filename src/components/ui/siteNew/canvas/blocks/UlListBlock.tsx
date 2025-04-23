@@ -1,15 +1,18 @@
 import { Input } from 'src/components/ui/input'
+import { Block } from 'src/store/slices/siteSlice/types'
 
 export type ListBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  styles: Block['styles']
 }
 
 export const UlListBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: ListBlockProps) => {
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
@@ -38,7 +41,9 @@ export const UlListBlock = ({
   ) : (
     <ul>
       {content.map((item, i) => (
-        <li key={i}>{item}</li>
+        <li style={styles} key={i}>
+          {item}
+        </li>
       ))}
     </ul>
   )

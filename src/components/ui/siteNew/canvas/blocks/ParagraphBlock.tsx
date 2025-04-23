@@ -11,10 +11,11 @@ export const ParagraphBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: ParagraphBlockProps) => {
   return isEditing ? (
     <textarea value={content} onChange={(e) => onChange(e.target.value)} />
   ) : (
-    <p>{content}</p>
+    <p style={styles}>{content}</p>
   )
 }
