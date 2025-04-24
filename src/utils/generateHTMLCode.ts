@@ -3,7 +3,7 @@ import { Block } from 'src/store/slices/siteSlice'
 export const generateHTMLCode = (block: Block) => {
   switch (block.type) {
     case 'header':
-      return `<h${block.content.level} class="${block.type}-${block.id}">${block.content.text}</h$>`
+      return `<h${block.content.level} class="${block.type}-${block.id}">${block.content.text}</h${block.content.level}>`
 
     case 'paragraph':
       return `<p class="${block.type}-${block.id}">${block.content}</p>`

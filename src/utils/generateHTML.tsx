@@ -8,7 +8,7 @@ export function generateHTML(blocks: Block[], siteById: Site) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${siteById?.title}</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body 
   style="background-color: ${siteById?.bgColor};position: relative;
