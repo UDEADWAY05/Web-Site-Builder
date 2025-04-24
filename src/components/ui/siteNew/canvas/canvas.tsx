@@ -18,11 +18,12 @@ export function Canvas() {
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
   const dispatch = useAppDispatch()
+  const userId = useAppSelector(store => store.user.data?.id)
 
   useEffect(() => {
     const siteRef = ref(dbSite)
     
-    get(child(siteRef, `sites/${siteId}`))
+    get(child(siteRef, `sites/${userId}/${siteId}`))
       .then((snapsot) => {
         if (snapsot.exists()) {
           // setSites(snapsot.val())

@@ -39,6 +39,7 @@ import { child, dbSite, get, off, ref } from 'src/App'
 export function SiteNew() {
   const blocks = useAppSelector(selectorLayoutSiteData)
   console.log(blocks)
+  const userId = useAppSelector(store => store.user.data?.id)  
 
   const isModal = useAppSelector(selectorModalOpen)
   const { siteId } = useParams<{ siteId: string }>()
@@ -50,7 +51,7 @@ export function SiteNew() {
   useEffect(() => {
     if (!siteId) return
     const dbRef = ref(dbSite)
-    get(child(dbRef, `sites/${siteId}`))
+      get(child(dbRef, `sites/${userId}/${siteId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           setSiteById(snapshot.val() as Site)
