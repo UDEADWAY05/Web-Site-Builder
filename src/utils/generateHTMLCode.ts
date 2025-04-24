@@ -4,23 +4,29 @@ export const generateHTMLCode = (block: Block) => {
   switch (block.type) {
     case 'header':
       return `<h${block.content.level} class="${block.type}-${block.id}">${block.content.text}</h$>`
+
     case 'paragraph':
       return `<p class="${block.type}-${block.id}">${block.content}</p>`
+
     case 'ul':
       return `<ul class="${block.type}-${block.id}">
   ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ul>`
+
     case 'ol':
       return `<ol class="${block.type}-${block.id}">
   ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
 </ol>`
+
     case 'image':
       return `<img src=${block.content.url} alt=${block.content.alt} class="${block.type}-${block.id}"/>`
+
     case 'divider':
       return `<hr class="${block.type}-${block.id}"/>`
-      return `<hr class="${block.type}-${block.id}"/>`
+
     case 'button':
       return `<button class="${block.type}-${block.id}">${block.content}</button>`
+
     case 'quote':
       return `
        <blockquote 
