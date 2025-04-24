@@ -48,34 +48,15 @@ export function Preview() {
         margin: 0;
         padding: 2px;
         background-color: ${siteById?.bgColor || '#ffffff'};
-      }
-      .container {
-        position: absolute;
-        box-sizing: border-box;
-        min-height: 100vh;
-        width:100%
-      }
-        ${blocks
-          ?.map(
-            (block) => `
-          ${block.styles ? generateCSSCode(block) : ''}
-        }
-      `
-          )
-          .join('')}
              ${blocks
                ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
                .join('')}
     </style>
   </head>
   <body>
-  <div class="container">
-    ${blocks?.map((block) => `${generateHTMLCode(block)}`).join('\n')}
-    </div>  
     ${blocks?.map((block) => ` ${generateHTMLCode(block)} `).join('\n')}
   </body>
   </html>`
-
   return (
     <iframe
       title="Preview"

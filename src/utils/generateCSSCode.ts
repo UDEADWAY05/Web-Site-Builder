@@ -15,5 +15,5 @@ export const generateCSSCode = (block: Block) => {
       font-style: ${block.styles?.fontStyle || ''};
       font-weight: ${block.styles?.fontWeight || ''};
       text-decoration: ${block.styles?.textDecoration || ''};
-      color:${block.styles?.color || '#000'};`
+      color:${block.styles?.color || '#00000'};`
 }
