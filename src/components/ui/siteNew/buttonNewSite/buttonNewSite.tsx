@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
 import { dbSite, ref, set } from 'src/App'
-import { useAppDispatch } from 'src/store/store'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { resetLayout } from 'src/store/slices/siteSlice'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const userId = useAppSelector(store => store.user.data?.id) 
   const handleCreateSite = async () => {
     try {
       const siteId = Date.now().toString()
@@ -17,7 +18,7 @@ export function ButtonNewSite() {
         data: [],
       }
       dispatch(resetLayout())
-      await set(ref(dbSite, `sites/${siteId}`), newSite)
+      await set(ref(dbSite, `sites/${userId}/${siteId}`), newSite)
 
       navigate(`/sites/${siteId}`)
     } catch (error) {

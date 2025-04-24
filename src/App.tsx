@@ -26,7 +26,7 @@ const firebaseService = new FirebaseService(auth, db)
 
 //временное решение
 // eslint-disable-next-line react-refresh/only-export-components
-export { dbSite, ref, set, onValue, child, get, off }
+export { db, dbSite, ref, set, onValue, child, get, off }
 // eslint-disable-next-line react-refresh/only-export-components
 export const saveSite = (siteId: string, data: Site) =>
   set(ref(dbSite, `sites/${siteId}`), data)
