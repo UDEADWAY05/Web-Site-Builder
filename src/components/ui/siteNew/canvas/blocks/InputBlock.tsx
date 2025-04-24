@@ -1,16 +1,19 @@
 import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
+import { Block } from 'src/store/slices/siteSlice'
 
 export type InputBlockProps = {
   content: string
   isEditing: boolean
   onChange: (newContent: string) => void
+  styles: Block['styles']
 }
 
 export const InputBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: InputBlockProps) => {
   return isEditing ? (
     <Input
@@ -21,7 +24,7 @@ export const InputBlock = ({
       className="border p-2 w-full"
     />
   ) : (
-    <form className="flex gap-2">
+    <form style={styles} className="flex gap-2">
       <Input
         type="text"
         value="Поле для ввода текста"

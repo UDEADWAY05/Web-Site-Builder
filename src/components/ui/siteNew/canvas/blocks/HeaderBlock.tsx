@@ -19,6 +19,7 @@ export const HeaderBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: HeaderBlockProps) => {
   const levelMap: number[] = [1, 2, 3, 4, 5, 6] //TODO making better
   const HeaderTag = `h${content.level}` as keyof JSX.IntrinsicElements
@@ -31,41 +32,37 @@ export const HeaderBlock = ({
     })
   }
 
-  return (
-    <div>
-      {isEditing ? (
-        <div className="flex">
-          <Input
-            type="text"
-            value={content.text}
-            onChange={(e) =>
-              onChange({
-                text: e.target.value,
-                level: content.level,
-              })
-            }
-            placeholder="Edit text"
-            className="border p-2 w-full"
-          />
-          <Select
-            value={content.level.toString()}
-            onValueChange={handleLevelChange}
-          >
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder={`h${content.level}`} />
-            </SelectTrigger>
-            <SelectContent>
-              {levelMap.map((lvl) => (
-                <SelectItem key={lvl} value={lvl.toString()}>
-                  {`h${lvl}`}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      ) : (
-        <HeaderTag>{content.text}</HeaderTag>
-      )}
-    </div>
+  return isEditing ? (
+    <form className="flex">
+      <Input
+        type="text"
+        value={content.text}
+        onChange={(e) =>
+          onChange({
+            text: e.target.value,
+            level: content.level,
+          })
+        }
+        placeholder="Edit text"
+        className="border p-2 w-full"
+      />
+      <Select
+        value={content.level.toString()}
+        onValueChange={handleLevelChange}
+      >
+        <SelectTrigger className="w-[120px]">
+          <SelectValue placeholder={`h${content.level}`} />
+        </SelectTrigger>
+        <SelectContent>
+          {levelMap.map((lvl) => (
+            <SelectItem key={lvl} value={lvl.toString()}>
+              {`h${lvl}`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </form>
+  ) : (
+    <HeaderTag style={styles}>{content.text}</HeaderTag>
   )
 }

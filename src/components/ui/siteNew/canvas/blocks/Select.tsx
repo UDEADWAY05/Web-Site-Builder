@@ -8,17 +8,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/select'
+import { Block } from 'src/store/slices/siteSlice'
 
 export type SelectBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  styles: Block['styles']
 }
 
 export const SelectBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: SelectBlockProps) => {
   const [selectedValue, setSelectedValue] = useState<string>(
     content[0] || 'empty'
@@ -82,7 +85,7 @@ export const SelectBlock = ({
       </SelectTrigger>
       <SelectContent>
         {content.map((value) => (
-          <SelectItem key={value} value={value}>
+          <SelectItem key={value} value={value} style={styles}>
             {value || 'empty'}
           </SelectItem>
         ))}

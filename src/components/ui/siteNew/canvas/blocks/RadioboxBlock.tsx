@@ -3,17 +3,20 @@ import { Button } from 'src/components/ui/button'
 import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { RadioGroup, RadioGroupItem } from 'src/components/ui/radio-group'
+import { Block } from 'src/store/slices/siteSlice'
 
 export type RadioboxBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  styles: Block['styles']
 }
 
 export const RadioboxBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: RadioboxBlockProps) => {
   const [selectedValue, setSelectedValue] = useState<string>(content[0] || '')
 
@@ -58,7 +61,7 @@ export const RadioboxBlock = ({
   ) : (
     <RadioGroup value={selectedValue} onValueChange={setSelectedValue}>
       {content.map((item, index) => (
-        <div key={index} className="flex items-center space-x-2">
+        <div key={index} style={styles} className="flex items-center space-x-2">
           <RadioGroupItem value={item} id="radiobox" />
           <Label htmlFor="radiobox">{item}</Label>
         </div>

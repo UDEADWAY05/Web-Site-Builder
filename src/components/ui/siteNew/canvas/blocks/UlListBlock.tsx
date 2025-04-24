@@ -1,16 +1,18 @@
-import { Button } from 'src/components/ui/button'
 import { Input } from 'src/components/ui/input'
+import { Block } from 'src/store/slices/siteSlice/types'
 
 export type ListBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  styles: Block['styles']
 }
 
 export const UlListBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: ListBlockProps) => {
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
@@ -22,9 +24,7 @@ export const UlListBlock = ({
   const removeItem = (index: number) =>
     onChange(content.filter((_, i) => i !== index))
 
-  return ( 
-    <article className="p-2 w-full resize-none overflow-hidden">
-      {isEditing ? (
+  return isEditing ? (
     <ul>
       {content.map((item, index) => (
         <li key={index}>
@@ -41,10 +41,10 @@ export const UlListBlock = ({
   ) : (
     <ul>
       {content.map((item, i) => (
-        <li key={i}>{item}</li>
+        <li style={styles} key={i}>
+          {item}
+        </li>
       ))}
     </ul>
-  )}
-    </article>
   )
 }

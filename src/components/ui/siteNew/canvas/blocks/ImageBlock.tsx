@@ -1,13 +1,17 @@
+import { Block } from 'src/store/slices/siteSlice'
+
 export type ImageBlockProps = {
   content: { url: string; alt: string }
   isEditing: boolean
   onChange: (newContent: { url: string; alt: string }) => void
+  styles: Block['styles']
 }
 
 export const ImageBlock = ({
   content,
   isEditing,
   onChange,
+  styles,
 }: ImageBlockProps) => {
   return isEditing ? (
     <input
@@ -18,6 +22,6 @@ export const ImageBlock = ({
       className="border p-2 w-full"
     />
   ) : (
-    <img src={`${content.url}`} alt={content.alt} />
+    <img style={styles} src={`${content.url}`} alt={content.alt} />
   )
 }
