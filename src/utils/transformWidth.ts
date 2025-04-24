@@ -2,11 +2,15 @@ import type { Block } from 'src/store/slices/siteSlice'
 
 export function transformWidth(block: Block) {
   let width
-  if (block.type === 'divider') width = '100%'
-  if (!block.styles.width) {
-    width = 'auto'
+  if (block.type === 'divider') {
+    width = '100%'
   } else {
-    width = `${block.styles?.width}px`
+    if (!block.styles.width) {
+      width = 'auto'
+    } else {
+      width = `${block.styles?.width}px`
+    }
   }
+
   return width
 }
