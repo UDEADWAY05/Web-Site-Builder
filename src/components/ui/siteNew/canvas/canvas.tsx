@@ -9,6 +9,9 @@ import { clearSelectedBlockButton, setSite } from 'src/store/slices/siteSlice/si
 import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
+import { BlockWrapper } from './BlockWrapper'
+import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
+import { C } from 'vitest/dist/chunks/reporters.66aFHiyX.js'
 
 export function Canvas() {
   const { siteId } = useParams()
@@ -89,6 +92,32 @@ export function Canvas() {
   const handleCanvasMouseEnter = () => setMouseOverCanvas(true)
   const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('handleDrop')
+    e.preventDefault()
+
+    // const blockType = e.dataTransfer.getData('blockType') as Block['type']
+    const blockId = e.dataTransfer.getData('blockId')
+    const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
+    const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
+  
+    // calculating correct position when user pressed to drag inside block
+    const canvasRect = e.currentTarget.getBoundingClientRect()
+    const left = e.clientX - canvasRect.left - offsetX
+    const top = e.clientY - canvasRect.top - offsetY
+  
+    if (blockId) {
+      console.log(blockId)
+      dispatch(updateBlockPosition({id:blockId, left, top}))
+      // return
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+  
+
   useEffect(() => {
     const siteRef = ref(dbSite)
     
@@ -117,6 +146,8 @@ export function Canvas() {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleCanvasMouseEnter}
         onMouseLeave={handleCanvasMouseLeave}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
         style={{
         flex: 1,
         position: 'relative',
@@ -129,7 +160,13 @@ export function Canvas() {
           //   key={block.id} 
           //   block={block} 
           // />
-          <div className='absolute' key={block.id} style={block.styles}>{block.type}</div>
+          
+          <BlockWrapper block={block}> 
+            
+            <div draggable key={block.id} style={block.styles}>{block.type}</div> 
+
+          </BlockWrapper>
+          //BlockRenderer??? TODO
         ))}
         {activeBlockButton && mouseOverCanvas && (
           <span
@@ -139,7 +176,6 @@ export function Canvas() {
               border:'1px dotted lightgray',
               borderRadius: '0.3em',
               padding:'0.5em 1em'
-            
             }}
           >
             {activeBlockButton}

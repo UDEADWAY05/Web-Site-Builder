@@ -3,7 +3,7 @@ import type { Block, BlockButtonType, HeaderBlockType, ImageBlockType, Site } fr
 
 const initialState: Site = {
   id: new Date().getTime().toString(), //TODO, it's shit
-  bgColor: '#ffffff',
+  bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],
   selectedBlockButton:'',

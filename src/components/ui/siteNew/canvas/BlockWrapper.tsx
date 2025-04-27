@@ -1,127 +1,77 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { createPortal } from 'react-dom'
-import { selectedBlockId } from 'src/store/slices/siteSlice/selectors'
-import { updateBlockPosition, updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/store'
-import { ControlsOverlay } from '../ControlsOverlay'
+import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ReactDOM from 'react-dom'
+import { calculateClickPosition } from 'src/utils/calculateClickPosition'
+
 interface BlockWrapperProps {
-  block: {
-    id: string
-    styles: {
-      top: number
-      left: number
-      width: number
-      height: number
-    }
-  }
-  // isSelected: boolean
-  onSelect: () => void
-  // onDrag: (id: string, top: number, left: number) => void
-  onResize: (id: string, width: number, height: number) => void
-  canvasRef: React.RefObject<HTMLDivElement>
+  block: any
   children: React.ReactNode
 }
 
-export const BlockWrapper = ({ block, onSelect, children,canvasRef }: BlockWrapperProps) => {
-  console.log('wrapper render',block.id)
-  const [rect, setRect] = useState<DOMRect | null>(null)
-  const ref = useRef<HTMLDivElement>(null)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const { id, styles } = block
+export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) => {
+  const [controlsPosition, setControlsPosition] = useState<{ top: number, left: number }>({ top: 0, left: 0 })
+  // const { selectedBlockId, editingBlockId } = useSelector((state: any) => state.editor)
+  const blockRef = useRef<HTMLDivElement>(null)
+  
+  const dispatch = useDispatch()
+  
+  // const handleClick = () => {
+  //   if (selectedBlockId !== block.id) {
+  //     dispatch(selectBlock(block.id))  // Select the block
+  //   } else if (editingBlockId !== block.id) {
+  //     dispatch(startEditingBlock(block.id))  // Start editing the block
+  //   }
+  // }
 
-  const selectedBlock = useAppSelector(selectedBlockId)
-  const isSelected = selectedBlock === block.id
-  console.log('isSelected',isSelected)
-  const dispatch = useAppDispatch()
-
-  const handleDragStart = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onSelect()
-
-    const canvasRect = canvasRef.current?.getBoundingClientRect()
-    if (!canvasRect) {
-      return
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      // onDrag(id, startTop + deltaY, startLeft + deltaX)
-      dispatch(updateBlockPosition({ id,left: e.clientX - canvasRect.left ,top: e.clientY - canvasRect.top }))
-    }
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+  // When the block is selected, calculate the position of controls
+  // useEffect(() => {
+  //   if (selectedBlockId === block.id && blockRef.current) {
+  //     const rect = blockRef.current.getBoundingClientRect()
+  //     setControlsPosition({
+  //       top: rect.top - 40,  // Position above the block
+  //       left: rect.left,
+  //     })
+  //   }
+  // }, [selectedBlockId, block.id])
+  const handleDragStart = (e:React.DragEvent<HTMLDivElement>) => {
+    const { offsetX, offsetY } = calculateClickPosition(e)
+    console.log('drag start')
+    e.dataTransfer.setData('blockId',block.id)
+    e.dataTransfer.setData('offsetX',offsetX.toString())
+    e.dataTransfer.setData('offsetY',offsetY.toString())
   }
-
-  const handleResizeStart = (e: React.MouseEvent) => {
-    e.stopPropagation()
-
-    const startX = e.clientX
-    const startY = e.clientY
-    const startWidth = styles.width
-    const startHeight = styles.height
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - startX
-      const deltaY = e.clientY - startY
-      dispatch(updateBlockSize({id,width:startWidth + deltaX, height:startHeight + deltaY}))
-      // onResize(id, startWidth + deltaX, startHeight + deltaY)
-    }
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
-  }
-
-  useEffect(() => {
-    if (isSelected && ref.current) {
-      setRect(ref.current.getBoundingClientRect())
-    }
-  }, [isSelected])
 
   return (
     <div
-      ref={wrapperRef}
-      onMouseDown={handleDragStart}
-      className={`absolute border ${isSelected ? 'border-orange-500' : 'border-transparent'}`}
+      ref={blockRef}
+      className='absolute'
+      draggable
+      // className={`absolute block ${selectedBlockId === block.id ? 'border-2 border-blue-500' : ''}`}
       style={{
-        top: styles.top,
-        left: styles.left,
-        width: styles.width,
-        height: styles.height,
-        cursor: 'grab',
-        zIndex: isSelected ? 10 : 1
+        top: block.styles.top,
+        left: block.styles.left,
+        width: block.styles.width,
+        height: block.styles.height,
       }}
+      onDragStart={handleDragStart}
+      // onClick={handleClick}
     >
       {children}
-      {/* {isSelected && (
-        <div
-          onMouseDown={handleResizeStart}
-          className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 cursor-nwse-resize rounded-full"
+
+      {/* {selectedBlockId === block.id && ReactDOM.createPortal(
+        <Controls style={{ position: 'absolute', top: controlsPosition.top, left: controlsPosition.left }} />,
+        document.body // Controls rendered to the body or a specific div
+      )} */}
+      
+    
+      {/* {editingBlockId === block.id && (
+        <input
+          type="text"
+          defaultValue={block.content}
+          onBlur={() => dispatch(startEditingBlock(''))} // Stop editing
         />
       )} */}
-     
-      {id}
-      {isSelected && createPortal(
-        <ControlsOverlay
-          id={block.id}
-          // isEditing={isE}
-          // isVisible={isSelected} 
-          onDragHandleMouseDown={() => {}} 
-          onResizeHandleMouseDown={() => {}} 
-        />, wrapperRef.current
-      )}
-       {isSelected && createPortal(
-        <div className='absolute'>portal</div>, document.body
-      )}
     </div>
   )
 }
+

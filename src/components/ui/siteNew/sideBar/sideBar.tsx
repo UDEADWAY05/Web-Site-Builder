@@ -19,20 +19,6 @@ export function SideBar() {
 
   const dispatch = useAppDispatch()
 
-  // const handleDragStart = (
-  //   e: React.DragEvent<HTMLDivElement>,
-  //   blockType: BlockButton['type']
-  // ) => {
-  //   const { offsetX, offsetY } = calculateClickPosition(e)
-
-  //   e.dataTransfer.setData('offsetX', offsetX.toString())
-  //   e.dataTransfer.setData('offsetY', offsetY.toString())
-  //   e.dataTransfer.setData('blockType', blockType)
-  // }
-  // const selectBlockButton = (type:BlockButton['type']) => {
-  //   dispatch(setSelectedBlockButton(type))
-  // }
-
   return (
     <div className="p-2 w-[250px] bg-[#f4f4f4] flex flex-col">
       <div className={isPreviewCode ? 'invisible' : ''}>
