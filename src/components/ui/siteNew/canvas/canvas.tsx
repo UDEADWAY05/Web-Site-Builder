@@ -149,11 +149,15 @@ export function Canvas() {
         onMouseLeave={handleCanvasMouseLeave}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        style={{
-        flex: 1,
-        position: 'relative',
-        backgroundColor: bgColor,
-        overflow: 'hidden',
+        style={{ 
+          flex: 1,
+          position: 'relative',
+          backgroundColor: bgColor,
+          overflow: 'hidden',
+          backgroundImage: `
+            linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+            linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
+        backgroundSize: '100px 100px',
         }}
       >
         {blocks.map((block) => (

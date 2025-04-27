@@ -51,19 +51,19 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) =
   // }, [selectedBlockId, block.id])
   const handleDragStart = (e:React.DragEvent<HTMLDivElement>) => {
     const { offsetX, offsetY } = calculateClickPosition(e)
-    console.log('drag start')
+
     e.dataTransfer.setData('blockId',block.id)
     e.dataTransfer.setData('offsetX',offsetX.toString())
     e.dataTransfer.setData('offsetY',offsetY.toString())
+
     dispatch(setSelectedBlockId(block.id))
   }
 
   return (
     <div
       ref={blockRef}
-      // className='absolute'
       draggable
-      className={`absolute p-2 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
+      className={`absolute px-2 py-1 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
       style={{
         top: block.styles.top,
         left: block.styles.left,
