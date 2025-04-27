@@ -150,6 +150,12 @@ const siteSlice = createSlice({
     },
     clearSelectedBlockButton:(state) => {
       state.selectedBlockButton = ''
+    },
+    setSelectedBlockId: (state,action:PayloadAction<Block['id']>) => {
+      state.selectedBlockId = action.payload
+    },
+    clearSelectedBlockId: (state) => {
+      state.selectedBlockId = ''
     }
   },
 })
@@ -171,7 +177,9 @@ export const {
   updateBlockBgColor,
   updateBlockStyles,
   setSelectedBlockButton,
-  clearSelectedBlockButton
+  clearSelectedBlockButton,
+  setSelectedBlockId,
+  clearSelectedBlockId
 } = siteSlice.actions
 
 export default siteSlice.reducer

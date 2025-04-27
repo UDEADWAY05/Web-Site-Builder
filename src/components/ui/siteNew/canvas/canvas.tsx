@@ -5,7 +5,7 @@ import { useAppSelector } from '../../../../store/store'
 import { selectActiveBlockButton, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { clearSelectedBlockButton, setSite } from 'src/store/slices/siteSlice/siteSlice'
+import { clearSelectedBlockButton, setSelectedBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
@@ -72,6 +72,7 @@ export function Canvas() {
     if (activeBlockButton){
       const newBlock = generateBlockByType(activeBlockButton,relativeX,relativeY)
       dispatch(addBlock(newBlock))
+      dispatch(setSelectedBlockId(newBlock.id))
       dispatch(clearSelectedBlockButton())
     }
   }
@@ -161,7 +162,7 @@ export function Canvas() {
           //   block={block} 
           // />
           
-          <BlockWrapper block={block}> 
+          <BlockWrapper block={block} key={block.id}> 
             
             <div draggable key={block.id} style={block.styles}>{block.type}</div> 
 
