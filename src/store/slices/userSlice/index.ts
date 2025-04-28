@@ -1,6 +1,6 @@
-import { User } from "./types";
-import { setUser,removeUser } from "./userSlice";
+import { User } from './types'
+import { setUser, loggedOutUser } from './userSlice'
 import reducer from './userSlice'
 
 export type { User }
-export { setUser,reducer,removeUser }
+export { setUser, reducer, loggedOutUser }
