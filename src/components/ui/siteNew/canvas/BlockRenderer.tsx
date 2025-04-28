@@ -21,7 +21,6 @@ import {
   TextareaBlock,
   SelectBlock,
 } from './blocks'
-import { StylePanel } from '../StylePanel/StylePanel'
 
 const blockComponentMap = {
   button: ButtonBlock,
@@ -46,7 +45,7 @@ type BlockRendererProps = {
 }
 
 export const BlockRenderer = ({ block, isEditing, setIsEditing }: BlockRendererProps) => {
-  const [editingContent, setEditingContent] = useState(block.content)
+  const [editingContent, setEditingContent] = useState<Block['content']>(block.content)
   const dispatch = useAppDispatch()
 
   const Component = blockComponentMap[block.type]
@@ -82,6 +81,7 @@ export const BlockRenderer = ({ block, isEditing, setIsEditing }: BlockRendererP
         content={editingContent}
         isEditing={isEditing}
         onChange={setEditingContent}
+        
         // styles={block.styles}
       />
     </>

@@ -160,7 +160,7 @@ const siteSlice = createSlice({
     setSelectedBlock: (state,action:PayloadAction<Block>) => {
       state.selectedBlock = action.payload
     },
-    clearSelectedBlock:(state,_) => {
+    clearSelectedBlock:(state) => {
       state.selectedBlock = null
     }
   },

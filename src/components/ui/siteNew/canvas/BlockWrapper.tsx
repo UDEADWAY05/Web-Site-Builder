@@ -2,12 +2,12 @@ import React, { useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from 'src/store/store'
-import { selectBlockId } from 'src/store/slices/siteSlice/selectors'
-import { setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { selectActiveBlock } from 'src/store/slices/siteSlice/selectors'
+import { clearSelectedBlock, setSelectedBlock, setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { calculateClickPosition } from 'src/utils/calculateClickPosition'
-import { Button } from '../../button'
+import { Controls } from './Controls'
 
 interface BlockWrapperProps {
   block: Block
@@ -15,21 +15,22 @@ interface BlockWrapperProps {
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const [isEditing,setIsEditing] = useState(false)
-  const selectedBlockId = useAppSelector(selectBlockId)  
-  const isBlockSelected = selectedBlockId === block.id
+  const activeBlock = useAppSelector(selectActiveBlock)
   const blockRef = useRef<HTMLDivElement>(null)
+  const isBlockSelected = activeBlock?.id === block.id
 
   const dispatch = useDispatch()
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
+    dispatch(clearSelectedBlock())
+    // if (e.target.contains())
   
     if (!isBlockSelected) {
       dispatch(setSelectedBlockId(block.id))
-      //show controls bar with portal
+      dispatch(setSelectedBlock(block))
     }
     else if (isBlockSelected){
-      console.log('block already selected')
       setIsEditing(true)
     } 
     // else if (editingBlockId !== block.id) {
@@ -69,7 +70,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     <div
       ref={blockRef}
       draggable
-      className={`absolute px-2 py-1 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
+      className={`absolute rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
       style={{
         top: block.styles.top,
         left: block.styles.left,
@@ -78,23 +79,15 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
       }}
       onDragStart={handleDragStart}
       onClick={handleClick}
+      // onFocus={() => console.log('focus',block.type,block.id)}
+      // onBlur={() => console.log('blur',block.type,block.id)}
     >
-      {/* {children} */}
         <BlockRenderer block={block} isEditing={isEditing} setIsEditing={setIsEditing} />
 
-        {isBlockSelected && blockRef.current && createPortal(
-          // <Controls style={{ position: 'absolute', top: controlsPosition.top, left: controlsPosition.left }} />,
-          <div>Portal!</div>,
+        {/* {isBlockSelected && blockRef.current && createPortal(
+          <div style={{position:'absolute',bottom:'5em'}}><Controls/></div>,
           blockRef.current // Controls rendered to the body or a specific div
-        )}
-    
-      {/* {editingBlockId === block.id && (
-        <input
-          type="text"
-          defaultValue={block.content}
-          onBlur={() => dispatch(startEditingBlock(''))} // Stop editing
-        />
-      )} */}
+        )} */}
     </div>
   )
 }

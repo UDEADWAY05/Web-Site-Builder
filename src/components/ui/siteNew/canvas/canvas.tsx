@@ -1,28 +1,31 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { useAppDispatch } from 'src/store/store'
+import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../store/store'
-import { selectActiveBlockButton, selectBlockId, selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectActiveBlock, selectActiveBlockButton, selectBlockId, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { clearSelectedBlockButton, setSelectedBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
+import { clearSelectedBlock, clearSelectedBlockButton, clearSelectedBlockId, setSelectedBlock, setSelectedBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
 import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
+import { Controls } from './Controls'
 
 export function Canvas() {
   const { siteId } = useParams()
   const [mouseOverCanvas,setMouseOverCanvas] = useState(false)
 
   const blocks = useAppSelector(selectBlocks)
+  console.log('blocks in canvas',blocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
   const activeBlockButton = useAppSelector(selectActiveBlockButton)
   const selectedBlockId = useAppSelector(selectBlockId)
+  const activeBlock = useAppSelector(selectActiveBlock)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
@@ -66,6 +69,9 @@ export function Canvas() {
   // }
 
   const handleClick = (e:React.MouseEvent<HTMLDivElement>) => {
+    // dispatch(clearSelectedBlock())
+    // dispatch(clearSelectedBlockId())
+    
     const canvasRect = e.currentTarget.getBoundingClientRect()
     const relativeX = e.clientX - canvasRect.left
     const relativeY = e.clientY - canvasRect.top
@@ -107,6 +113,12 @@ export function Canvas() {
     const top = e.clientY - canvasRect.top - offsetY
   
     if (blockId) {
+      //TODO delete outside of canvas. Now doesn't work since drop doesn't happen outside canvas
+
+      // if (e.clientX <= canvasRect.left || e.clientY <= canvasRect.top){
+      //   console.log('deleting',blockId)
+      //   dispatch(deleteBlock(blockId))
+      // }
       dispatch(updateBlockPosition({ id:blockId, left, top }))
     }
   }
@@ -139,6 +151,7 @@ export function Canvas() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && selectedBlockId) {
         dispatch(deleteBlock(selectedBlockId))
+        dispatch(clearSelectedBlock())
       }
     }
 
@@ -170,19 +183,15 @@ export function Canvas() {
             linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
           backgroundSize: '100px 100px',
         }}
-      >
+      > 
+        {activeBlock && <Controls canvasRef={canvasRef}/>}
+        {/* {<Controls canvasRef={canvasRef}/>} */}
         {blocks.map((block) => (
           // <DraggableBlock 
           //   key={block.id} 
           //   block={block} 
           // />
-          
-          <BlockWrapper block={block} key={block.id}> 
-            {/* <BlockRenderer /> */}
-            {/* <div draggable key={block.id} style={block.styles}>{block.type}</div>  */}
-
-          </BlockWrapper>
-          //BlockRenderer??? TODO
+          <BlockWrapper block={block} key={block.id} /> 
         ))}
         {activeBlockButton && mouseOverCanvas && (
           <span

@@ -1,65 +1,105 @@
-type ControlsProps = {
-//   isEditing: boolean
-//   onEdit: () => void
-//   onDelete: () => void
-//   onSave: () => void
-//   onCancel: () => void
-}
+import { useState, useRef, useEffect } from "react"
+import { selectActiveBlock } from "src/store/slices/siteSlice/selectors"
+import { useAppDispatch, useAppSelector } from "src/store/store"
+import { blockControlsMap } from "./blockControls/blockControlsMap"
+import { clearSelectedBlock, deleteBlock } from "src/store/slices/siteSlice/siteSlice"
+import { createPortal } from "react-dom"
 
-export const Controls = ({
-//   isEditing,
-//   onEdit,
-//   onDelete,
-//   onSave,
-//   onCancel,
-}: ControlsProps) => {
-  const iconClass = 'w-8 h-8 cursor-pointer p-1 hover:bg-gray-300'
+export const Controls = ({canvasRef}:{canvasRef:React.RefObject<HTMLDivElement | null>}) => {
+  const [position,setPosition] = useState({ x:200,y:30 })
+  const isDraggingRef = useRef(false)
+  const lastMousePosition = useRef<{ x: number; y: number } | null>(null)
+
+  const selectedBlock = useAppSelector(selectActiveBlock)  
+  const ControlsComponent = blockControlsMap[selectedBlock.type]
+
+  const dispatch = useAppDispatch()
+
+  if (!ControlsComponent) return null
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDraggingRef.current = true
+    lastMousePosition.current = { x: e.clientX, y: e.clientY }
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDraggingRef.current || !lastMousePosition.current) return
+
+    const deltaX = e.clientX - lastMousePosition.current.x
+    const deltaY = e.clientY - lastMousePosition.current.y
+
+    setPosition((prev) => ({
+      x: prev.x + deltaX,
+      y: prev.y + deltaY,
+    }))
+
+    lastMousePosition.current = { x: e.clientX, y: e.clientY }
+  }
+
+  const onDelete = () => {
+    dispatch(deleteBlock(selectedBlock?.id))
+    dispatch(clearSelectedBlock())
+  }
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false
+    lastMousePosition.current = null
+  }
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mouseup", handleMouseUp)
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("mouseup", handleMouseUp)
+    }
+  }, [])
 
   return (
-    <div className="absolute px-4 py-2 flex gap-2 ">
-        Contols
-      {/* {isEditing ? (
-        <>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            className={iconClass}
-            onClick={onSave}
-          >
-            <path d="M12.16,28a3,3,0,0,1-2.35-1.13L3.22,18.62a1,1,0,0,1,1.56-1.24l6.59,8.24A1,1,0,0,0,13,25.56L27.17,4.44a1,1,0,1,1,1.66,1.12L14.67,26.67A3,3,0,0,1,12.29,28Z" />
-          </svg>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            className={iconClass}
-            onClick={onCancel}
-          >
-            <path d="M4,29a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l24-24a1,1,0,1,1,1.42,1.42l-24,24A1,1,0,0,1,4,29Z" />
-            <path d="M28,29a1,1,0,0,1-.71-.29l-24-24A1,1,0,0,1,4.71,3.29l24,24a1,1,0,0,1,0,1.42A1,1,0,0,1,28,29Z" />
-          </svg>
-        </>
-      ) : (
-        <>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={onEdit}
-            className={iconClass}
-            viewBox="0 0 500 600"
-          >
-            <path d="M467.476,146.438l-21.445,21.455L317.35,39.23l21.445-21.457c23.689-23.692,62.104-23.692,85.795,0l42.886,42.897C491.133,84.349,491.133,122.748,467.476,146.438z M167.233,403.748c-5.922,5.922-5.922,15.513,0,21.436c5.925,5.955,15.521,5.955,21.443,0L424.59,189.335l-21.469-21.457L167.233,403.748z M60,296.54c-5.925,5.927-5.925,15.514,0,21.44c5.922,5.923,15.518,5.923,21.443,0L317.35,82.113L295.914,60.67L60,296.54z M338.767,103.54L102.881,339.421c-11.845,11.822-11.815,31.041,0,42.886c11.85,11.846,31.038,11.901,42.914-0.032l235.886-235.837L338.767,103.54z M145.734,446.572c-7.253-7.262-10.749-16.465-12.05-25.948c-3.083,0.476-6.188,0.919-9.36,0.919c-16.202,0-31.419-6.333-42.881-17.795c-11.462-11.491-17.77-26.687-17.77-42.887c0-2.954,0.443-5.833,0.859-8.703c-9.803-1.335-18.864-5.629-25.972-12.737c-0.682-0.677-0.917-1.596-1.538-2.338L0,485.216l147.748-36.986C147.097,447.637,146.36,447.193,145.734,446.572z" />
-          </svg>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
+    <div 
+        className="absolute px-4 py-2 flex gap-2 shadow-lg"
+        style={{ left:position.x, top:position.y }}
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200'            
+            width="24"
+            height="24"
+            onMouseDown={handleMouseDown}
+            >
+            <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg"
+            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200'     
             onClick={onDelete}
-            className={iconClass}
             viewBox="0 0 90 170"
           >
             <path d="M75.6,44.8v73c0,3.4-2.8,6.2-6.2,6.2H21.3c-3.4,0-6.2-2.8-6.2-6.2v-73H75.6L75.6,44.8z M59.9,52.9v62.8h3.6V52.9H59.9  L59.9,52.9z M43.6,52.9v62.8h3.6V52.9H43.6L43.6,52.9z M27.3,52.9v62.8h3.6V52.9H27.3L27.3,52.9z M31.3,27.9v-5.2  c0-3.3,2.6-5.9,5.9-5.9h16.4c3.3,0,5.9,2.6,5.9,5.9v5.2h18.1c3.4,0,6.2,2.8,6.2,6.2v4.3H7V34c0-3.4,2.8-6.2,6.2-6.2H31.3L31.3,27.9z   M37.2,20.8c-1,0-1.8,0.8-1.8,1.8v5.2h20.1v-5.2c0-1-0.8-1.8-1.8-1.8H37.2L37.2,20.8z" />
           </svg>
-        </>
-      )} */}
+        <ControlsComponent />
     </div>
   )
+// return createPortal(
+//     <div 
+//         className="absolute px-4 py-2 flex gap-2 shadow-lg"
+//         style={{ left:position.x, top:position.y }}
+//     >
+//         <svg xmlns="http://www.w3.org/2000/svg" 
+//             className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200 hover:cursor-grab'            
+//             width="24"
+//             height="24"
+//             onMouseDown={handleMouseDown}
+//             >
+//             <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z" /></svg>
+//         <svg xmlns="http://www.w3.org/2000/svg"
+//             className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200'     
+//             onClick={onDelete}
+//             viewBox="0 0 90 170"
+//           >
+//             <path d="M75.6,44.8v73c0,3.4-2.8,6.2-6.2,6.2H21.3c-3.4,0-6.2-2.8-6.2-6.2v-73H75.6L75.6,44.8z M59.9,52.9v62.8h3.6V52.9H59.9  L59.9,52.9z M43.6,52.9v62.8h3.6V52.9H43.6L43.6,52.9z M27.3,52.9v62.8h3.6V52.9H27.3L27.3,52.9z M31.3,27.9v-5.2  c0-3.3,2.6-5.9,5.9-5.9h16.4c3.3,0,5.9,2.6,5.9,5.9v5.2h18.1c3.4,0,6.2,2.8,6.2,6.2v4.3H7V34c0-3.4,2.8-6.2,6.2-6.2H31.3L31.3,27.9z   M37.2,20.8c-1,0-1.8,0.8-1.8,1.8v5.2h20.1v-5.2c0-1-0.8-1.8-1.8-1.8H37.2L37.2,20.8z" />
+//           </svg>
+//         <ControlsComponent />
+//     </div>,
+//     canvasRef.current
+//   )
 }
