@@ -34,7 +34,8 @@ import {
 import { exportSiteToZip } from 'src/utils/exportSiteToZip'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { child, dbSite, get, off, ref } from 'src/App'
+import { child, get, off, ref } from 'src/App'
+import { dbSite } from 'src/firebase'
 
 export function SiteNew() {
   const blocks = useAppSelector(selectorLayoutSiteData)
