@@ -10,8 +10,6 @@ export function generateBlockByType(
     left,
     top,
     backgroundColor: '#fafafa',
-    width: 'auto',
-    height: 'auto',
   }
 
   switch (type) {
