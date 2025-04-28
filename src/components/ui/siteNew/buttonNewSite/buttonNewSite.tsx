@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
-import { dbSite, ref, set } from 'src/App'
+import { ref, set } from 'src/App'
 import { useAppDispatch } from 'src/store/store'
 import { resetLayout } from 'src/store/slices/siteSlice'
+import { dbSite } from 'src/firebase'
+import { getRoutePathSiteDetail } from 'src/routes/paths'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
@@ -17,9 +19,9 @@ export function ButtonNewSite() {
         data: [],
       }
       dispatch(resetLayout())
-      await set(ref(dbSite, `sites/${siteId}`), newSite)
+      await set(ref(dbSite, getRoutePathSiteDetail(siteId)), newSite)
 
-      navigate(`/sites/${siteId}`)
+      navigate(getRoutePathSiteDetail(siteId))
     } catch (error) {
       // временная заглушка - перенести в slice
       console.log('Ошибка при создании макета сайта:', error)
