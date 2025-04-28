@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useAppSelector } from '../../../../store/store'
-import { selectActiveBlockButton, selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectActiveBlockButton, selectBlockId, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
 import { clearSelectedBlockButton, setSelectedBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
@@ -11,7 +11,7 @@ import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
 import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
-import { C } from 'vitest/dist/chunks/reporters.66aFHiyX.js'
+import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
 
 export function Canvas() {
   const { siteId } = useParams()
@@ -22,6 +22,7 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
   const activeBlockButton = useAppSelector(selectActiveBlockButton)
+  const selectedBlockId = useAppSelector(selectBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
@@ -70,7 +71,7 @@ export function Canvas() {
     const relativeY = e.clientY - canvasRect.top
 
     if (activeBlockButton){
-      const newBlock = generateBlockByType(activeBlockButton,relativeX,relativeY)
+      const newBlock = generateBlockByType(activeBlockButton.type,relativeX,relativeY)
       dispatch(addBlock(newBlock))
       dispatch(setSelectedBlockId(newBlock.id))
       dispatch(clearSelectedBlockButton())
@@ -94,10 +95,8 @@ export function Canvas() {
   const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('handleDrop')
     e.preventDefault()
 
-    // const blockType = e.dataTransfer.getData('blockType') as Block['type']
     const blockId = e.dataTransfer.getData('blockId')
     const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
     const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
@@ -108,9 +107,7 @@ export function Canvas() {
     const top = e.clientY - canvasRect.top - offsetY
   
     if (blockId) {
-      console.log(blockId)
-      dispatch(updateBlockPosition({id:blockId, left, top}))
-      // return
+      dispatch(updateBlockPosition({ id:blockId, left, top }))
     }
   }
 
@@ -137,6 +134,20 @@ export function Canvas() {
     return off(siteRef) // Функция для отписки
   }, [dispatch, siteId])
 
+  //delete by keyboard
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Delete' && selectedBlockId) {
+        dispatch(deleteBlock(selectedBlockId))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedBlockId, dispatch])
+
   return (
     <>
   { isPreview 
@@ -157,7 +168,7 @@ export function Canvas() {
           backgroundImage: `
             linear-gradient(to right, #f0f0f0 1px, transparent 1px),
             linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
-        backgroundSize: '100px 100px',
+          backgroundSize: '100px 100px',
         }}
       >
         {blocks.map((block) => (
@@ -167,8 +178,8 @@ export function Canvas() {
           // />
           
           <BlockWrapper block={block} key={block.id}> 
-            
-            <div draggable key={block.id} style={block.styles}>{block.type}</div> 
+            {/* <BlockRenderer /> */}
+            {/* <div draggable key={block.id} style={block.styles}>{block.type}</div>  */}
 
           </BlockWrapper>
           //BlockRenderer??? TODO
@@ -183,7 +194,8 @@ export function Canvas() {
               padding:'0.5em 1em'
             }}
           >
-            {activeBlockButton}
+            {activeBlockButton.label}
+            <img src={activeBlockButton.img}/>
           </span>
         )}
       </div>

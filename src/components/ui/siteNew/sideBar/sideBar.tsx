@@ -10,8 +10,6 @@ import {
 import { selectSiteTitle, selectSiteBgColor, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { BlockButton } from './BlockButton'
 
-console.log(blockButtons)
-
 export function SideBar() {
   const projectName = useAppSelector(selectSiteTitle)
   const bgColor = useAppSelector(selectSiteBgColor)

@@ -112,8 +112,9 @@ export interface Site {
   title: string
   bgColor: string
   blocks: Array<Block>
-  selectedBlockButton:Block['type'] | ''
+  selectedBlockButton:BlockButtonType | null
   selectedBlockId:Block['id']
   isPreview: boolean
   isModalOpen: boolean
+  selectedBlock: Block | null
 }

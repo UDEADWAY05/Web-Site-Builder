@@ -6,10 +6,11 @@ const initialState: Site = {
   bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],
-  selectedBlockButton:'',
+  selectedBlockButton: null,
   selectedBlockId:'',
   isPreview: false,
   isModalOpen: false,
+  selectedBlock: null
 }
 
 const siteSlice = createSlice({
@@ -144,18 +145,23 @@ const siteSlice = createSlice({
         }
       }
     },
-    setSelectedBlockButton:(state,action:PayloadAction<BlockButtonType['type']>) => {
+    setSelectedBlockButton:(state,action:PayloadAction<BlockButtonType>) => {
       state.selectedBlockButton = action.payload
-      console.log('sb',state.selectedBlockButton)
     },
     clearSelectedBlockButton:(state) => {
-      state.selectedBlockButton = ''
+      state.selectedBlockButton = null
     },
     setSelectedBlockId: (state,action:PayloadAction<Block['id']>) => {
       state.selectedBlockId = action.payload
     },
     clearSelectedBlockId: (state) => {
       state.selectedBlockId = ''
+    },
+    setSelectedBlock: (state,action:PayloadAction<Block>) => {
+      state.selectedBlock = action.payload
+    },
+    clearSelectedBlock:(state,_) => {
+      state.selectedBlock = null
     }
   },
 })
@@ -179,7 +185,9 @@ export const {
   setSelectedBlockButton,
   clearSelectedBlockButton,
   setSelectedBlockId,
-  clearSelectedBlockId
+  clearSelectedBlockId,
+  setSelectedBlock,
+  clearSelectedBlock
 } = siteSlice.actions
 
 export default siteSlice.reducer

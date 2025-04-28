@@ -1,30 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import ReactDOM from 'react-dom'
-import { calculateClickPosition } from 'src/utils/calculateClickPosition'
+import React, { useState, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import { useDispatch } from 'react-redux'
 import { useAppSelector } from 'src/store/store'
 import { selectBlockId } from 'src/store/slices/siteSlice/selectors'
 import { setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { Block } from 'src/store/slices/siteSlice'
+import { BlockRenderer } from './BlockRenderer'
+import { calculateClickPosition } from 'src/utils/calculateClickPosition'
+import { Button } from '../../button'
 
 interface BlockWrapperProps {
-  block: any
-  children: React.ReactNode
+  block: Block
 }
 
-export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) => {
-  const [controlsPosition, setControlsPosition] = useState<{ top: number, left: number }>({ top: 0, left: 0 })
-  // const { selectedBlockId, editingBlockId } = useSelector((state: any) => state.editor)
-  const blockRef = useRef<HTMLDivElement>(null)
+export const BlockWrapper = ({ block }: BlockWrapperProps) => {
+  const [isEditing,setIsEditing] = useState(false)
   const selectedBlockId = useAppSelector(selectBlockId)  
+  const isBlockSelected = selectedBlockId === block.id
+  const blockRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
-  const isBlockSelected = selectedBlockId === block.id
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
   
     if (!isBlockSelected) {
       dispatch(setSelectedBlockId(block.id))
+      //show controls bar with portal
+    }
+    else if (isBlockSelected){
+      console.log('block already selected')
+      setIsEditing(true)
     } 
     // else if (editingBlockId !== block.id) {
     //   dispatch(startEditingBlock(block.id))
@@ -73,13 +79,14 @@ export const BlockWrapper: React.FC<BlockWrapperProps> = ({ block, children }) =
       onDragStart={handleDragStart}
       onClick={handleClick}
     >
-      {children}
+      {/* {children} */}
+        <BlockRenderer block={block} isEditing={isEditing} setIsEditing={setIsEditing} />
 
-      {/* {selectedBlockId === block.id && ReactDOM.createPortal(
-        <Controls style={{ position: 'absolute', top: controlsPosition.top, left: controlsPosition.left }} />,
-        document.body // Controls rendered to the body or a specific div
-      )} */}
-      
+        {isBlockSelected && blockRef.current && createPortal(
+          // <Controls style={{ position: 'absolute', top: controlsPosition.top, left: controlsPosition.left }} />,
+          <div>Portal!</div>,
+          blockRef.current // Controls rendered to the body or a specific div
+        )}
     
       {/* {editingBlockId === block.id && (
         <input

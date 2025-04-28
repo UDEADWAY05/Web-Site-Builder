@@ -5,14 +5,14 @@ import { BlockButtonType } from "src/store/slices/siteSlice/types"
 
 export const BlockButton = ({ block }: { block: BlockButtonType}) => {
     const activeBlockButton = useAppSelector(selectActiveBlockButton)
-    const isSelected = activeBlockButton === block.type
+    const isSelected = activeBlockButton?.type === block.type
 
     const dispatch = useAppDispatch()
 
     return (
         <div            
             className={`col bg-slate-200 rounded-md p-1 ${isSelected ? 'bg-slate-400' : 'hover:bg-slate-300'}`}
-            onClick={() => dispatch(setSelectedBlockButton(block.type))}
+            onClick={() => dispatch(setSelectedBlockButton(block))}
             >
             <div className="flex flex-col">
             <img className="m-auto" src={block.img} alt={block.type} />

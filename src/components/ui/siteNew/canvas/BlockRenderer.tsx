@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
-import { Controls } from '../draggableBlock/Controls'
 import { useAppDispatch } from 'src/store/store'
 import {
   deleteBlock,
@@ -42,10 +41,11 @@ const blockComponentMap = {
 
 type BlockRendererProps = {
   block: Block
+  isEditing:boolean
+  setIsEditing:(isEditing:boolean) => void
 }
 
-export const BlockRenderer = ({ block }: BlockRendererProps) => {
-  const [isEditing, setIsEditing] = useState(false)
+export const BlockRenderer = ({ block, isEditing, setIsEditing }: BlockRendererProps) => {
   const [editingContent, setEditingContent] = useState(block.content)
   const dispatch = useAppDispatch()
 
@@ -62,7 +62,7 @@ export const BlockRenderer = ({ block }: BlockRendererProps) => {
 
   return (
     <>
-      <div className="flex">
+      {/* <div className="flex">
         <StylePanel
           styles={block.styles}
           onChange={(newStyles) =>
@@ -76,13 +76,13 @@ export const BlockRenderer = ({ block }: BlockRendererProps) => {
           onCancel={() => setIsEditing(false)}
           onDelete={onDelete}
         />
-      </div>
+      </div> */}
 
       <Component
         content={editingContent}
         isEditing={isEditing}
         onChange={setEditingContent}
-        styles={block.styles}
+        // styles={block.styles}
       />
     </>
   )
