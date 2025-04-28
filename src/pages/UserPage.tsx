@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { checkUserData } from 'src/store/slices/userSlice/thunks'
 import {
@@ -14,35 +14,48 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from 'src/components/ui/button'
 import { z } from 'zod'
+import { localStorageService } from 'src/services/localstorage.service'
 
-const profileSchema = z.object({
+const userSchema = z.object({
   email: z.string().email('Неверно введен email'),
   name: z.string().min(3, 'Имя не может быть короче 3 символов'),
   surname: z.string().min(2, 'Фамилия не должна быть короче 2 символов'),
 })
 
-export const ProfilePage = () => {
+export const UserPage = () => {
   const [isEditing, setIsEditing] = useState(false)
   const userData = useAppSelector(selectUserData)
-  const userId = useAppSelector(selectUserId)
+  const userId = localStorageService.getUserId()
   const dispatch = useAppDispatch()
   const { updateUser, getUserById } = useFirebase()
 
-  const form = useForm<z.infer<typeof profileSchema>>({
+  const form = useForm<z.infer<typeof userSchema>>({
     mode: 'onTouched',
     defaultValues: {
       email: userData?.email,
       name: userData?.name,
       surname: userData?.surname,
     },
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(userSchema),
   })
 
   const {
     formState: { errors, isValid, isSubmitting },
     setError,
+    reset,
   } = form
   const serverError = errors.root?.message
+
+  // Сбрасываем форму при изменении данных пользователя
+  useEffect(() => {
+    if (userData) {
+      reset({
+        email: userData.email,
+        name: userData.name,
+        surname: userData.surname,
+      })
+    }
+  }, [userData, reset])
 
   const onSubmit = async ({
     name,
@@ -53,7 +66,7 @@ export const ProfilePage = () => {
   }) => {
     try {
       if (!userId) {
-        return
+        throw new Error('Пользователь не авторизован')
       }
       await updateUser(userId, name, surname)
       dispatch(checkUserData({ id: userId, getUserById }))
@@ -69,6 +82,11 @@ export const ProfilePage = () => {
         setError('root', { type: 'root_error', message: e.message })
       }
     }
+  }
+
+  const handleCancel = () => {
+    reset()
+    setIsEditing(false)
   }
 
   return (
@@ -120,7 +138,7 @@ export const ProfilePage = () => {
           )}
 
           {isEditing && (
-            <Button variant="default" onClick={() => setIsEditing(false)}>
+            <Button variant="default" onClick={handleCancel}>
               Отменить редактирование
             </Button>
           )}
