@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Disclosure,
   DisclosureButton,
@@ -8,7 +8,7 @@ import { RoutePaths } from 'src/routes/paths'
 import { useFirebase } from 'src/hooks/useFirebase'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { isUserLoggedIn } from 'src/store/slices/userSlice/selectors'
-import { removeUser } from 'src/store/slices/userSlice'
+import { loggedOutUser } from 'src/store/slices/userSlice'
 import { Button } from '../button'
 import { ButtonNewSite } from '../siteNew/buttonNewSite/buttonNewSite'
 
@@ -35,7 +35,7 @@ export function NavBar() {
       id: 'main',
     },
   ]
-
+  const navigate = useNavigate()
   const isLoggedIn = useAppSelector(isUserLoggedIn)
 
   const dispatch = useAppDispatch()
@@ -43,10 +43,9 @@ export function NavBar() {
 
   const handleSignOut = async () => {
     await signOutUser()
-    dispatch(removeUser())
+    dispatch(loggedOutUser())
+    navigate('/auth/login')
   }
-  // const { signOutUser } = useAuth()
-  // const { signOutUser } = useFirebase()
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
