@@ -6,7 +6,7 @@ export function generateBlockByType(
   left: number,
   top: number
 ): Block {
-  const styles: Block['styles'] = {
+  const defaultStyles: Block['styles'] = {
     left,
     top,
     backgroundColor: '#fafafa',
@@ -17,28 +17,28 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: {...defaultStyles, fontSize:16, color:'#000000'},
         content: 'new_paragraph',
       }
     case 'header':
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: { text: 'new_header', level: 1 },
       }
     case 'image':
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: { url: `${musical}`, alt: 'image' },
       }
     case 'button':
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: {...defaultStyles,fontSize:16, color:'#000000'},
         content: 'Button',
       }
     case 'ul':
@@ -46,7 +46,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: ['item1', 'item2'],
       }
 
@@ -54,7 +54,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: 'divider',
       }
 
@@ -62,15 +62,14 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: {...defaultStyles,fontWeight:'bold', color:'#000000'},
         content: 'Lorem ipsum dolor sir amet',
       }
-    ///// form////
     case 'input':
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: 'Inter your label',
       }
 
@@ -78,7 +77,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: 'Type your message here',
       }
 
@@ -86,7 +85,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: ['select 1', 'select2'],
       }
 
@@ -94,7 +93,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: 'Accept terms and conditions',
       }
 
@@ -102,7 +101,7 @@ export function generateBlockByType(
       return {
         id: Date.now().toString(),
         type,
-        styles,
+        styles: defaultStyles,
         content: ['yes', 'no'],
       }
 

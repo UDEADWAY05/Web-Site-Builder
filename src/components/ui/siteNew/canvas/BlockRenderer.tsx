@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import { useAppDispatch } from 'src/store/store'
-import {
-  deleteBlock,
-  updateBlockContent,
-  updateBlockStyles,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { deleteBlock, updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -81,8 +77,7 @@ export const BlockRenderer = ({ block, isEditing, setIsEditing }: BlockRendererP
         content={editingContent}
         isEditing={isEditing}
         onChange={setEditingContent}
-        
-        // styles={block.styles}
+        styles={block.styles}
       />
     </>
   )

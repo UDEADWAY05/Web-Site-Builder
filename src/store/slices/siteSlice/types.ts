@@ -113,8 +113,8 @@ export interface Site {
   bgColor: string
   blocks: Array<Block>
   selectedBlockButton:BlockButtonType | null
-  selectedBlockId:Block['id']
+  // selectedBlockId:Block['id']
   isPreview: boolean
   isModalOpen: boolean
-  selectedBlock: Block | null
+  activeBlockId: Block['id'] | undefined
 }

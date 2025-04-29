@@ -1,13 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { createPortal } from 'react-dom'
+import { setActiveBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from 'src/store/store'
-import { selectActiveBlock } from 'src/store/slices/siteSlice/selectors'
-import { clearSelectedBlock, setSelectedBlock, setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { selectActiveBlockId } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { calculateClickPosition } from 'src/utils/calculateClickPosition'
-import { Controls } from './Controls'
 
 interface BlockWrapperProps {
   block: Block
@@ -15,55 +13,29 @@ interface BlockWrapperProps {
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const [isEditing,setIsEditing] = useState(false)
-  const activeBlock = useAppSelector(selectActiveBlock)
+  const activeBlockId = useAppSelector(selectActiveBlockId)
   const blockRef = useRef<HTMLDivElement>(null)
-  const isBlockSelected = activeBlock?.id === block.id
+  const isBlockSelected = activeBlockId === block.id
 
   const dispatch = useDispatch()
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    dispatch(clearSelectedBlock())
-    // if (e.target.contains())
   
     if (!isBlockSelected) {
-      dispatch(setSelectedBlockId(block.id))
-      dispatch(setSelectedBlock(block))
+      dispatch(setActiveBlockId(block.id))
     }
     else if (isBlockSelected){
       setIsEditing(true)
     } 
-    // else if (editingBlockId !== block.id) {
-    //   dispatch(startEditingBlock(block.id))
-    // }
   }
   
-  // const handleClick = () => {
-  //   if (selectedBlockId !== block.id) {
-  //     dispatch(selectBlock(block.id))  // Select the block
-  //   } else if (editingBlockId !== block.id) {
-  //     dispatch(startEditingBlock(block.id))  // Start editing the block
-  //   }
-  // }
-
-  // When the block is selected, calculate the position of controls
-  // useEffect(() => {
-  //   if (selectedBlockId === block.id && blockRef.current) {
-  //     const rect = blockRef.current.getBoundingClientRect()
-  //     setControlsPosition({
-  //       top: rect.top - 40,  // Position above the block
-  //       left: rect.left,
-  //     })
-  //   }
-  // }, [selectedBlockId, block.id])
   const handleDragStart = (e:React.DragEvent<HTMLDivElement>) => {
     const { offsetX, offsetY } = calculateClickPosition(e)
 
     e.dataTransfer.setData('blockId',block.id)
     e.dataTransfer.setData('offsetX',offsetX.toString())
     e.dataTransfer.setData('offsetY',offsetY.toString())
-
-    dispatch(setSelectedBlockId(block.id))
   }
 
   return (

@@ -20,6 +20,7 @@ export const QuoteBlock = ({
       onChange={(e) => onChange(e.target.value)}
       placeholder="Edit text"
       className="border p-2 w-full"
+      style={styles}
     />
   ) : (
     <blockquote style={styles}>

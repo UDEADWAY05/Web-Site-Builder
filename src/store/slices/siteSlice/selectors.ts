@@ -19,6 +19,5 @@ export const selectSiteTitle = (state: RootState) =>
 export const selectSiteBgColor = (state: RootState) =>
   state.site.bgColor
 export const selectActiveBlockButton = (state:RootState) => state.site.selectedBlockButton
-export const selectBlockId = (state:RootState) => state.site.selectedBlockId  
 
-export const selectActiveBlock = (state:RootState) => state.site.selectedBlock
+export const selectActiveBlockId = (state:RootState) => state.site.activeBlockId

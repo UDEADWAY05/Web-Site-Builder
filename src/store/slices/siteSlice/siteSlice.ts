@@ -7,10 +7,9 @@ const initialState: Site = {
   title: 'New_title',
   blocks: [],
   selectedBlockButton: null,
-  selectedBlockId:'',
   isPreview: false,
   isModalOpen: false,
-  selectedBlock: null
+  activeBlockId: undefined
 }
 
 const siteSlice = createSlice({
@@ -51,7 +50,6 @@ const siteSlice = createSlice({
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
     updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
-      // console.log(action.payload)
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate) {
@@ -68,7 +66,6 @@ const siteSlice = createSlice({
       })
     },
     updateBlockSize: (state, action:PayloadAction<{id:Block['id'],width:number,height:number}>) => {
-      console.log(state, action)
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate){
@@ -138,6 +135,7 @@ const siteSlice = createSlice({
     },
     updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
       const block = state.blocks.find((b) => b.id === action.payload.id)
+
       if (block) {
         block.styles = {
           ...block.styles,
@@ -151,17 +149,11 @@ const siteSlice = createSlice({
     clearSelectedBlockButton:(state) => {
       state.selectedBlockButton = null
     },
-    setSelectedBlockId: (state,action:PayloadAction<Block['id']>) => {
-      state.selectedBlockId = action.payload
+    setActiveBlockId: (state,action:PayloadAction<Block['id']>) => {
+      state.activeBlockId = action.payload
     },
-    clearSelectedBlockId: (state) => {
-      state.selectedBlockId = ''
-    },
-    setSelectedBlock: (state,action:PayloadAction<Block>) => {
-      state.selectedBlock = action.payload
-    },
-    clearSelectedBlock:(state) => {
-      state.selectedBlock = null
+    clearActiveBlockId:(state) => {
+      state.activeBlockId = undefined
     }
   },
 })
@@ -184,10 +176,8 @@ export const {
   updateBlockStyles,
   setSelectedBlockButton,
   clearSelectedBlockButton,
-  setSelectedBlockId,
-  clearSelectedBlockId,
-  setSelectedBlock,
-  clearSelectedBlock
+  setActiveBlockId,
+  clearActiveBlockId
 } = siteSlice.actions
 
 export default siteSlice.reducer

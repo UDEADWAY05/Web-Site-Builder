@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../store/store'
-import { selectActiveBlock, selectActiveBlockButton, selectBlockId, selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectActiveBlockId, selectActiveBlockButton,  selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { clearSelectedBlock, clearSelectedBlockButton, clearSelectedBlockId, setSelectedBlock, setSelectedBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
+import { clearActiveBlockId, clearSelectedBlockButton, setActiveBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
@@ -24,52 +25,15 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
   const activeBlockButton = useAppSelector(selectActiveBlockButton)
-  const selectedBlockId = useAppSelector(selectBlockId)
-  const activeBlock = useAppSelector(selectActiveBlock)
+  // const selectedBlockId = useAppSelector(selectBlockId)
+  const activeBlockId = useAppSelector(selectActiveBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
   const dispatch = useAppDispatch()
 
-  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault()
-
-  //   const blockType = e.dataTransfer.getData('blockType') as Block['type']
-  //   const blockId = e.dataTransfer.getData('blockId')
-  //   const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
-  //   const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
-  
-  //   const canvasRect = e.currentTarget.getBoundingClientRect()
-  //   const left = e.clientX - canvasRect.left - offsetX
-  //   const top = e.clientY - canvasRect.top - offsetY
-  
-  //   if (blockId) {
-  //     dispatch(updateBlockPosition({
-  //       id: blockId,
-  //       left,
-  //       top,
-  //     }))
-  //     return
-  //   }
-  
-  //   const newBlock = generateBlockByType(blockType, left, top)
-  //   dispatch(addBlock(newBlock))
-  // }
-
-  // const handleSelect = (id: string) => {
-  //   dispatch(selectBlock(id))
-  // }
-
-  // const handleDrag = (id: string, x: number, y: number) => {
-  //   dispatch(updateBlockPosition({ id, x, y }))
-  // }
-
-  // const handleResize = (id: string, width: number, height: number) => {
-  //   dispatch(updateBlockSize({ id, width, height }))
-  // }
-
   const handleClick = (e:React.MouseEvent<HTMLDivElement>) => {
-    // dispatch(clearSelectedBlock())
+    // dispatch(clearActiveBlockId())
     // dispatch(clearSelectedBlockId())
     
     const canvasRect = e.currentTarget.getBoundingClientRect()
@@ -79,7 +43,7 @@ export function Canvas() {
     if (activeBlockButton){
       const newBlock = generateBlockByType(activeBlockButton.type,relativeX,relativeY)
       dispatch(addBlock(newBlock))
-      dispatch(setSelectedBlockId(newBlock.id))
+      dispatch(setActiveBlockId(newBlock.id))
       dispatch(clearSelectedBlockButton())
     }
   }
@@ -149,9 +113,9 @@ export function Canvas() {
   //delete by keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && selectedBlockId) {
-        dispatch(deleteBlock(selectedBlockId))
-        dispatch(clearSelectedBlock())
+      if (e.key === 'Delete' && activeBlockId) {
+        dispatch(deleteBlock(activeBlockId))
+        dispatch(clearActiveBlockId())
       }
     }
 
@@ -159,7 +123,7 @@ export function Canvas() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [selectedBlockId, dispatch])
+  }, [activeBlockId, dispatch])
 
   return (
     <>
@@ -181,16 +145,13 @@ export function Canvas() {
           backgroundImage: `
             linear-gradient(to right, #f0f0f0 1px, transparent 1px),
             linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
-          backgroundSize: '100px 100px',
+          backgroundSize: '140px 100px',
         }}
       > 
-        {activeBlock && <Controls canvasRef={canvasRef}/>}
+        {/* {activeBlockId} */}
+        {activeBlockId && canvasRef.current && createPortal(<Controls blocks={blocks}/>,canvasRef.current)}
         {/* {<Controls canvasRef={canvasRef}/>} */}
         {blocks.map((block) => (
-          // <DraggableBlock 
-          //   key={block.id} 
-          //   block={block} 
-          // />
           <BlockWrapper block={block} key={block.id} /> 
         ))}
         {activeBlockButton && mouseOverCanvas && (

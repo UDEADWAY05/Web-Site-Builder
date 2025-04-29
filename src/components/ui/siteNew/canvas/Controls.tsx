@@ -1,21 +1,23 @@
 import { useState, useRef, useEffect } from "react"
-import { selectActiveBlock } from "src/store/slices/siteSlice/selectors"
+import { selectActiveBlockId } from "src/store/slices/siteSlice/selectors"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { blockControlsMap } from "./blockControls/blockControlsMap"
-import { clearSelectedBlock, deleteBlock } from "src/store/slices/siteSlice/siteSlice"
+import { clearActiveBlockId, deleteBlock } from "src/store/slices/siteSlice/siteSlice"
 import { createPortal } from "react-dom"
+import { Block } from "src/store/slices/siteSlice"
 
-export const Controls = ({canvasRef}:{canvasRef:React.RefObject<HTMLDivElement | null>}) => {
-  const [position,setPosition] = useState({ x:200,y:30 })
+export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
+  const [position,setPosition] = useState({ x:20,y:20 })
+
   const isDraggingRef = useRef(false)
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null)
 
-  const selectedBlock = useAppSelector(selectActiveBlock)  
-  const ControlsComponent = blockControlsMap[selectedBlock.type]
+  const activeBlockId = useAppSelector(selectActiveBlockId)
+  const activeBlock = blocks.find(block => block.id === activeBlockId)
+  const activeBlockType = activeBlock?.type
+  const ControlsComponent = blockControlsMap[activeBlockType]
 
   const dispatch = useAppDispatch()
-
-  if (!ControlsComponent) return null
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDraggingRef.current = true
@@ -39,8 +41,11 @@ export const Controls = ({canvasRef}:{canvasRef:React.RefObject<HTMLDivElement |
   }
 
   const onDelete = () => {
-    dispatch(deleteBlock(selectedBlock?.id))
-    dispatch(clearSelectedBlock())
+    if (!activeBlockId){
+      return
+    }
+    dispatch(deleteBlock(activeBlockId))
+    dispatch(clearActiveBlockId())
   }
 
   const handleMouseUp = () => {
@@ -59,18 +64,18 @@ export const Controls = ({canvasRef}:{canvasRef:React.RefObject<HTMLDivElement |
 
   return (
     <div 
-        className="absolute px-4 py-2 flex gap-2 shadow-lg"
+        className="absolute px-1 py-1 flex shadow-lg"
         style={{ left:position.x, top:position.y }}
     >
         <svg xmlns="http://www.w3.org/2000/svg" 
-            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200'            
+            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200 rounded'            
             width="24"
             height="24"
             onMouseDown={handleMouseDown}
             >
             <path d="M7,19V17H9V19H7M11,19V17H13V19H11M15,19V17H17V19H15M7,15V13H9V15H7M11,15V13H13V15H11M15,15V13H17V15H15M7,11V9H9V11H7M11,11V9H13V11H11M15,11V9H17V11H15M7,7V5H9V7H7M11,7V5H13V7H11M15,7V5H17V7H15Z" /></svg>
         <svg xmlns="http://www.w3.org/2000/svg"
-            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200'     
+            className='w-8 h-8 cursor-pointer p-1 hover:bg-gray-200 rounded'     
             onClick={onDelete}
             viewBox="0 0 90 170"
           >
