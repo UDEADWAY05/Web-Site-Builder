@@ -42,12 +42,12 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     <div
       ref={blockRef}
       draggable
-      className={`absolute rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
+      className={`absolute p-1 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
       style={{
-        top: block.styles.top,
-        left: block.styles.left,
-        width: block.styles.width,
-        height: block.styles.height,
+        left: block.position.x,
+        top: block.position.y,
+        width: block.dimentions.width,
+        height: block.dimentions.height,
       }}
       onDragStart={handleDragStart}
       onClick={handleClick}

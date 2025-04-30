@@ -38,7 +38,7 @@ export const ButtonControls = () => {
   }))
 
   return (
-    <div className="flex items-baseline gap-1 relative">
+    <div className="flex items-center  gap-1 relative">
       <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
       <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
       <TextColorButton color={editingBlock?.styles.color} onChangeColor={handleColorChange}/>

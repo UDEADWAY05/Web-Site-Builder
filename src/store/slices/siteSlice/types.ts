@@ -1,5 +1,3 @@
-import { CSSProperties } from 'react'
-
 export interface BlockButtonType {
   type: Block['type']
   label: string
@@ -14,16 +12,17 @@ export interface LayoutSiteState {
 
 export interface BaseBlockType {
   id: string | null
-  x: number
-  y: number
-  width: number
-  height: number
+  position: { x: number, y: number }
+  dimentions: {
+    width: number
+    height: number
+  }
   type: string | null
   styles: {
     backgroundColor?: string
     color?: string
     fontSize?: number
-    fontWeight?: 'noraml' | 'bold'
+    fontWeight?: 'normal' | 'bold'
     fontStyle?: 'normal' | 'italic'
     textDecoration?: 'none' | 'underline'
   }

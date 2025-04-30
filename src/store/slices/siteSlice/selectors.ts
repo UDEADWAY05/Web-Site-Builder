@@ -13,7 +13,6 @@ export const selectorModalOpen = (state: RootState) =>
   state.site.isModalOpen
 export const selectBlocks = (state: RootState) =>
   state.site.blocks
-  // state.layoutSite.entities?.data
 export const selectSiteTitle = (state: RootState) =>
   state.site.title
 export const selectSiteBgColor = (state: RootState) =>

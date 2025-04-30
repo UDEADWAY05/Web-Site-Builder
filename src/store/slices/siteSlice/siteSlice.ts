@@ -7,10 +7,10 @@ const initialState: Site = {
   bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],
-  selectedBlockButton: null,
   isPreview: false,
   isModalOpen: false,
-  selectedBlockId: null
+  selectedBlockId: null,
+  selectedBlockButton: null,
 }
 
 const siteSlice = createSlice({
@@ -50,7 +50,7 @@ const siteSlice = createSlice({
     deleteBlock: (state, action: PayloadAction<Block['id']>) => {
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
-    updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
+    updateBlockPosition: (state, action:PayloadAction<{id:string,x:number,y:number}>) => {
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate) {
@@ -59,8 +59,8 @@ const siteSlice = createSlice({
       
       // blockToUpdate.styles.left = `${action.payload.left}px`
       // blockToUpdate.styles.top = `${action.payload.top}px`
-      blockToUpdate.styles.left = action.payload.left
-      blockToUpdate.styles.top = action.payload.top
+      blockToUpdate.position.x = action.payload.x
+      blockToUpdate.position.y = action.payload.y
 
       state.blocks = state.blocks.map((block) => {
         return block.id === blockToUpdate.id ? blockToUpdate : block

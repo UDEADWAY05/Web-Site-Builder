@@ -2,12 +2,10 @@ import { Block } from 'src/store/slices/siteSlice'
 import { generateId } from './generateId'
 import musical from '../assets/musical.png'
 
-export function generateBlockByType(type: Block['type'], left: number, top: number): Block {
+export function generateBlockByType(type: Block['type'], x: number, y: number): Block {
   const id = generateId()
 
   const defaultStyles: Block['styles'] = {
-    left,
-    top,
     backgroundColor: '#fafafa',
   }
 
@@ -16,6 +14,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: {...defaultStyles, fontSize:16, color:'#000000'},
         content: 'new_paragraph',
       }
@@ -23,6 +23,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: defaultStyles,
         content: { text: 'new_header', level: 1 },
       }
@@ -30,6 +32,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:200, height:100},
         styles: defaultStyles,
         content: { url: `${musical}`, alt: 'image' },
       }
@@ -37,6 +41,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:50, height:30},
         styles: {...defaultStyles,fontSize:16, color:'#000000'},
         content: 'Button',
       }
@@ -45,6 +51,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: defaultStyles,
         content: ['item1', 'item2'],
       }
@@ -53,6 +61,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:500, height:1},
         styles: defaultStyles,
         content: 'divider',
       }
@@ -61,6 +71,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:100, height:50},
         styles: {...defaultStyles,fontWeight:'bold', color:'#000000',fontSize:18},
         content: 'Lorem ipsum dolor sir amet',
       }
@@ -68,6 +80,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:80, height:20},
         styles: defaultStyles,
         content: 'Inter your label',
       }
@@ -76,6 +90,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:200, height:100},
         styles: defaultStyles,
         content: 'Type your message here',
       }
@@ -84,6 +100,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: defaultStyles,
         content: ['select 1', 'select2'],
       }
@@ -92,6 +110,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: defaultStyles,
         content: 'Accept terms and conditions',
       }
@@ -100,6 +120,8 @@ export function generateBlockByType(type: Block['type'], left: number, top: numb
       return {
         id,
         type,
+        position: { x,y },
+        dimentions: { width:150, height:50},
         styles: defaultStyles,
         content: ['yes', 'no'],
       }

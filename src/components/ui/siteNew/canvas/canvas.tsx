@@ -25,6 +25,7 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
   const selectedBlockButton = useAppSelector(selectBlockButton)
+  console.log('s',selectedBlockButton)
   // const selectedBlockId = useAppSelector(selectBlockId)
   const activeBlockId = useAppSelector(selectBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
@@ -33,28 +34,25 @@ export function Canvas() {
   const dispatch = useAppDispatch()
 
   const handleClick = (e:React.MouseEvent<HTMLDivElement>) => {
-    // e.stopPropagation()
     if (e.target === e.currentTarget){
       const canvasRect = e.currentTarget.getBoundingClientRect()
-    const relativeX = e.clientX - canvasRect.left
-    const relativeY = e.clientY - canvasRect.top
+      const relativeX = e.clientX - canvasRect.left
+      const relativeY = e.clientY - canvasRect.top
 
     if (activeBlockId){
       dispatch(setSelectedBlockId(null))
     }
     if (selectedBlockButton){
-      const newBlock = generateBlockByType(selectedBlockButton['type'],relativeX,relativeY)
+      console.log(selectBlockButton)
+      const newBlock = generateBlockByType(selectedBlockButton,relativeX,relativeY)
       dispatch(addBlock(newBlock))
       dispatch(setSelectedBlockId(newBlock.id))
       dispatch(setSelectedBlockButton(null))
     }
     else {
       dispatch(setSelectedBlockId(null))
-
     }
     }
-    
-    
   }
 
   const handleMouseMove = (e:React.MouseEvent<HTMLDivElement>) => {
@@ -82,8 +80,8 @@ export function Canvas() {
   
     // calculating correct position when user pressed to drag inside block
     const canvasRect = e.currentTarget.getBoundingClientRect()
-    const left = e.clientX - canvasRect.left - offsetX
-    const top = e.clientY - canvasRect.top - offsetY
+    const updatedX = e.clientX - canvasRect.left - offsetX
+    const updatedY = e.clientY - canvasRect.top - offsetY
   
     if (blockId) {
       //TODO delete outside of canvas. Now doesn't work since drop doesn't happen outside canvas
@@ -92,7 +90,7 @@ export function Canvas() {
       //   console.log('deleting',blockId)
       //   dispatch(deleteBlock(blockId))
       // }
-      dispatch(updateBlockPosition({ id:blockId, left, top }))
+      dispatch(updateBlockPosition({ id:blockId, x: updatedX, y: updatedY }))
     }
   }
 
@@ -172,8 +170,8 @@ export function Canvas() {
               padding:'0.5em 1em'
             }}
           >
-            {selectedBlockButton.label}
-            <img src={selectedBlockButton.img}/>
+            {selectedBlockButton}
+            {/* <img src={selectedBlockButton.img}/> */}
           </span>
         )}
       </div>

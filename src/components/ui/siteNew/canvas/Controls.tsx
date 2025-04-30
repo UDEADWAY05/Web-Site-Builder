@@ -12,6 +12,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null)
 
   const activeBlockId = useAppSelector(selectBlockId)
+  
   const activeBlock = blocks.find(block => block.id === activeBlockId)
   const activeBlockType = activeBlock?.type
   const ControlsComponent = blockControlsMap[activeBlockType]
@@ -65,7 +66,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
 
   return (
     <div 
-        className="absolute flex shadow-lg"
+        className="absolute flex shadow-lg items-center"
         style={{ left:position.x, top:position.y }}
     >
         <svg xmlns="http://www.w3.org/2000/svg" 
