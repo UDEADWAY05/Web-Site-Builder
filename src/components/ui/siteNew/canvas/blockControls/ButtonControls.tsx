@@ -4,6 +4,7 @@ import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
+import { FontStyler } from "./controlElements/FontStyler"
 
 export const ButtonControls = () => {
   const blocks = useAppSelector(selectBlocks)
@@ -13,6 +14,10 @@ export const ButtonControls = () => {
   if (!activeBlockId) return null
 
   const editingBlock = blocks.find(block => block.id === activeBlockId)
+
+  const toggleFontStyle = (newStyles:React.CSSProperties) => {
+    dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
+  }
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateBlockStyles({
@@ -33,7 +38,8 @@ export const ButtonControls = () => {
   }))
 
   return (
-    <div className="flex align-baseline gap-1 relative">
+    <div className="flex items-baseline gap-1 relative">
+      <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
       <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
       <TextColorButton color={editingBlock?.styles.color} onChangeColor={handleColorChange}/>
       <FontSizeButton fontSize={editingBlock?.styles.fontSize} onChangeFontSize={onFontSizeChange}/>

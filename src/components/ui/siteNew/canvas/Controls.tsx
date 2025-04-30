@@ -3,11 +3,10 @@ import { selectActiveBlockId } from "src/store/slices/siteSlice/selectors"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { blockControlsMap } from "./blockControls/blockControlsMap"
 import { clearActiveBlockId, deleteBlock } from "src/store/slices/siteSlice/siteSlice"
-import { createPortal } from "react-dom"
 import { Block } from "src/store/slices/siteSlice"
 
 export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
-  const [position,setPosition] = useState({ x:20,y:20 })
+  const [position,setPosition] = useState({ x:400,y:50 })
 
   const isDraggingRef = useRef(false)
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null)

@@ -1,11 +1,10 @@
 import { Block } from 'src/store/slices/siteSlice'
+import { generateId } from './generateId'
 import musical from '../assets/musical.png'
 
-export function generateBlockByType(
-  type: Block['type'],
-  left: number,
-  top: number
-): Block {
+export function generateBlockByType(type: Block['type'], left: number, top: number): Block {
+  const id = generateId()
+
   const defaultStyles: Block['styles'] = {
     left,
     top,
@@ -15,28 +14,28 @@ export function generateBlockByType(
   switch (type) {
     case 'paragraph':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: {...defaultStyles, fontSize:16, color:'#000000'},
         content: 'new_paragraph',
       }
     case 'header':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: { text: 'new_header', level: 1 },
       }
     case 'image':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: { url: `${musical}`, alt: 'image' },
       }
     case 'button':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: {...defaultStyles,fontSize:16, color:'#000000'},
         content: 'Button',
@@ -44,7 +43,7 @@ export function generateBlockByType(
     case 'ul':
     case 'ol':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: ['item1', 'item2'],
@@ -52,7 +51,7 @@ export function generateBlockByType(
 
     case 'divider':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: 'divider',
@@ -60,14 +59,14 @@ export function generateBlockByType(
 
     case 'quote':
       return {
-        id: Date.now().toString(),
+        id,
         type,
-        styles: {...defaultStyles,fontWeight:'bold', color:'#000000'},
+        styles: {...defaultStyles,fontWeight:'bold', color:'#000000',fontSize:18},
         content: 'Lorem ipsum dolor sir amet',
       }
     case 'input':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: 'Inter your label',
@@ -75,7 +74,7 @@ export function generateBlockByType(
 
     case 'textarea':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: 'Type your message here',
@@ -83,7 +82,7 @@ export function generateBlockByType(
 
     case 'select':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: ['select 1', 'select2'],
@@ -91,7 +90,7 @@ export function generateBlockByType(
 
     case 'checkbox':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: 'Accept terms and conditions',
@@ -99,7 +98,7 @@ export function generateBlockByType(
 
     case 'radiobox':
       return {
-        id: Date.now().toString(),
+        id,
         type,
         styles: defaultStyles,
         content: ['yes', 'no'],

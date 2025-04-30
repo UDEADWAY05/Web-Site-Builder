@@ -1,4 +1,4 @@
-import { button, horozontal, title, list_ol, list_ul, paragraf, photo, quote } from '../assets'
+import { button, horozontal, title, list_ol, list_ul, paragraf, photo, quote, form, check_box, radio_button_checked } from '../assets'
 import { BlockButtonType } from 'src/store/slices/siteSlice/types'
 
 export const blockButtons: BlockButtonType[] = [
@@ -42,4 +42,29 @@ export const blockButtons: BlockButtonType[] = [
     label: 'Цитата',
     img: quote,
 },
+{
+    type: 'input',
+    label: 'Поле ввода',
+    img: form,
+  },
+  {
+    type: 'textarea',
+    label: 'Текстовая область',
+    img: form,
+  },
+  {
+    type: 'select',
+    label: 'Поле выбора',
+    img: form,
+  },
+  {
+    type: 'checkbox',
+    label: 'Флажок',
+    img: check_box,
+  },
+  {
+    type: 'radiobox',
+    label: 'Переключатель',
+    img: radio_button_checked,
+  },
 ]
