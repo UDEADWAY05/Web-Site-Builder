@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useAppSelector } from '../../../../store/store'
 import { Block } from 'src/store/slices/siteSlice'
-import { DraggableBlock } from '../draggableBlock/DraggableBlock'
+import { DraggableBlock } from '../draggableBlock/draggableBlock'
 import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import {
   selectBlocks,
@@ -43,7 +43,7 @@ export function Canvas() {
       })
       .catch((err) => console.log(err))
     return off(siteRef) // Функция для отписки
-  }, [dispatch, siteId])
+  }, [dispatch, siteId, userId])
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()

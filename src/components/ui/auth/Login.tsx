@@ -78,7 +78,7 @@ export const Login = () => {
         <FormInputField
           form={form}
           name={'email'}
-          label="Email"
+          label="Почта"
           type="text"
           placeholder="email"
         />
@@ -87,17 +87,17 @@ export const Login = () => {
           name={'password'}
           label="Пароль"
           type="password"
-          placeholder="password"
+          placeholder="пароль"
         />
 
         <Button type="submit" disabled={!isDirty || !isValid || isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting ? 'Отправка данных...' : 'Авторизация'}
         </Button>
         <Link
           to="/auth/signup"
           className="text-sm text-blue-500 hover:text-blue-800 justify-self-center"
         >
-          No account yet? Signup
+          Еще нет аккаунта? Зарегистрироваться.
         </Link>
         {serverError && <p className="text-red-500">{serverError}</p>}
       </form>
