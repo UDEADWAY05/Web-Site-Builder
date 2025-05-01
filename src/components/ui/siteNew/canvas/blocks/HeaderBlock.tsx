@@ -1,12 +1,6 @@
 import { CSSProperties, JSX } from 'react'
 import { Input } from 'src/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from 'src/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 
 export type HeaderBlockProps = {
   content: { text: string; level: number }

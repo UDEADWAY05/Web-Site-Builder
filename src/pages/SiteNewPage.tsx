@@ -1,17 +1,5 @@
-import type { BlockButton, Site } from 'src/store/slices/siteSlice/types'
-import {
-  button,
-  horozontal,
-  list_ol,
-  list_ul,
-  photo,
-  quote,
-  title,
-  paragraf,
-  form,
-  check_box,
-  radio_button_checked,
-} from '../assets'
+import type { Site } from 'src/store/slices/siteSlice/types'
+import { blockButtons } from 'src/constants/blockButtons'
 import { SideBar } from 'src/components/ui/siteNew'
 import { Canvas } from 'src/components/ui/siteNew'
 import { Button } from 'src/components/ui/button'
@@ -27,10 +15,7 @@ import { setModalClose } from 'src/store/slices/siteSlice'
 import { generateHTML } from 'src/utils/generateHTML'
 import { generateCSS } from 'src/utils/generateCSS'
 import { useAppSelector, useAppDispatch } from 'src/store/store'
-import {
-  selectorLayoutSiteData,
-  selectorModalOpen,
-} from 'src/store/slices/siteSlice/selectors'
+import { selectorLayoutSiteData, selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
 import { exportSiteToZip } from 'src/utils/exportSiteToZip'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -67,76 +52,10 @@ export function SiteNew() {
     return () => off(dbRef) // Функция для отписки
   }, [siteId])
 
-  // Кнопки для бокового меню
-  const blockTypes: BlockButton[] = [
-    {
-      type: 'header',
-      label: 'Заголовок',
-      img: title,
-    },
-    {
-      type: 'paragraph',
-      label: 'Параграф',
-      img: paragraf,
-    },
-    {
-      type: 'ul',
-      label: 'Маркированный',
-      img: list_ul,
-    },
-    {
-      type: 'ol',
-      label: 'Нумерованный',
-      img: list_ol,
-    },
-    {
-      type: 'image',
-      label: 'Изображение',
-      img: photo,
-    },
-    {
-      type: 'divider',
-      label: 'Разделитель',
-      img: horozontal,
-    },
-    { type: 'button', label: 'Кнопка', img: button },
-    {
-      type: 'quote',
-      label: 'Цитата',
-      img: quote,
-    },
-    //////form///////
-    {
-      type: 'input',
-      label: 'Поле ввода',
-      img: form,
-    },
-    {
-      type: 'textarea',
-      label: 'Текстовая область',
-      img: form,
-    },
-    {
-      type: 'select',
-      label: 'Поле выбора',
-      img: form,
-    },
-    {
-      type: 'checkbox',
-      label: 'Флажкок',
-      img: check_box,
-    },
-    {
-      type: 'radiobox',
-      label: 'Переключатель',
-      img: radio_button_checked,
-    },
-  ]
-
   return (
     <>
       <div className="flex h-screen">
-        <SideBar blockTypes={blockTypes} />
+        <SideBar />
         <Canvas />
       </div>
       <Dialog open={isModal} onOpenChange={() => dispatch(setModalClose())}>
