@@ -3,10 +3,10 @@ import { createPortal } from 'react-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../store/store'
-import { selectActiveBlockId, selectActiveBlockButton,  selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectBlockId, selectBlockButton,  selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, dbSite, get, off, ref } from 'src/App'
-import { clearActiveBlockId, clearSelectedBlockButton, setActiveBlockId, setSite } from 'src/store/slices/siteSlice/siteSlice'
+import { setSelectedBlockId, setSelectedBlockButton, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
@@ -24,32 +24,41 @@ export function Canvas() {
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
-  const activeBlockButton = useAppSelector(selectActiveBlockButton)
+  const selectedBlockButton = useAppSelector(selectBlockButton)
   // const selectedBlockId = useAppSelector(selectBlockId)
-  const activeBlockId = useAppSelector(selectActiveBlockId)
+  const activeBlockId = useAppSelector(selectBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
   const dispatch = useAppDispatch()
 
   const handleClick = (e:React.MouseEvent<HTMLDivElement>) => {
-    // dispatch(clearActiveBlockId())
-    // dispatch(clearSelectedBlockId())
-    
-    const canvasRect = e.currentTarget.getBoundingClientRect()
+    // e.stopPropagation()
+    if (e.target === e.currentTarget){
+      const canvasRect = e.currentTarget.getBoundingClientRect()
     const relativeX = e.clientX - canvasRect.left
     const relativeY = e.clientY - canvasRect.top
 
-    if (activeBlockButton){
-      const newBlock = generateBlockByType(activeBlockButton.type,relativeX,relativeY)
-      dispatch(addBlock(newBlock))
-      dispatch(setActiveBlockId(newBlock.id))
-      dispatch(clearSelectedBlockButton())
+    if (activeBlockId){
+      dispatch(setSelectedBlockId(null))
     }
+    if (selectedBlockButton){
+      const newBlock = generateBlockByType(selectedBlockButton['type'],relativeX,relativeY)
+      dispatch(addBlock(newBlock))
+      dispatch(setSelectedBlockId(newBlock.id))
+      dispatch(setSelectedBlockButton(null))
+    }
+    else {
+      dispatch(setSelectedBlockId(null))
+
+    }
+    }
+    
+    
   }
 
   const handleMouseMove = (e:React.MouseEvent<HTMLDivElement>) => {
-    if (!activeBlockButton) return
+    if (!selectedBlockButton) return
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -115,7 +124,7 @@ export function Canvas() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && activeBlockId) {
         dispatch(deleteBlock(activeBlockId))
-        dispatch(clearActiveBlockId())
+        dispatch(setSelectedBlockId(null))
       }
     }
 
@@ -137,6 +146,7 @@ export function Canvas() {
         onMouseLeave={handleCanvasMouseLeave}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
+        onDragEnd={() => console.log('drag end')}
         style={{ 
           flex: 1,
           position: 'relative',
@@ -148,13 +158,11 @@ export function Canvas() {
           backgroundSize: '140px 100px',
         }}
       > 
-        {/* {activeBlockId} */}
         {activeBlockId && canvasRef.current && createPortal(<Controls blocks={blocks}/>,canvasRef.current)}
-        {/* {<Controls canvasRef={canvasRef}/>} */}
         {blocks.map((block) => (
           <BlockWrapper block={block} key={block.id} /> 
         ))}
-        {activeBlockButton && mouseOverCanvas && (
+        {selectedBlockButton && mouseOverCanvas && (
           <span
             ref={ghostRef}
             className="absolute opacity-50 pointer-events-none"
@@ -164,8 +172,8 @@ export function Canvas() {
               padding:'0.5em 1em'
             }}
           >
-            {activeBlockButton.label}
-            <img src={activeBlockButton.img}/>
+            {selectedBlockButton.label}
+            <img src={selectedBlockButton.img}/>
           </span>
         )}
       </div>

@@ -5,6 +5,7 @@ export interface BlockButtonType {
   label: string
   img: string
 }
+
 export interface LayoutSiteState {
   entities: Site | null
   isPreview: boolean
@@ -12,8 +13,20 @@ export interface LayoutSiteState {
 }
 
 export interface BaseBlockType {
-  id: string
-  styles: CSSProperties
+  id: string | null
+  x: number
+  y: number
+  width: number
+  height: number
+  type: string | null
+  styles: {
+    backgroundColor?: string
+    color?: string
+    fontSize?: number
+    fontWeight?: 'noraml' | 'bold'
+    fontStyle?: 'normal' | 'italic'
+    textDecoration?: 'none' | 'underline'
+  }
 }
 
 export type TextBlockType = BaseBlockType & {
@@ -112,9 +125,8 @@ export interface Site {
   title: string
   bgColor: string
   blocks: Array<Block>
-  selectedBlockButton:BlockButtonType | null
-  // selectedBlockId:Block['id']
   isPreview: boolean
   isModalOpen: boolean
-  activeBlockId: Block['id'] | undefined
+  selectedBlockId: Block['id'] | null
+  selectedBlockButton:Block['type'] | null
 }

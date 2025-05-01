@@ -1,12 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { Button } from '../../button'
 import { blockButtons } from 'src/constants/blockButtons'
-import {
-  setModalOpen,
-  togglePreview,
-  updateSiteTitle,
-  updateSiteBgColor,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { setModalOpen, togglePreview, updateSiteTitle, updateSiteBgColor } from 'src/store/slices/siteSlice/siteSlice'
 import { selectSiteTitle, selectSiteBgColor, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { BlockButton } from './BlockButton'
 

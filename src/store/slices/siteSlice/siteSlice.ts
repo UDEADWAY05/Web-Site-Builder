@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Block, BlockButtonType, HeaderBlockType, ImageBlockType, Site } from './types'
+import { generateId } from 'src/utils/generateId'
+import type { Block, HeaderBlockType, ImageBlockType, Site } from './types'
 
 const initialState: Site = {
-  id: new Date().getTime().toString(), //TODO, it's shit
+  id: generateId(),
   bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],
   selectedBlockButton: null,
   isPreview: false,
   isModalOpen: false,
-  activeBlockId: undefined
+  selectedBlockId: null
 }
 
 const siteSlice = createSlice({
@@ -133,28 +134,28 @@ const siteSlice = createSlice({
       blockToUpdate.styles.backgroundColor = action.payload.color
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
-    updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
-      const block = state.blocks.find((b) => b.id === action.payload.id)
+    // updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
+    //   const block = state.blocks.find((b) => b.id === action.payload.id)
 
+    //   if (block) {
+    //     block.styles = {
+    //       ...block.styles,
+    //       ...action.payload.styles,
+    //     }
+    //   }
+    // },
+    updateBlockStyles: (state, action: PayloadAction<{id: string; styles: Partial<Block['styles']>}>) => {
+      const block = state.blocks.find((block) => block.id === action.payload.id)
       if (block) {
-        block.styles = {
-          ...block.styles,
-          ...action.payload.styles,
-        }
+        block.styles = { ...block.styles, ...action.payload.styles }
       }
     },
-    setSelectedBlockButton:(state,action:PayloadAction<BlockButtonType>) => {
+    setSelectedBlockButton:(state,action:PayloadAction<Block['type'] | null>) => {
       state.selectedBlockButton = action.payload
     },
-    clearSelectedBlockButton:(state) => {
-      state.selectedBlockButton = null
+    setSelectedBlockId: (state,action:PayloadAction<Block['id'] | null>) => {
+      state.selectedBlockId = action.payload
     },
-    setActiveBlockId: (state,action:PayloadAction<Block['id']>) => {
-      state.activeBlockId = action.payload
-    },
-    clearActiveBlockId:(state) => {
-      state.activeBlockId = undefined
-    }
   },
 })
 
@@ -175,9 +176,7 @@ export const {
   updateBlockBgColor,
   updateBlockStyles,
   setSelectedBlockButton,
-  clearSelectedBlockButton,
-  setActiveBlockId,
-  clearActiveBlockId
+  setSelectedBlockId
 } = siteSlice.actions
 
 export default siteSlice.reducer

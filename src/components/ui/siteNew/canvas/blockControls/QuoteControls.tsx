@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
-import { selectActiveBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
+import { selectBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
 import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
@@ -7,7 +7,7 @@ import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
 
 export const QuoteControls = () => {
     const blocks = useAppSelector(selectBlocks)
-    const activeBlockId = useAppSelector(selectActiveBlockId)
+    const activeBlockId = useAppSelector(selectBlockId)
     const dispatch = useAppDispatch()
 
     if (!activeBlockId) return null

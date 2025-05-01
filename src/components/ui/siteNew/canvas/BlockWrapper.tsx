@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
-import { setActiveBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from 'src/store/store'
-import { selectActiveBlockId } from 'src/store/slices/siteSlice/selectors'
+import { selectBlockId } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { calculateClickPosition } from 'src/utils/calculateClickPosition'
@@ -13,7 +13,7 @@ interface BlockWrapperProps {
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const [isEditing,setIsEditing] = useState(false)
-  const activeBlockId = useAppSelector(selectActiveBlockId)
+  const activeBlockId = useAppSelector(selectBlockId)
   const blockRef = useRef<HTMLDivElement>(null)
   const isBlockSelected = activeBlockId === block.id
 
@@ -23,7 +23,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     e.stopPropagation()
   
     if (!isBlockSelected) {
-      dispatch(setActiveBlockId(block.id))
+      dispatch(setSelectedBlockId(block.id))
     }
     else if (isBlockSelected){
       setIsEditing(true)

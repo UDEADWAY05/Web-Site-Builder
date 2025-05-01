@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react"
-import { selectActiveBlockId } from "src/store/slices/siteSlice/selectors"
+import { selectBlockId } from "src/store/slices/siteSlice/selectors"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { blockControlsMap } from "./blockControls/blockControlsMap"
-import { clearActiveBlockId, deleteBlock } from "src/store/slices/siteSlice/siteSlice"
+import { deleteBlock, setSelectedBlockId } from "src/store/slices/siteSlice/siteSlice"
 import { Block } from "src/store/slices/siteSlice"
 
 export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
@@ -11,7 +11,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   const isDraggingRef = useRef(false)
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null)
 
-  const activeBlockId = useAppSelector(selectActiveBlockId)
+  const activeBlockId = useAppSelector(selectBlockId)
   const activeBlock = blocks.find(block => block.id === activeBlockId)
   const activeBlockType = activeBlock?.type
   const ControlsComponent = blockControlsMap[activeBlockType]
@@ -19,10 +19,11 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   const dispatch = useAppDispatch()
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    isDraggingRef.current = true
-    lastMousePosition.current = { x: e.clientX, y: e.clientY }
     e.preventDefault()
     e.stopPropagation()
+
+    isDraggingRef.current = true
+    lastMousePosition.current = { x: e.clientX, y: e.clientY }
   }
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -37,6 +38,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
     }))
 
     lastMousePosition.current = { x: e.clientX, y: e.clientY }
+    // dispatch(setSelectedBlockId(activeBlockId))
   }
 
   const onDelete = () => {
@@ -44,7 +46,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
       return
     }
     dispatch(deleteBlock(activeBlockId))
-    dispatch(clearActiveBlockId())
+    dispatch(setSelectedBlockId(null))
   }
 
   const handleMouseUp = () => {
@@ -63,7 +65,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
 
   return (
     <div 
-        className="absolute px-1 py-1 flex shadow-lg"
+        className="absolute flex shadow-lg"
         style={{ left:position.x, top:position.y }}
     >
         <svg xmlns="http://www.w3.org/2000/svg" 
