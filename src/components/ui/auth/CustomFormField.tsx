@@ -40,6 +40,7 @@ export function FormInputField<T extends FieldValues>({
                 field.onChange(e);
                 form.clearErrors("root");
               }}
+              onFocus={() => form.clearErrors()}
             />
           </FormControl>
           <FormMessage />

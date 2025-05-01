@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Block, HeaderBlockType, ImageBlockType, Site } from './types'
+import type { Block, BlockButtonType, HeaderBlockType, ImageBlockType, Site } from './types'
 
 const initialState: Site = {
   id: new Date().getTime().toString(), //TODO, it's shit
   bgColor: '#ffffff',
   title: 'New_title',
   blocks: [],
+  selectedBlockButton:'',
+  selectedBlockId:'',
   isPreview: false,
   isModalOpen: false,
 }
@@ -76,8 +78,6 @@ const siteSlice = createSlice({
       blockToUpdate.styles.height = action.payload.height
 
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
-
-
     },
     updateBlockContent: (
       state,
@@ -144,6 +144,13 @@ const siteSlice = createSlice({
         }
       }
     },
+    setSelectedBlockButton:(state,action:PayloadAction<BlockButtonType['type']>) => {
+      state.selectedBlockButton = action.payload
+      console.log('sb',state.selectedBlockButton)
+    },
+    clearSelectedBlockButton:(state) => {
+      state.selectedBlockButton = ''
+    }
   },
 })
 
@@ -162,7 +169,9 @@ export const {
   updateBlockSize,
   updateBlockContent,
   updateBlockBgColor,
-  updateBlockStyles
+  updateBlockStyles,
+  setSelectedBlockButton,
+  clearSelectedBlockButton
 } = siteSlice.actions
 
 export default siteSlice.reducer

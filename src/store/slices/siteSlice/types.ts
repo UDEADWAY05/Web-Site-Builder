@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react'
 
-export interface BlockButton {
+export interface BlockButtonType {
   type: Block['type']
   label: string
   img: string
@@ -112,6 +112,8 @@ export interface Site {
   title: string
   bgColor: string
   blocks: Array<Block>
+  selectedBlockButton:Block['type'] | ''
+  selectedBlockId:Block['id']
   isPreview: boolean
   isModalOpen: boolean
 }

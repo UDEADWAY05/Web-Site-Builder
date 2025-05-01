@@ -1,36 +1,37 @@
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { Button } from '../../button'
+import { blockButtons } from 'src/constants/blockButtons'
 import {
   setModalOpen,
   togglePreview,
   updateSiteTitle,
   updateSiteBgColor,
 } from 'src/store/slices/siteSlice/siteSlice'
-import {
-  selectSiteTitle,
-  selectSiteBgColor,
-  selectorPreview,
-} from 'src/store/slices/siteSlice/selectors'
-import { BlockButton } from '../../../../store/slices/siteSlice/types'
-import { calculateClickPosition } from 'src/utils/calculateClickPosition'
+import {selectSiteTitle, selectSiteBgColor, selectorPreview, selectActiveBlockButton} from 'src/store/slices/siteSlice/selectors'
+import { setSelectedBlockButton } from 'src/store/slices/siteSlice/siteSlice'
+import { BlockButton } from './BlockButton'
 
-export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
+export function SideBar() {
   const projectName = useAppSelector(selectSiteTitle)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreviewCode = useAppSelector(selectorPreview)
+  const activeButton = useAppSelector(selectActiveBlockButton)
 
   const dispatch = useAppDispatch()
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    blockType: BlockButton['type']
-  ) => {
-    const { offsetX, offsetY } = calculateClickPosition(e)
+  // const handleDragStart = (
+  //   e: React.DragEvent<HTMLDivElement>,
+  //   blockType: BlockButton['type']
+  // ) => {
+  //   const { offsetX, offsetY } = calculateClickPosition(e)
 
-    e.dataTransfer.setData('offsetX', offsetX.toString())
-    e.dataTransfer.setData('offsetY', offsetY.toString())
-    e.dataTransfer.setData('blockType', blockType)
-  }
+  //   e.dataTransfer.setData('offsetX', offsetX.toString())
+  //   e.dataTransfer.setData('offsetY', offsetY.toString())
+  //   e.dataTransfer.setData('blockType', blockType)
+  // }
+  // const selectBlockButton = (type:BlockButton['type']) => {
+  //   dispatch(setSelectedBlockButton(type))
+  // }
 
   return (
     <div className="p-2 w-[250px] bg-[#f4f4f4] flex flex-col">
@@ -51,41 +52,41 @@ export function SideBar({ blockTypes }: { blockTypes: BlockButton[] }) {
         <hr />
         <p className="py-2 text-xs opacity-25">Базовый</p>
         <div className="grid grid-cols-2 gap-1">
-          {blockTypes.slice(0, 8).map((block) => (
-            <div
-              draggable
-              key={block.type}
-              className="col border-2 border-black rounded-md p-1"
-              style={{ cursor: 'pointer' }}
-              onDragStart={(e) => handleDragStart(e, block.type)}
-            >
-              <div className="flex flex-col">
-                <img className="m-auto" src={block.img} alt={block.type} />
-                <div className="text-center ">
-                  <p className=" text-xs ">{block.label}</p>
-                </div>
-              </div>
-            </div>
+          {blockButtons.slice(0, 8).map((block) => (
+            // <div
+            
+            //   key={block.type}
+              
+            //   className="col bg-slate-200 hover:bg-slate-300 rounded-md p-1"
+            //   onClick={() => dispatch(setSelectedBlockButton(block.type))}
+            // >
+            //   <div className="flex flex-col">
+            //     <img className="m-auto" src={block.img} alt={block.type} />
+            //     <div className="text-center ">
+            //       <p className=" text-xs ">{block.label}</p>
+            //     </div>
+            //   </div>
+            // </div>
+            <BlockButton block={block}/>
           ))}
         </div>
         <hr />
         <p className="py-2 text-xs opacity-25">Форма</p>
         <div className="grid grid-cols-2 gap-1">
-          {blockTypes.slice(8, 13).map((block) => (
-            <div
-              draggable
-              key={block.type}
-              className="col border-2 border-black rounded-md p-1"
-              style={{ cursor: 'pointer' }}
-              onDragStart={(e) => handleDragStart(e, block.type)}
-            >
-              <div className="flex flex-col">
-                <img className="m-auto" src={block.img} alt={block.type} />
-                <div className="text-center ">
-                  <p className=" text-xs ">{block.label}</p>
-                </div>
-              </div>
-            </div>
+          {blockButtons.slice(8, 13).map((block) => (
+            // <div
+            //   key={block.type}
+            //   className="col bg-slate-200 hover:bg-slate-300 rounded-md p-1"
+            //   onClick={() => setSelectedBlockButton(block.type)}
+            // >
+            //   <div className="flex flex-col">
+            //     <img className="m-auto" src={block.img} alt={block.type} />
+            //     <div className="text-center ">
+            //       <p className=" text-xs ">{block.label}</p>
+            //     </div>
+            //   </div>
+            // </div>
+            <BlockButton key={block.type} block={block}/>
           ))}
         </div>
       </div>
