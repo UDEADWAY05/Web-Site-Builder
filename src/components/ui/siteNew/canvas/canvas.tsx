@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useAppSelector } from '../../../../store/store'
@@ -7,28 +7,23 @@ import { selectBlocks,selectSiteBgColor } from 'src/store/slices/siteSlice/selec
 import { child, dbSite, get, off, ref } from 'src/App'
 import { clearSelectedBlockButton, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock,updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
+import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
-import { BlockButton } from '../sideBar/BlockButton'
-
 
 export function Canvas() {
   const { siteId } = useParams()
+  const [mouseOverCanvas,setMouseOverCanvas] = useState(false)
+
   const blocks = useAppSelector(selectBlocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
-  const dispatch = useAppDispatch()
   const userId = useAppSelector(store => store.user.data?.id)
   const activeBlockButton = useAppSelector(selectActiveBlockButton)
+  const ghostRef = useRef<HTMLSpanElement | null>(null)
+  const canvasRef = useRef<HTMLDivElement | null>(null)
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const dispatch = useAppDispatch()
 
-    if (activeBlockButton) {
-      // If already selected, and user clicks again -> start editing
-    dispatch(addBlock(generateBlockByType(activeBlockButton,e.clientX,e.clientY))) 
-  }
-  }
   // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
   //   e.preventDefault()
 
@@ -68,7 +63,6 @@ export function Canvas() {
 
   const handleClick = (e:React.MouseEvent<HTMLDivElement>) => {
     const canvasRect = e.currentTarget.getBoundingClientRect()
-    console.log(canvasRect.left,canvasRect.top)
     const relativeX = e.clientX - canvasRect.left
     const relativeY = e.clientY - canvasRect.top
 
@@ -78,6 +72,22 @@ export function Canvas() {
       dispatch(clearSelectedBlockButton())
     }
   }
+
+  const handleMouseMove = (e:React.MouseEvent<HTMLDivElement>) => {
+    if (!activeBlockButton) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    if (ghostRef.current) {
+      requestAnimationFrame(() => {
+        ghostRef.current!.style.transform = `translate(${x}px, ${y}px)`
+      })
+    }
+  }
+
+  const handleCanvasMouseEnter = () => setMouseOverCanvas(true)
+  const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
   useEffect(() => {
     const siteRef = ref(dbSite)
@@ -102,7 +112,11 @@ export function Canvas() {
   { isPreview 
     ? (<Preview />)
     : (<div
+        ref={canvasRef}
         onClick={handleClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleCanvasMouseEnter}
+        onMouseLeave={handleCanvasMouseLeave}
         style={{
         flex: 1,
         position: 'relative',
@@ -115,9 +129,22 @@ export function Canvas() {
           //   key={block.id} 
           //   block={block} 
           // />
-          <div className='absolute' style={block.styles}>{block.type}</div>
-          // <BlockButton block={block}/>
+          <div className='absolute' key={block.id} style={block.styles}>{block.type}</div>
         ))}
+        {activeBlockButton && mouseOverCanvas && (
+          <span
+            ref={ghostRef}
+            className="absolute opacity-50 pointer-events-none"
+            style={{
+              border:'1px dotted lightgray',
+              borderRadius: '0.3em',
+              padding:'0.5em 1em'
+            
+            }}
+          >
+            {activeBlockButton}
+          </span>
+        )}
       </div>
       )}
     </> 

@@ -17,7 +17,7 @@ export const BlockButton = ({ block }: { block: BlockButtonType}) => {
             <div className="flex flex-col">
             <img className="m-auto" src={block.img} alt={block.type} />
             <div className="text-center ">
-                <p className=" text-xs ">{block.label}</p>
+                <p className="text-xs ">{block.label}</p>
             </div>
         </div>
         </div>)

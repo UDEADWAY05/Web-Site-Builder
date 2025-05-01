@@ -7,15 +7,15 @@ import {
   updateSiteTitle,
   updateSiteBgColor,
 } from 'src/store/slices/siteSlice/siteSlice'
-import {selectSiteTitle, selectSiteBgColor, selectorPreview, selectActiveBlockButton} from 'src/store/slices/siteSlice/selectors'
-import { setSelectedBlockButton } from 'src/store/slices/siteSlice/siteSlice'
+import { selectSiteTitle, selectSiteBgColor, selectorPreview } from 'src/store/slices/siteSlice/selectors'
 import { BlockButton } from './BlockButton'
+
+console.log(blockButtons)
 
 export function SideBar() {
   const projectName = useAppSelector(selectSiteTitle)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreviewCode = useAppSelector(selectorPreview)
-  const activeButton = useAppSelector(selectActiveBlockButton)
 
   const dispatch = useAppDispatch()
 
