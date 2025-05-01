@@ -18,9 +18,11 @@ export interface BaseBlockType {
     height: number
   }
   type: string | null
-  styles: {
+  styles?: {
     backgroundColor?: string
     color?: string
+    // height?: number
+    borderColor?: string,
     fontSize?: number
     fontWeight?: 'normal' | 'bold'
     fontStyle?: 'normal' | 'italic'

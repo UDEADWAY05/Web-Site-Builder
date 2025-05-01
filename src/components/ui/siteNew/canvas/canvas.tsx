@@ -19,7 +19,7 @@ export function Canvas() {
   const [mouseOverCanvas,setMouseOverCanvas] = useState(false)
 
   const blocks = useAppSelector(selectBlocks)
-  console.log('blocks in canvas',blocks)
+  // console.log('blocks in canvas',blocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
@@ -41,8 +41,8 @@ export function Canvas() {
       dispatch(setSelectedBlockId(null))
     }
     if (selectedBlockButton){
-      console.log(selectBlockButton)
       const newBlock = generateBlockByType(selectedBlockButton,relativeX,relativeY)
+
       dispatch(addBlock(newBlock))
       dispatch(setSelectedBlockId(newBlock.id))
       dispatch(setSelectedBlockButton(null))

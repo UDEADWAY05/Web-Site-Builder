@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import { useAppDispatch } from 'src/store/store'
-import { deleteBlock, updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
+import { updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -37,48 +37,25 @@ const blockComponentMap = {
 type BlockRendererProps = {
   block: Block
   isEditing:boolean
-  setIsEditing:(isEditing:boolean) => void
 }
 
-export const BlockRenderer = ({ block, isEditing, setIsEditing }: BlockRendererProps) => {
-  const [editingContent, setEditingContent] = useState<Block['content']>(block.content)
+export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   const dispatch = useAppDispatch()
-
   const Component = blockComponentMap[block.type]
-
-  const onDelete = () => dispatch(deleteBlock(block.id))
-
-  const onSave = () => {
-    dispatch(updateBlockContent({ id: block.id, content: editingContent }))
-    setIsEditing(false)
-  }
 
   if (!Component) return <div>Unsupported block: {block.type}</div>
 
-  return (
-    <>
-      {/* <div className="flex">
-        <StylePanel
-          styles={block.styles}
-          onChange={(newStyles) =>
-            dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))
-          }
-        />
-        <Controls
-          isEditing={isEditing}
-          onEdit={() => setIsEditing(true)}
-          onSave={onSave}
-          onCancel={() => setIsEditing(false)}
-          onDelete={onDelete}
-        />
-      </div> */}
+  const handleChange = (content:Block['content']) => {
+    dispatch(updateBlockContent({ id: block.id, content }))
+  }
 
+  return (
       <Component
-        content={editingContent}
+        blockId={block.id}
+        content={block.content}
         isEditing={isEditing}
-        onChange={setEditingContent}
+        onChange={handleChange}
         styles={block.styles}
-      />
-    </>
+      /> 
   )
 }

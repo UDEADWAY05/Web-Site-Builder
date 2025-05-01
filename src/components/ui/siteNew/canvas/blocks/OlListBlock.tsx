@@ -28,13 +28,18 @@ export const OlListBlock = ({
   return isEditing ? (
     <ol>
       {content.map((item, index) => (
-        <li key={index}>
+        <li key={index} className='flex'>
           <Input
             type="text"
             value={item}
             onChange={(e) => updateItem(index, e.target.value)}
           />
-          <Button onClick={() => removeItem(index)}>x</Button>
+          <button 
+            onClick={() => removeItem(index)}
+            className='bg-gray-100 rounded p-2 hover:bg-gray-200'
+          >
+              x
+          </button>
         </li>
       ))}
       <Button onClick={addItem}>+ Add item</Button>

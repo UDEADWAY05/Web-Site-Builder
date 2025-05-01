@@ -3,12 +3,27 @@ import { ListControls } from "./ListControls";
 import { ParagraphControls } from "./ParagraphControls";
 import { QuoteControls } from "./QuoteControls";
 import { HeaderControls } from "./HeaderControls";
+import { DividerControls } from "./dividerControls";
+import { ImageControls } from "./ImageControls";
+import { TextareaControls } from "./TextareaControls";
+import { InputControls } from "./InputControls";
+import { CheckboxControls } from "./CheckboxControls";
+import { RadioboxControls } from "./RadioboxControls";
+import { SelectControls } from "./SelectControls";
+import { Block } from "src/store/slices/siteSlice";
 
-export const blockControlsMap = {
+export const blockControlsMap:Record<Block['type'],React.ElementType> = {
     button: ButtonControls,
     ul: ListControls,
     ol: ListControls,
     paragraph: ParagraphControls,
     quote: QuoteControls,
-    header: HeaderControls
+    header: HeaderControls,
+    divider: DividerControls,
+    image: ImageControls,
+    textarea: TextareaControls,
+    input: InputControls,
+    checkbox: CheckboxControls,
+    radiobox: RadioboxControls,
+    select: SelectControls
 }

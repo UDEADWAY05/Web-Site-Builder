@@ -5,11 +5,6 @@ import musical from '../assets/musical.png'
 export function generateBlockByType(type: Block['type'], x: number, y: number): Block {
   const id = generateId()
 
-  const defaultProperties = {
-    position: { x,y },
-    dimentions: { width:150, height:50},
-    zIndex:1
-  }
   const defaultStyles: Block['styles'] = {
     backgroundColor: '#fafafa',
   }
@@ -50,7 +45,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:50, height:30},
+        dimentions: { width:120, height:40},
         styles: {...defaultStyles,fontSize:16, color:'#000000'},
         content: 'Button',
         zIndex:1
@@ -61,7 +56,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:150, height:50},
+        dimentions: { width:300, height:200},
         styles: defaultStyles,
         content: ['item1', 'item2'],
         zIndex:1
@@ -72,8 +67,8 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:500, height:1},
-        styles: defaultStyles,
+        dimentions: { width:500, height:10},
+        styles: {...defaultStyles,color:'red'},
         content: 'divider',
         zIndex:1
       }
@@ -83,7 +78,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:100, height:50},
+        dimentions: { width:200, height:90},
         styles: {...defaultStyles,fontWeight:'bold', color:'#000000',fontSize:18},
         content: 'Lorem ipsum dolor sir amet',
         zIndex:1
@@ -93,7 +88,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:80, height:20},
+        dimentions: { width:150, height:100},
         styles: defaultStyles,
         content: 'Inter your label',
         zIndex:1
@@ -115,7 +110,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:150, height:50},
+        dimentions: { width:200, height:100},
         styles: defaultStyles,
         content: ['select 1', 'select2'],
         zIndex:1
@@ -126,7 +121,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:150, height:50},
+        dimentions: { width:200, height:100},
         styles: defaultStyles,
         content: 'Accept terms and conditions',
         zIndex:1
@@ -137,11 +132,21 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:150, height:50},
+        dimentions: { width:200, height:90},
         styles: defaultStyles,
         content: ['yes', 'no'],
         zIndex:1
       }
+    case 'divider':
+      return {
+        id,
+        type,
+        position: { x: 0, y },
+        dimentions: {width: 1,height: 0 },
+        styles: defaultStyles,
+        zIndex: 1,
+        content:''
+    }
 
     default:
       throw new Error(`Unknown block type: ${type}`)

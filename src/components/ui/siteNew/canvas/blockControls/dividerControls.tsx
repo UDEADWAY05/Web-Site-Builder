@@ -6,7 +6,7 @@ import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
 import { FontStyler } from "./controlElements/FontStyler"
 
-export const ButtonControls = () => {
+export const DividerControls = () => {
   const blocks = useAppSelector(selectBlocks)
   const activeBlockId = useAppSelector(selectBlockId)
   const dispatch = useAppDispatch()
@@ -39,10 +39,11 @@ export const ButtonControls = () => {
 
   return (
     <div className="flex items-center">
-      <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
+      {/* <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
       <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
       <TextColorButton color={editingBlock?.styles.color} onChangeColor={handleColorChange}/>
-      <FontSizeButton fontSize={editingBlock?.styles.fontSize} onChangeFontSize={onFontSizeChange}/>
+      <FontSizeButton fontSize={editingBlock?.styles.fontSize} onChangeFontSize={onFontSizeChange}/> */}
+      Divider controls  
     </div>
   )
 }

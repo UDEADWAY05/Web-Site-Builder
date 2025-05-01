@@ -5,7 +5,6 @@ import { useAppSelector } from 'src/store/store'
 import { selectBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
-import { calculateClickPosition } from 'src/utils/calculateClickPosition'
 import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 interface BlockWrapperProps {
   block: Block
@@ -33,7 +32,6 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isEditing) return // avoid moving while editing
     dispatch(setBlockZIndex({id: block.id,zIndex: maxZIndex + 1}))
-
 
     const startX = e.clientX
     const startY = e.clientY
@@ -63,7 +61,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   return (
     <div
       ref={blockRef}
-      className={`absolute p-1 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
+      className={`absolute overflow-hidden rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
       style={{
         left: block.position.x,
         top: block.position.y,
@@ -75,7 +73,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
       onMouseDown={handleMouseDown}
       onBlur={() => setIsEditing(false)}
     >
-        <BlockRenderer block={block} isEditing={isEditing} setIsEditing={setIsEditing} />
+        <BlockRenderer block={block} isEditing={isEditing} />
     </div>
   )
 }

@@ -32,39 +32,13 @@ export function SideBar() {
         <p className="py-2 text-xs opacity-25">Базовый</p>
         <div className="grid grid-cols-2 gap-1">
           {blockButtons.slice(0, 8).map((block) => (
-            // <div
-            
-            //   key={block.type}
-              
-            //   className="col bg-slate-200 hover:bg-slate-300 rounded-md p-1"
-            //   onClick={() => dispatch(setSelectedBlockButton(block.type))}
-            // >
-            //   <div className="flex flex-col">
-            //     <img className="m-auto" src={block.img} alt={block.type} />
-            //     <div className="text-center ">
-            //       <p className=" text-xs ">{block.label}</p>
-            //     </div>
-            //   </div>
-            // </div>
-            <BlockButton block={block}/>
+            <BlockButton key={block.type} block={block}/>
           ))}
         </div>
         <hr />
         <p className="py-2 text-xs opacity-25">Форма</p>
         <div className="grid grid-cols-2 gap-1">
           {blockButtons.slice(8, 13).map((block) => (
-            // <div
-            //   key={block.type}
-            //   className="col bg-slate-200 hover:bg-slate-300 rounded-md p-1"
-            //   onClick={() => setSelectedBlockButton(block.type)}
-            // >
-            //   <div className="flex flex-col">
-            //     <img className="m-auto" src={block.img} alt={block.type} />
-            //     <div className="text-center ">
-            //       <p className=" text-xs ">{block.label}</p>
-            //     </div>
-            //   </div>
-            // </div>
             <BlockButton key={block.type} block={block}/>
           ))}
         </div>

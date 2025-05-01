@@ -5,17 +5,11 @@ import { Block } from 'src/store/slices/siteSlice'
 export type ButtonBlockProps = {
   content: string
   isEditing: boolean
-  onChange: (newContent: string) => void
+  onChange: (newContent: Block['content']) => void
   styles: Block['styles']
 }
 
-export const ButtonBlock = ({
-  content,
-  isEditing,
-  onChange,
-  styles,
-}: ButtonBlockProps) => {
-  console.log('style in btn')
+export const ButtonBlock = ({ content, onChange, isEditing, styles }: ButtonBlockProps) => {
   return isEditing ? (
     <Input
       type="text"
