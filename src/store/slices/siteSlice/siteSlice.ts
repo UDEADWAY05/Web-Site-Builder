@@ -11,6 +11,7 @@ const initialState: Site = {
   isModalOpen: false,
   selectedBlockId: null,
   selectedBlockButton: null,
+  maxZIndex: 1
 }
 
 const siteSlice = createSlice({
@@ -73,8 +74,8 @@ const siteSlice = createSlice({
         throw new Error('Updating block not found')
       }
 
-      blockToUpdate.styles.width = action.payload.width
-      blockToUpdate.styles.height = action.payload.height
+      blockToUpdate.dimentions.width = action.payload.width
+      blockToUpdate.dimentions.height = action.payload.height
 
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
@@ -150,6 +151,15 @@ const siteSlice = createSlice({
         block.styles = { ...block.styles, ...action.payload.styles }
       }
     },
+    setBlockZIndex: (state, action: PayloadAction<{ id: string; zIndex: number }>) => {
+      const block = state.blocks.find(b => b.id === action.payload.id)
+      if (block) {
+        block.zIndex = action.payload.zIndex
+      }
+      if (action.payload.zIndex > state.maxZIndex) {
+        state.maxZIndex = action.payload.zIndex
+      }
+    },
     setSelectedBlockButton:(state,action:PayloadAction<Block['type'] | null>) => {
       state.selectedBlockButton = action.payload
     },
@@ -176,7 +186,8 @@ export const {
   updateBlockBgColor,
   updateBlockStyles,
   setSelectedBlockButton,
-  setSelectedBlockId
+  setSelectedBlockId,
+  setBlockZIndex
 } = siteSlice.actions
 
 export default siteSlice.reducer

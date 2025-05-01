@@ -11,7 +11,7 @@ export interface LayoutSiteState {
 }
 
 export interface BaseBlockType {
-  id: string | null
+  id: string
   position: { x: number, y: number }
   dimentions: {
     width: number
@@ -26,6 +26,7 @@ export interface BaseBlockType {
     fontStyle?: 'normal' | 'italic'
     textDecoration?: 'none' | 'underline'
   }
+  zIndex: number
 }
 
 export type TextBlockType = BaseBlockType & {
@@ -128,4 +129,5 @@ export interface Site {
   isModalOpen: boolean
   selectedBlockId: Block['id'] | null
   selectedBlockButton:Block['type'] | null
+  maxZIndex: number
 }

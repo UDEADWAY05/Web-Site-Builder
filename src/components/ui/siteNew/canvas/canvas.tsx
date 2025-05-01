@@ -11,7 +11,6 @@ import { Preview } from '../Preview/preview'
 import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
-import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { Controls } from './Controls'
 
@@ -25,7 +24,6 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector(store => store.user.data?.id)
   const selectedBlockButton = useAppSelector(selectBlockButton)
-  console.log('s',selectedBlockButton)
   // const selectedBlockId = useAppSelector(selectBlockId)
   const activeBlockId = useAppSelector(selectBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
@@ -71,34 +69,6 @@ export function Canvas() {
   const handleCanvasMouseEnter = () => setMouseOverCanvas(true)
   const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-
-    const blockId = e.dataTransfer.getData('blockId')
-    const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
-    const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
-  
-    // calculating correct position when user pressed to drag inside block
-    const canvasRect = e.currentTarget.getBoundingClientRect()
-    const updatedX = e.clientX - canvasRect.left - offsetX
-    const updatedY = e.clientY - canvasRect.top - offsetY
-  
-    if (blockId) {
-      //TODO delete outside of canvas. Now doesn't work since drop doesn't happen outside canvas
-
-      // if (e.clientX <= canvasRect.left || e.clientY <= canvasRect.top){
-      //   console.log('deleting',blockId)
-      //   dispatch(deleteBlock(blockId))
-      // }
-      dispatch(updateBlockPosition({ id:blockId, x: updatedX, y: updatedY }))
-    }
-  }
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-  }
-  
-
   useEffect(() => {
     const siteRef = ref(dbSite)
     
@@ -142,9 +112,7 @@ export function Canvas() {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleCanvasMouseEnter}
         onMouseLeave={handleCanvasMouseLeave}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragEnd={() => console.log('drag end')}
+        // onDrop={handleDrop}
         style={{ 
           flex: 1,
           position: 'relative',
@@ -171,7 +139,6 @@ export function Canvas() {
             }}
           >
             {selectedBlockButton}
-            {/* <img src={selectedBlockButton.img}/> */}
           </span>
         )}
       </div>

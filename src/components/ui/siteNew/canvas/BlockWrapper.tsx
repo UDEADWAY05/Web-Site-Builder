@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react'
-import { setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { setBlockZIndex, setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from 'src/store/store'
-import { selectBlockId } from 'src/store/slices/siteSlice/selectors'
+import { selectBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { calculateClickPosition } from 'src/utils/calculateClickPosition'
-
+import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 interface BlockWrapperProps {
   block: Block
 }
@@ -16,50 +16,66 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const activeBlockId = useAppSelector(selectBlockId)
   const blockRef = useRef<HTMLDivElement>(null)
   const isBlockSelected = activeBlockId === block.id
+  const maxZIndex = useAppSelector(selectMaxZIndex)
 
   const dispatch = useDispatch()
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-  
+
     if (!isBlockSelected) {
       dispatch(setSelectedBlockId(block.id))
-    }
-    else if (isBlockSelected){
+    } else {
       setIsEditing(true)
-    } 
+    }
   }
-  
-  const handleDragStart = (e:React.DragEvent<HTMLDivElement>) => {
-    const { offsetX, offsetY } = calculateClickPosition(e)
 
-    e.dataTransfer.setData('blockId',block.id)
-    e.dataTransfer.setData('offsetX',offsetX.toString())
-    e.dataTransfer.setData('offsetY',offsetY.toString())
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isEditing) return // avoid moving while editing
+    dispatch(setBlockZIndex({id: block.id,zIndex: maxZIndex + 1}))
+
+
+    const startX = e.clientX
+    const startY = e.clientY
+    const initialX = block.position.x
+    const initialY = block.position.y
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX
+      const deltaY = moveEvent.clientY - startY
+
+      dispatch(updateBlockPosition({
+        id: block.id,
+        x: initialX + deltaX,
+        y: initialY + deltaY,
+      }))
+    }
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
   }
 
   return (
     <div
       ref={blockRef}
-      draggable
       className={`absolute p-1 rounded-sm ${isBlockSelected ? 'border border-slate-300' : ''}`}
       style={{
         left: block.position.x,
         top: block.position.y,
         width: block.dimentions.width,
         height: block.dimentions.height,
+        zIndex: block.zIndex || 1
       }}
-      onDragStart={handleDragStart}
       onClick={handleClick}
-      // onFocus={() => console.log('focus',block.type,block.id)}
-      // onBlur={() => console.log('blur',block.type,block.id)}
+      onMouseDown={handleMouseDown}
+      onBlur={() => setIsEditing(false)}
     >
         <BlockRenderer block={block} isEditing={isEditing} setIsEditing={setIsEditing} />
-
-        {/* {isBlockSelected && blockRef.current && createPortal(
-          <div style={{position:'absolute',bottom:'5em'}}><Controls/></div>,
-          blockRef.current // Controls rendered to the body or a specific div
-        )} */}
     </div>
   )
 }

@@ -15,6 +15,7 @@ export const ButtonBlock = ({
   onChange,
   styles,
 }: ButtonBlockProps) => {
+  console.log('style in btn')
   return isEditing ? (
     <Input
       type="text"

@@ -20,3 +20,4 @@ export const selectSiteBgColor = (state: RootState) =>
 export const selectBlockButton = (state:RootState) => state.site.selectedBlockButton
 
 export const selectBlockId = (state:RootState) => state.site.selectedBlockId
+export const selectMaxZIndex = (state: RootState) => state.site.maxZIndex
