@@ -27,14 +27,19 @@ export const UlListBlock = ({
   return isEditing ? (
     <ul>
       {content.map((item, index) => (
-        <li key={index}>
-          <Input
-            type="text"
-            value={item}
-            onChange={(e) => updateItem(index, e.target.value)}
-          />
-          <button onClick={() => removeItem(index)}>x</button>
-        </li>
+        <li key={index} className='flex'>
+        <Input
+          type="text"
+          value={item}
+          onChange={(e) => updateItem(index, e.target.value)}
+        />
+        <button 
+          onClick={() => removeItem(index)}
+          className='bg-gray-100 rounded p-2 hover:bg-gray-200'
+        >
+            x
+        </button>
+      </li>
       ))}
       <button onClick={addItem}>+ Add item</button>
     </ul>

@@ -1,12 +1,7 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
-import { Controls } from '../draggableBlock/Controls'
 import { useAppDispatch } from 'src/store/store'
-import {
-  deleteBlock,
-  updateBlockContent,
-  updateBlockStyles,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
@@ -22,7 +17,6 @@ import {
   TextareaBlock,
   SelectBlock,
 } from './blocks'
-import { StylePanel } from '../StylePanel/StylePanel'
 
 const blockComponentMap = {
   button: ButtonBlock,
@@ -42,48 +36,26 @@ const blockComponentMap = {
 
 type BlockRendererProps = {
   block: Block
+  isEditing:boolean
 }
 
-export const BlockRenderer = ({ block }: BlockRendererProps) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editingContent, setEditingContent] = useState(block.content)
+export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   const dispatch = useAppDispatch()
-
   const Component = blockComponentMap[block.type]
-
-  const onDelete = () => dispatch(deleteBlock(block.id))
-
-  const onSave = () => {
-    dispatch(updateBlockContent({ id: block.id, content: editingContent }))
-    setIsEditing(false)
-  }
 
   if (!Component) return <div>Unsupported block: {block.type}</div>
 
-  return (
-    <>
-      <div className="flex">
-        <StylePanel
-          styles={block.styles}
-          onChange={(newStyles) =>
-            dispatch(updateBlockStyles({ id: block.id, styles: newStyles }))
-          }
-        />
-        <Controls
-          isEditing={isEditing}
-          onEdit={() => setIsEditing(true)}
-          onSave={onSave}
-          onCancel={() => setIsEditing(false)}
-          onDelete={onDelete}
-        />
-      </div>
+  const handleChange = (content:Block['content']) => {
+    dispatch(updateBlockContent({ id: block.id, content }))
+  }
 
+  return (
       <Component
-        content={editingContent}
+        blockId={block.id}
+        content={block.content}
         isEditing={isEditing}
-        onChange={setEditingContent}
+        onChange={handleChange}
         styles={block.styles}
-      />
-    </>
+      /> 
   )
 }

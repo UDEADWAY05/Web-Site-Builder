@@ -4,7 +4,6 @@ interface StylePanelProps {
 }
 
 export const StylePanel = ({ styles, onChange }: StylePanelProps) => {
-  console.log('styles in panel', styles)
   const toggleStyle = (key: keyof React.CSSProperties, value: unknown) => {
     onChange({
       ...styles,

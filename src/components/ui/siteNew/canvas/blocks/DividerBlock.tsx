@@ -5,5 +5,9 @@ export type DividerBlockProps = {
 }
 
 export const DividerBlock = ({ styles }: DividerBlockProps) => {
-  return <hr style={styles} />
+  console.log('d styles',styles)
+
+  return <hr style={{backgroundColor:'black', height:'5px',border:'none'}} />
 }
+
+

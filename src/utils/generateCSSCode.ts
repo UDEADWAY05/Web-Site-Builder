@@ -6,10 +6,12 @@ export const generateCSSCode = (block: Block) => {
   return `
   .${block.type}-${block.id} {
       position:absolute;
-      left: ${block.styles?.left || 0}px; 
-      top: ${block.styles?.top || 0}px; 
-      height: ${transformHeight(block)}; 
-      width: ${transformWidth(block)};
+      left: ${block.position.x || 0}px; 
+      top: ${block.position.y || 0}px; 
+      height: ${block.dimentions.height || 'auto'}; 
+      width: ${
+        block.type !== 'divider' ? `${block.dimentions.width || 'auto'}` : '100%'
+      };
       background-color: ${block.styles?.backgroundColor || '#fafafa'};
       font-size: ${
         block.type === 'header' ? '' : block.styles?.fontSize || '14px'

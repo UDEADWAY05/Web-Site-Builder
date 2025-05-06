@@ -1,31 +1,87 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useAppDispatch } from 'src/store/store'
+import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../store/store'
-import { Block } from 'src/store/slices/siteSlice'
-import { DraggableBlock } from '../draggableBlock/draggableBlock'
-import { selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import {
+  selectBlockId,
+  selectBlockButton,
+  selectorPreview,
+} from 'src/store/slices/siteSlice/selectors'
 import {
   selectBlocks,
   selectSiteBgColor,
 } from 'src/store/slices/siteSlice/selectors'
-import { child, get, off, ref } from 'src/App'
-import { setSite } from 'src/store/slices/siteSlice/siteSlice'
-import { Preview } from '../Preview/preview'
+import { child, dbSite, get, off, ref } from 'src/App'
 import {
-  addBlock,
-  updateBlockPosition,
+  setSelectedBlockId,
+  setSelectedBlockButton,
+  setSite,
 } from 'src/store/slices/siteSlice/siteSlice'
+import { Preview } from '../Preview/preview'
+import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
-import { dbSite } from 'src/firebase'
+import { BlockWrapper } from './BlockWrapper'
+import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
+import { Controls } from './Controls'
 
 export function Canvas() {
   const { siteId } = useParams()
+  const [mouseOverCanvas, setMouseOverCanvas] = useState(false)
+
   const blocks = useAppSelector(selectBlocks)
+  // console.log('blocks in canvas',blocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
-  const dispatch = useAppDispatch()
   const userId = useAppSelector((store) => store.user.data?.id)
+  const selectedBlockButton = useAppSelector(selectBlockButton)
+  // const selectedBlockId = useAppSelector(selectBlockId)
+  const activeBlockId = useAppSelector(selectBlockId)
+  const ghostRef = useRef<HTMLSpanElement | null>(null)
+  const canvasRef = useRef<HTMLDivElement | null>(null)
+
+  const dispatch = useAppDispatch()
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      const canvasRect = e.currentTarget.getBoundingClientRect()
+      const relativeX = e.clientX - canvasRect.left
+      const relativeY = e.clientY - canvasRect.top
+
+      if (activeBlockId) {
+        dispatch(setSelectedBlockId(null))
+      }
+      if (selectedBlockButton) {
+        const newBlock = generateBlockByType(
+          selectedBlockButton,
+          relativeX,
+          relativeY
+        )
+
+        dispatch(addBlock(newBlock))
+        dispatch(setSelectedBlockId(newBlock.id))
+        dispatch(setSelectedBlockButton(null))
+      } else {
+        dispatch(setSelectedBlockId(null))
+      }
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!selectedBlockButton) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    if (ghostRef.current) {
+      requestAnimationFrame(() => {
+        ghostRef.current!.style.transform = `translate(${x}px, ${y}px)`
+      })
+    }
+  }
+
+  const handleCanvasMouseEnter = () => setMouseOverCanvas(true)
+  const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
   useEffect(() => {
     const siteRef = ref(dbSite)
@@ -43,39 +99,22 @@ export function Canvas() {
       })
       .catch((err) => console.log(err))
     return off(siteRef) // Функция для отписки
-  }, [dispatch, siteId, userId])
+  }, [dispatch, siteId])
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-
-    const blockType = e.dataTransfer.getData('blockType') as Block['type']
-    const blockId = e.dataTransfer.getData('blockId')
-    const offsetX = parseFloat(e.dataTransfer.getData('offsetX') || '0')
-    const offsetY = parseFloat(e.dataTransfer.getData('offsetY') || '0')
-
-    // calculating correct position when user pressed to drag inside block
-    const canvasRect = e.currentTarget.getBoundingClientRect()
-    const left = e.clientX - canvasRect.left - offsetX
-    const top = e.clientY - canvasRect.top - offsetY
-
-    if (blockId) {
-      dispatch(
-        updateBlockPosition({
-          id: blockId,
-          left,
-          top,
-        })
-      )
-      return
+  //delete by keyboard
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Delete' && activeBlockId) {
+        dispatch(deleteBlock(activeBlockId))
+        dispatch(setSelectedBlockId(null))
+      }
     }
 
-    const newBlock = generateBlockByType(blockType, left, top)
-    dispatch(addBlock(newBlock))
-  }
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-  }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [activeBlockId, dispatch])
 
   return (
     <>
@@ -83,18 +122,42 @@ export function Canvas() {
         <Preview />
       ) : (
         <div
+          ref={canvasRef}
+          onClick={handleClick}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleCanvasMouseEnter}
+          onMouseLeave={handleCanvasMouseLeave}
+          // onDrop={handleDrop}
           style={{
             flex: 1,
             position: 'relative',
             backgroundColor: bgColor,
             overflow: 'hidden',
+            backgroundImage: `
+            linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+            linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
+            backgroundSize: '140px 100px',
           }}
-          onDrop={(e) => handleDrop(e)}
-          onDragOver={(e) => handleDragOver(e)}
         >
+          {activeBlockId &&
+            canvasRef.current &&
+            createPortal(<Controls blocks={blocks} />, canvasRef.current)}
           {blocks.map((block) => (
-            <DraggableBlock key={block.id} block={block} />
+            <BlockWrapper block={block} key={block.id} />
           ))}
+          {selectedBlockButton && mouseOverCanvas && (
+            <span
+              ref={ghostRef}
+              className="absolute opacity-50 pointer-events-none"
+              style={{
+                border: '1px dotted lightgray',
+                borderRadius: '0.3em',
+                padding: '0.5em 1em',
+              }}
+            >
+              {selectedBlockButton}
+            </span>
+          )}
         </div>
       )}
     </>

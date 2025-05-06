@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { Block, HeaderBlockType, ImageBlockType, Site } from './types'
+import { generateId } from 'src/utils/generateId'
+import type { Block, Site } from './types'
 
 const initialState: Site = {
-  id: new Date().getTime().toString(), //TODO, it's shit
-  bgColor: '#ffffff',
+  id: generateId(),
+  bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],
   isPreview: false,
   isModalOpen: false,
+  selectedBlockId: null,
+  selectedBlockButton: null,
+  maxZIndex: 1
 }
 
 const siteSlice = createSlice({
@@ -47,8 +51,7 @@ const siteSlice = createSlice({
     deleteBlock: (state, action: PayloadAction<Block['id']>) => {
       state.blocks = state.blocks.filter((block) => block.id !== action.payload)
     },
-    updateBlockPosition: (state, action:PayloadAction<{id:string,left:number,top:number}>) => {
-      // console.log(action.payload)
+    updateBlockPosition: (state, action:PayloadAction<{id:string,x:number,y:number}>) => {
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate) {
@@ -57,73 +60,79 @@ const siteSlice = createSlice({
       
       // blockToUpdate.styles.left = `${action.payload.left}px`
       // blockToUpdate.styles.top = `${action.payload.top}px`
-      blockToUpdate.styles.left = action.payload.left
-      blockToUpdate.styles.top = action.payload.top
+      blockToUpdate.position.x = action.payload.x
+      blockToUpdate.position.y = action.payload.y
 
       state.blocks = state.blocks.map((block) => {
         return block.id === blockToUpdate.id ? blockToUpdate : block
       })
     },
     updateBlockSize: (state, action:PayloadAction<{id:Block['id'],width:number,height:number}>) => {
-      console.log(state, action)
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate){
         throw new Error('Updating block not found')
       }
 
-      blockToUpdate.styles.width = action.payload.width
-      blockToUpdate.styles.height = action.payload.height
+      blockToUpdate.dimentions.width = action.payload.width
+      blockToUpdate.dimentions.height = action.payload.height
 
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
-
-
     },
-    updateBlockContent: (
-      state,
-      action: PayloadAction<{
-        id: Block['id']
-        content:
-          | string // paragraph
-          | { text: string; level: number } // header
-          | { url: string; alt?: string } // image
-          | string[] //list[]
-      }>
-    ) => {
-      const blockToUpdate = state.blocks.find(
-        (block) => block.id === action.payload.id
-      )
+    // updateBlockContent: (
+    //   state,
+    //   action: PayloadAction<{
+    //     id: Block['id']
+    //     content:
+    //       | string // paragraph
+    //       | { text: string; level: number } // header
+    //       | { url: string; alt?: string } // image
+    //       | string[] //list[]
+    //   }>
+    // ) => {
+    //   const blockToUpdate = state.blocks.find(
+    //     (block) => block.id === action.payload.id
+    //   )
 
-      if (!blockToUpdate) {
-        throw new Error('Updating block not found')
+    //   if (!blockToUpdate) {
+    //     throw new Error('Updating block not found')
+    //   }
+
+    //   if (
+    //     typeof action.payload.content === 'object' &&
+    //     action.payload.content !== null
+    //   ) {
+    //     if (blockToUpdate.type === 'header') {
+    //       const headerBlock = blockToUpdate as HeaderBlockType
+    //       headerBlock.content.text = action.payload.content.text
+    //       headerBlock.content.level = action.payload.content.level
+    //     }
+    //     if (blockToUpdate.type === 'image') {
+    //       const headerBlock = blockToUpdate as ImageBlockType
+    //       headerBlock.content.url = action.payload.content.url
+    //       headerBlock.content.alt = action.payload.content.alt
+    //     }
+    //   }
+
+    //   if (
+    //     Array.isArray(blockToUpdate.content) &&
+    //     Array.isArray(action.payload.content)
+    //   ) {
+    //     blockToUpdate.content = [...action.payload.content]
+    //   }
+
+    //   state.blocks = state.blocks.map((block) =>
+    //     block.id === blockToUpdate.id ? blockToUpdate : block
+    //   )
+    // },
+    updateBlockContent:(state,action:PayloadAction<{id:Block['id'],content:Block['content']}>) => {
+      const block = state.blocks.find(block => block.id === action.payload.id)
+
+      if (!block){
+        return
       }
 
-      if (
-        typeof action.payload.content === 'object' &&
-        action.payload.content !== null
-      ) {
-        if (blockToUpdate.type === 'header') {
-          const headerBlock = blockToUpdate as HeaderBlockType
-          headerBlock.content.text = action.payload.content.text
-          headerBlock.content.level = action.payload.content.level
-        }
-        if (blockToUpdate.type === 'image') {
-          const headerBlock = blockToUpdate as ImageBlockType
-          headerBlock.content.url = action.payload.content.url
-          headerBlock.content.alt = action.payload.content.alt
-        }
-      }
-
-      if (
-        Array.isArray(blockToUpdate.content) &&
-        Array.isArray(action.payload.content)
-      ) {
-        blockToUpdate.content = [...action.payload.content]
-      }
-
-      state.blocks = state.blocks.map((block) =>
-        block.id === blockToUpdate.id ? blockToUpdate : block
-      )
+      block.content = action.payload.content
     },
     updateBlockBgColor: (state, action:PayloadAction<{id:Block['id'],color: Block['styles']['backgroundColor']}>) => {
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
@@ -135,14 +144,36 @@ const siteSlice = createSlice({
       blockToUpdate.styles.backgroundColor = action.payload.color
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
-    updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
-      const block = state.blocks.find((b) => b.id === action.payload.id)
+    // updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
+    //   const block = state.blocks.find((b) => b.id === action.payload.id)
+
+    //   if (block) {
+    //     block.styles = {
+    //       ...block.styles,
+    //       ...action.payload.styles,
+    //     }
+    //   }
+    // },
+    updateBlockStyles: (state, action: PayloadAction<{id: string; styles: Partial<Block['styles']>}>) => {
+      const block = state.blocks.find((block) => block.id === action.payload.id)
       if (block) {
-        block.styles = {
-          ...block.styles,
-          ...action.payload.styles,
-        }
+        block.styles = { ...block.styles, ...action.payload.styles }
       }
+    },
+    setBlockZIndex: (state, action: PayloadAction<{ id: string; zIndex: number }>) => {
+      const block = state.blocks.find(b => b.id === action.payload.id)
+      if (block) {
+        block.zIndex = action.payload.zIndex
+      }
+      if (action.payload.zIndex > state.maxZIndex) {
+        state.maxZIndex = action.payload.zIndex
+      }
+    },
+    setSelectedBlockButton:(state,action:PayloadAction<Block['type'] | null>) => {
+      state.selectedBlockButton = action.payload
+    },
+    setSelectedBlockId: (state,action:PayloadAction<Block['id'] | null>) => {
+      state.selectedBlockId = action.payload
     },
   },
 })
@@ -162,7 +193,10 @@ export const {
   updateBlockSize,
   updateBlockContent,
   updateBlockBgColor,
-  updateBlockStyles
+  updateBlockStyles,
+  setSelectedBlockButton,
+  setSelectedBlockId,
+  setBlockZIndex
 } = siteSlice.actions
 
 export default siteSlice.reducer

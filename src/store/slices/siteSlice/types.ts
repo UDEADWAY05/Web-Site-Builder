@@ -1,10 +1,9 @@
-import { CSSProperties } from 'react'
-
-export interface BlockButton {
+export interface BlockButtonType {
   type: Block['type']
   label: string
   img: string
 }
+
 export interface LayoutSiteState {
   entities: Site | null
   isPreview: boolean
@@ -13,7 +12,23 @@ export interface LayoutSiteState {
 
 export interface BaseBlockType {
   id: string
-  styles: CSSProperties
+  position: { x: number, y: number }
+  dimentions: {
+    width: number
+    height: number
+  }
+  type: string | null
+  styles?: {
+    backgroundColor?: string
+    color?: string
+    // height?: number
+    borderColor?: string,
+    fontSize?: number
+    fontWeight?: 'normal' | 'bold'
+    fontStyle?: 'normal' | 'italic'
+    textDecoration?: 'none' | 'underline'
+  }
+  zIndex: number
 }
 
 export type TextBlockType = BaseBlockType & {
@@ -114,4 +129,7 @@ export interface Site {
   blocks: Array<Block>
   isPreview: boolean
   isModalOpen: boolean
+  selectedBlockId: Block['id'] | null
+  selectedBlockButton:Block['type'] | null
+  maxZIndex: number
 }

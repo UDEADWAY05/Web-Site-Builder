@@ -16,7 +16,7 @@ export function ButtonNewSite() {
       const newSite = {
         id: siteId,
         title: 'My Project',
-        bgColor: '#5C90FF',
+        bgColor: '#fafafa',
         data: [],
       }
       dispatch(resetLayout())
