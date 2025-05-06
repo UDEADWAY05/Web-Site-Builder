@@ -12,7 +12,7 @@ import {
   selectBlocks,
   selectSiteBgColor,
 } from 'src/store/slices/siteSlice/selectors'
-import { child, dbSite, get, off, ref } from 'src/App'
+import { child, get, off, ref } from 'src/App'
 import {
   setSelectedBlockId,
   setSelectedBlockButton,
@@ -24,6 +24,7 @@ import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
 import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { Controls } from './Controls'
+import { dbSite } from 'src/firebase'
 
 export function Canvas() {
   const { siteId } = useParams()
