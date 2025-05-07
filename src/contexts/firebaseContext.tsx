@@ -19,6 +19,7 @@ export interface FirebaseApi {
   updateUser: (id: string, name: string, surname: string) => Promise<void>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const FirebaseContext = createContext<FirebaseApi | null>(null)
 
 export const FirebaseProvider = ({
@@ -40,9 +41,9 @@ export const FirebaseProvider = ({
             dispatch(
               setUser({
                 id: userId,
-                email: user.email,
-                name: userData?.name,
-                surname: userData?.surname,
+                email: user.email || '',
+                name: userData?.name || '',
+                surname: userData?.surname || '',
               })
             )
           }
