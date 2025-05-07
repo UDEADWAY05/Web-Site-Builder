@@ -1,3 +1,9 @@
+import { FirebaseService } from './services/firebaseService'
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
+import { getFirestore } from 'firebase/firestore'
+
 export const firebaseConfig = {
   apiKey: import.meta.env.VITE_apiKey,
   authDomain: import.meta.env.VITE_authDomain,
@@ -7,3 +13,11 @@ export const firebaseConfig = {
   appId: import.meta.env.VITE_appId,
   databaseURL: import.meta.env.VITE_dataBaseURL,
 }
+
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const db = getFirestore(app)
+const dbSite = getDatabase(app)
+const firebaseService = new FirebaseService(auth, db)
+
+export { dbSite, firebaseService, auth, db }

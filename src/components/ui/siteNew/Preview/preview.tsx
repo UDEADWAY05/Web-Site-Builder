@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { child, dbSite, get, off, ref } from 'src/App'
+import { child, get, off, ref } from 'firebase/database'
 import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
 import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import { generateCSSCode } from 'src/utils/generateCSSCode'
 import type { Site } from 'src/store/slices/siteSlice/types'
+import { dbSite } from 'src/firebase'
 
 export function Preview() {
   const blocks = useAppSelector(selectorLayoutSiteData)
@@ -36,7 +37,7 @@ export function Preview() {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${siteById?.title || 'My project'}</title>
+    <title>${siteById?.title || 'Мой проект'}</title>
     <style>
       body {
         position: relative;
