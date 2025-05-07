@@ -6,11 +6,6 @@ import { deleteSite, fetchSites } from 'src/store/slices/projectSlice';
 import { Link } from 'react-router-dom';
 import { Button } from 'src/components/ui/button';
 
-const SORT_OPTIONS = {
-    ASC: 'asc',
-    DESC: 'desc',
-} as const;
-
 export const Main = () => {
     const [sort, setSort] = useState<'asc' | 'desc'>('asc');
     const [page, setPage] = useState(1);
@@ -55,6 +50,13 @@ export const Main = () => {
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center items-center">
+                {pagedSites.length === 0 && <div>
+                    <h4 className='mt-10 text-2xl text-gray-400'>
+                        Здесь пока пусто :)
+                    </h4>
+                    <p className='text-gray-400'> Создайте новый проект и он появится тут!</p>
+                </div>
+                }
                 {pagedSites.map((el, index) => {
                     const isLast = index === pagedSites.length - 1;
                     return (
