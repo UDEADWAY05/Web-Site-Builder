@@ -4,7 +4,6 @@ import { ref, set } from 'src/App'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { resetLayout } from 'src/store/slices/siteSlice'
 import { dbSite } from 'src/firebase'
-import { getRoutePathSiteDetail } from 'src/routes/paths'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
@@ -12,17 +11,18 @@ export function ButtonNewSite() {
   const userId = useAppSelector((store) => store.user.data?.id)
   const handleCreateSite = async () => {
     try {
+      const date = new Date()
       const siteId = Date.now().toString()
       const newSite = {
         id: siteId,
-        title: 'My Project',
+        title: `Мой проект ${date.toLocaleString()}`,
         bgColor: '#fafafa',
         data: [],
       }
       dispatch(resetLayout())
       await set(ref(dbSite, `sites/${userId}/${siteId}`), newSite)
 
-      navigate(getRoutePathSiteDetail(siteId))
+      navigate(`/sites/${siteId}`)
     } catch (error) {
       // временная заглушка - перенести в slice
       console.log('Ошибка при создании макета сайта:', error)
