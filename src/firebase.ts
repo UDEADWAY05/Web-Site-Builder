@@ -20,4 +20,4 @@ const db = getFirestore(app)
 const dbSite = getDatabase(app)
 const firebaseService = new FirebaseService(auth, db)
 
-export { dbSite, firebaseService, auth }
+export { dbSite, firebaseService, auth, db }

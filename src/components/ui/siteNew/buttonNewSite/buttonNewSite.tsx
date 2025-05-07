@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
-import { ref, set } from 'src/App'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { resetLayout } from 'src/store/slices/siteSlice'
+import { ref, set } from 'firebase/database'
 import { dbSite } from 'src/firebase'
 
 export function ButtonNewSite() {
@@ -15,7 +15,11 @@ export function ButtonNewSite() {
       const siteId = Date.now().toString()
       const newSite = {
         id: siteId,
+<<<<<<< HEAD
         title: `Мой проект ${date.toLocaleString()}`,
+=======
+        title: 'Мой проект',
+>>>>>>> 1702434 (chore: убрал firebase из app)
         bgColor: '#fafafa',
         data: [],
       }

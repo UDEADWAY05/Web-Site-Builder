@@ -1,5 +1,4 @@
 import type { Site } from 'src/store/slices/siteSlice/types'
-import { blockButtons } from 'src/constants/blockButtons'
 import { SideBar } from 'src/components/ui/siteNew'
 import { Canvas } from 'src/components/ui/siteNew'
 import { Button } from 'src/components/ui/button'
@@ -15,17 +14,20 @@ import { setModalClose } from 'src/store/slices/siteSlice'
 import { generateHTML } from 'src/utils/generateHTML'
 import { generateCSS } from 'src/utils/generateCSS'
 import { useAppSelector, useAppDispatch } from 'src/store/store'
-import { selectorLayoutSiteData, selectorModalOpen } from 'src/store/slices/siteSlice/selectors'
+import {
+  selectorLayoutSiteData,
+  selectorModalOpen,
+} from 'src/store/slices/siteSlice/selectors'
 import { exportSiteToZip } from 'src/utils/exportSiteToZip'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { child, get, off, ref } from 'src/App'
+import { child, get, off, ref } from 'firebase/database'
 import { dbSite } from 'src/firebase'
 
 export function SiteNew() {
   const blocks = useAppSelector(selectorLayoutSiteData)
   console.log(blocks)
-  const userId = useAppSelector(store => store.user.data?.id)  
+  const userId = useAppSelector((store) => store.user.data?.id)
 
   const isModal = useAppSelector(selectorModalOpen)
   const { siteId } = useParams<{ siteId: string }>()
@@ -37,7 +39,7 @@ export function SiteNew() {
   useEffect(() => {
     if (!siteId) return
     const dbRef = ref(dbSite)
-      get(child(dbRef, `sites/${userId}/${siteId}`))
+    get(child(dbRef, `sites/${userId}/${siteId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           setSiteById(snapshot.val() as Site)
@@ -51,7 +53,7 @@ export function SiteNew() {
         setSiteById(null)
       })
     return () => off(dbRef) // Функция для отписки
-  }, [siteId])
+  }, [siteId, userId])
 
   return (
     <>

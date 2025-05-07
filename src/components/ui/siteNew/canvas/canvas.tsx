@@ -12,7 +12,7 @@ import {
   selectBlocks,
   selectSiteBgColor,
 } from 'src/store/slices/siteSlice/selectors'
-import { child, get, off, ref } from 'src/App'
+import { child, get, off, ref } from 'firebase/database'
 import {
   setSelectedBlockId,
   setSelectedBlockButton,
@@ -100,7 +100,7 @@ export function Canvas() {
       })
       .catch((err) => console.log(err))
     return off(siteRef) // Функция для отписки
-  }, [dispatch, siteId])
+  }, [dispatch, siteId, userId])
 
   //delete by keyboard
   useEffect(() => {
