@@ -15,11 +15,7 @@ export function ButtonNewSite() {
       const siteId = Date.now().toString()
       const newSite = {
         id: siteId,
-<<<<<<< HEAD
         title: `Мой проект ${date.toLocaleString()}`,
-=======
-        title: 'Мой проект',
->>>>>>> 1702434 (chore: убрал firebase из app)
         bgColor: '#fafafa',
         data: [],
       }
