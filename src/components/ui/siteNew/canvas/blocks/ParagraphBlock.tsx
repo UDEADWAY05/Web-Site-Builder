@@ -5,21 +5,22 @@ export type ParagraphBlockProps = {
   isEditing: boolean
   onChange: (newContent: string) => void
   styles: Block['styles']
+  width: number
+  height: number
 }
 
 export const ParagraphBlock = ({
   content,
-  isEditing,
   onChange,
   styles,
+  width,
+  height
 }: ParagraphBlockProps) => {
-  return isEditing ? (
+  return (
     <textarea 
       value={content}
       onChange={e => onChange(e.target.value)} 
-      style={styles}
+      style={{...styles,width:`${width}px`,height:`${height}px`, resize:'none'}}
     />
-    ) : (
-    <p style={styles}>{content}</p>
   )
 }

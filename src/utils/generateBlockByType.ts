@@ -6,7 +6,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
   const id = generateId()
 
   const defaultStyles: Block['styles'] = {
-    backgroundColor: '#fafafa',
+    backgroundColor: '#f5fafa',
   }
 
   switch (type) {
@@ -46,7 +46,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         type,
         position: { x,y },
         dimentions: { width:120, height:40},
-        styles: {...defaultStyles,fontSize:16, color:'#000000'},
+        styles: {...defaultStyles, fontSize:16, color:'#000000'},
         content: 'Button',
         zIndex:1
       }
@@ -56,8 +56,8 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:300, height:200},
-        styles: defaultStyles,
+        dimentions: { width:110, height:160},
+        styles: {...defaultStyles, backgroundColor:'#f5f4f5'},
         content: ['item1', 'item2'],
         zIndex:1
       }
@@ -67,8 +67,8 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:500, height:10},
-        styles: {...defaultStyles,color:'red'},
+        dimentions: { width:300, height:3},
+        styles: {...defaultStyles,backgroundColor: '#000000'},
         content: 'divider',
         zIndex:1
       }
@@ -100,7 +100,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         type,
         position: { x,y },
         dimentions: { width:200, height:100},
-        styles: defaultStyles,
+        styles: {...defaultStyles,fontWeight:'bold', color:'#000000',fontSize:16},
         content: 'Type your message here',
         zIndex:1
       }
@@ -137,16 +137,6 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         content: ['yes', 'no'],
         zIndex:1
       }
-    case 'divider':
-      return {
-        id,
-        type,
-        position: { x: 0, y },
-        dimentions: {width: 1,height: 0 },
-        styles: defaultStyles,
-        zIndex: 1,
-        content:''
-    }
 
     default:
       throw new Error(`Unknown block type: ${type}`)

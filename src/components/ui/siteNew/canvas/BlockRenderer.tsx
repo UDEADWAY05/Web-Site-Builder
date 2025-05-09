@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { useRef } from 'react'
 import { Block } from 'src/store/slices/siteSlice'
 import { useAppDispatch } from 'src/store/store'
 import { updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
@@ -50,12 +50,14 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   }
 
   return (
-      <Component
-        blockId={block.id}
-        content={block.content}
-        isEditing={isEditing}
-        onChange={handleChange}
-        styles={block.styles}
-      /> 
+    <Component
+      blockId={block.id}
+      content={block.content}
+      isEditing={isEditing}
+      onChange={handleChange}
+      styles={block.styles}
+      width={block.dimentions.width}
+      height={block.dimentions.height}
+    /> 
   )
 }

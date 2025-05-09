@@ -57,9 +57,7 @@ const siteSlice = createSlice({
       if (!blockToUpdate) {
         return
       }
-      
-      // blockToUpdate.styles.left = `${action.payload.left}px`
-      // blockToUpdate.styles.top = `${action.payload.top}px`
+  
       blockToUpdate.position.x = action.payload.x
       blockToUpdate.position.y = action.payload.y
 
@@ -79,52 +77,7 @@ const siteSlice = createSlice({
 
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
-    // updateBlockContent: (
-    //   state,
-    //   action: PayloadAction<{
-    //     id: Block['id']
-    //     content:
-    //       | string // paragraph
-    //       | { text: string; level: number } // header
-    //       | { url: string; alt?: string } // image
-    //       | string[] //list[]
-    //   }>
-    // ) => {
-    //   const blockToUpdate = state.blocks.find(
-    //     (block) => block.id === action.payload.id
-    //   )
 
-    //   if (!blockToUpdate) {
-    //     throw new Error('Updating block not found')
-    //   }
-
-    //   if (
-    //     typeof action.payload.content === 'object' &&
-    //     action.payload.content !== null
-    //   ) {
-    //     if (blockToUpdate.type === 'header') {
-    //       const headerBlock = blockToUpdate as HeaderBlockType
-    //       headerBlock.content.text = action.payload.content.text
-    //       headerBlock.content.level = action.payload.content.level
-    //     }
-    //     if (blockToUpdate.type === 'image') {
-    //       const headerBlock = blockToUpdate as ImageBlockType
-    //       headerBlock.content.url = action.payload.content.url
-    //       headerBlock.content.alt = action.payload.content.alt
-    //     }
-    //   }
-
-    //   if (
-    //     Array.isArray(blockToUpdate.content) &&
-    //     Array.isArray(action.payload.content)
-    //   ) {
-    //     blockToUpdate.content = [...action.payload.content]
-    //   }
-
-    //   state.blocks = state.blocks.map((block) =>
-    //     block.id === blockToUpdate.id ? blockToUpdate : block
-    //   )
-    // },
     updateBlockContent:(state,action:PayloadAction<{id:Block['id'],content:Block['content']}>) => {
       const block = state.blocks.find(block => block.id === action.payload.id)
 
@@ -134,30 +87,21 @@ const siteSlice = createSlice({
 
       block.content = action.payload.content
     },
-    updateBlockBgColor: (state, action:PayloadAction<{id:Block['id'],color: Block['styles']['backgroundColor']}>) => {
+    updateBlockBgColor: (state, action:PayloadAction<{id:Block['id'],color: string}>) => {
       const blockToUpdate = state.blocks.find(block => block.id === action.payload.id)
 
       if (!blockToUpdate){
-        throw new Error('Updating block not found')
+        return
       }
 
       blockToUpdate.styles.backgroundColor = action.payload.color
       state.blocks = state.blocks.map(block => block.id === blockToUpdate.id ? blockToUpdate : block)
     },
-    // updateBlockStyles: (state, action: PayloadAction<{ id: string; styles: React.CSSProperties }>) => {
-    //   const block = state.blocks.find((b) => b.id === action.payload.id)
 
-    //   if (block) {
-    //     block.styles = {
-    //       ...block.styles,
-    //       ...action.payload.styles,
-    //     }
-    //   }
-    // },
     updateBlockStyles: (state, action: PayloadAction<{id: string; styles: Partial<Block['styles']>}>) => {
       const block = state.blocks.find((block) => block.id === action.payload.id)
       if (block) {
-        block.styles = { ...block.styles, ...action.payload.styles }
+        block.styles = {...block.styles, ...action.payload.styles }
       }
     },
     setBlockZIndex: (state, action: PayloadAction<{ id: string; zIndex: number }>) => {

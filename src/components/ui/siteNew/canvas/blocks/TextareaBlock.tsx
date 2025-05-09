@@ -6,6 +6,8 @@ export type TextareaBlockProps = {
   content: string
   isEditing: boolean
   onChange: (newContent: string) => void
+  width: number
+  height: number
   styles: Block['styles']
 }
 
@@ -13,6 +15,8 @@ export const TextareaBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: TextareaBlockProps) => {
   return isEditing ? (
@@ -21,13 +25,13 @@ export const TextareaBlock = ({
       value={content}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Type your message here"
-      className="border p-2 w-full"
+      style={{...styles,width:`${width}px`,height:`${height}px`, resize:'none'}}
     />
   ) : (
     <Textarea
-      style={styles}
       placeholder="Type your message here."
       value={content}
+      style={{...styles,width:`${width}px`,height:`${height}px`, resize:'none'}}
     />
   )
 }
