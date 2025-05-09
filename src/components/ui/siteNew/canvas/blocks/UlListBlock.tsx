@@ -5,6 +5,8 @@ export type ListBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  width: number
+  height: number
   styles: Block['styles']
 }
 
@@ -12,8 +14,11 @@ export const UlListBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: ListBlockProps) => {
+  console.log('in ul',width,height)
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
@@ -25,9 +30,9 @@ export const UlListBlock = ({
     onChange(content.filter((_, i) => i !== index))
 
   return isEditing ? (
-    <ul>
+    <ul style={{...styles,width:`${width}px`,height:`${height}px`}}>
       {content.map((item, index) => (
-        <li key={index} className='flex'>
+        <li key={index} className='flex' >
         <Input
           type="text"
           value={item}
@@ -44,7 +49,7 @@ export const UlListBlock = ({
       <button onClick={addItem}>+ Add item</button>
     </ul>
   ) : (
-    <ul>
+    <ul style={{...styles,width:`${width}px`,height:`${height}px`}}>
       {content.map((item, i) => (
         <li style={styles} key={i}>
           {item}

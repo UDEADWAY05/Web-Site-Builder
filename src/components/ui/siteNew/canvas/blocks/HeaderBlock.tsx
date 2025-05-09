@@ -2,12 +2,14 @@ import { CSSProperties, JSX } from 'react'
 import { Input } from 'src/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
 
-export type HeaderBlockProps = {
+interface HeaderBlockProps {
   content: { text: string; level: number }
   isEditing: boolean
   onChange: (newContent: { text: string; level: number }) => void
   styles?: CSSProperties
 }
+
+const HEADER_LEVELS: number[] = [1, 2, 3, 4, 5, 6]
 
 export const HeaderBlock = ({
   content,
@@ -15,7 +17,6 @@ export const HeaderBlock = ({
   onChange,
   styles,
 }: HeaderBlockProps) => {
-  const levelMap: number[] = [1, 2, 3, 4, 5, 6] //TODO making better
   const HeaderTag = `h${content.level}` as keyof JSX.IntrinsicElements
 
   const handleLevelChange = (newLevel: string) => {
@@ -44,11 +45,11 @@ export const HeaderBlock = ({
         value={content.level.toString()}
         onValueChange={handleLevelChange}
       >
-        <SelectTrigger className="w-[120px]">
+        <SelectTrigger>
           <SelectValue placeholder={`h${content.level}`} />
         </SelectTrigger>
         <SelectContent>
-          {levelMap.map((lvl) => (
+          {HEADER_LEVELS.map((lvl) => (
             <SelectItem key={lvl} value={lvl.toString()}>
               {`h${lvl}`}
             </SelectItem>

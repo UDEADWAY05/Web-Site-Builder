@@ -119,22 +119,20 @@ export function Canvas() {
 
   return (
     <>
-      {isPreview ? (
-        <Preview />
-      ) : (
-        <div
-          ref={canvasRef}
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleCanvasMouseEnter}
-          onMouseLeave={handleCanvasMouseLeave}
-          // onDrop={handleDrop}
-          style={{
-            flex: 1,
-            position: 'relative',
-            backgroundColor: bgColor,
-            overflow: 'hidden',
-            backgroundImage: `
+  { isPreview 
+    ? (<Preview />)
+    : (<div
+        ref={canvasRef}
+        onClick={handleClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleCanvasMouseEnter}
+        onMouseLeave={handleCanvasMouseLeave}
+        style={{ 
+          flex: 1,
+          position: 'relative',
+          backgroundColor: bgColor,
+          overflow: 'hidden',
+          backgroundImage: `
             linear-gradient(to right, #f0f0f0 1px, transparent 1px),
             linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
             backgroundSize: '140px 100px',

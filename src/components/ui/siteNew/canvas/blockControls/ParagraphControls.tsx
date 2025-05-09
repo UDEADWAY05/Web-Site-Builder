@@ -22,18 +22,22 @@ export const ParagraphControls = () => {
     }))
   }
 
-  const handleColorChange = (color:string) => {dispatch(updateBlockStyles({
+  const handleColorChange = (color:string) => {
+    dispatch(updateBlockStyles({
       id: activeBlockId,
       styles: { color }
     }))
   }
 
-  const onFontSizeChange = (size:number) => dispatch(updateBlockStyles({
-    id: activeBlockId,
-    styles: { fontSize: size }
+  const onFontSizeChange = (size:number) => dispatch(
+    updateBlockStyles({
+      id: activeBlockId,
+      styles: { fontSize: size }
   }))
 
   const toggleFontStyle = (newStyles:React.CSSProperties) => {
+    if (!editingBlock?.id) return
+
     dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
   }
 
