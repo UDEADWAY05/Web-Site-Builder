@@ -26,13 +26,14 @@ export const InputBlock = ({
   ) : (
     <form style={styles} className="flex gap-2">
       <Input
+        id={content}
         type="text"
-        value="Поле для ввода текста"
+        value={content}
         placeholder="Edit text"
         className="border p-2 w-full"
         onChange={(e) => e.target.value}
       />
-      <Label htmlFor="checkbox">{content}</Label>
+      <Label htmlFor={content}>"Поле для ввода текста"</Label>
     </form>
   )
 }

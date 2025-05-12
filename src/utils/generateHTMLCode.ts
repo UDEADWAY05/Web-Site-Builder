@@ -43,17 +43,17 @@ export const generateHTMLCode = (block: Block) => {
 
     /// form ///
     case 'checkbox':
-      return `<form class="${block.type}-${block.id}">
+      return `<div class="${block.type}-${block.id}">
     <input 
       type="checkbox" 
       id='${block.id}'
       name='${block.id}'
       checked />
     <label for='${block.id}'>${block.content}</label>
-  </form>`
+  </div>`
 
     case 'radiobox':
-      return `<form class="${block.type}-${block.id}">
+      return `<div class="${block.type}-${block.id}">
  ${block.content
    .map(
      (item) =>
@@ -66,28 +66,30 @@ export const generateHTMLCode = (block: Block) => {
   <label for='${item}'>${item}</label>`
    )
    .join('\n')}
-</form>`
+</div>`
 
     case 'input':
-      return `<form class="${block.type}-${block.id}">
+      return `<div class="${block.type}-${block.id}">
     <input 
       type="text" 
       id='${block.id}'
-      
+      name='${block.id}'
+      value=${block.content}
     />
-    <label for='${block.id}'>${block.content}</label>
-  </form>`
+    <label for='${block.id}'>"Поле для ввода текста"</label>
+  </div>`
 
     case 'textarea':
-      return `<form class="${block.type}-${block.id}">
+      return `<div class="${block.type}-${block.id}">
     <textarea 
       id='${block.id}'
+      name='${block.id}'
       rows='5'
       cols='33'
         >
       ${block.content}
       </textarea>
-      </form>`
+      </div>`
 
     case 'select':
       return `<select 
