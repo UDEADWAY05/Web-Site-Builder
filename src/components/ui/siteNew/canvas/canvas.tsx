@@ -94,8 +94,6 @@ export function Canvas() {
     get(child(siteRef, `sites/${userId}/${siteId}`))
       .then((snapsot) => {
         if (snapsot.exists()) {
-          // setSites(snapsot.val())
-          console.log('sval', snapsot.val())
           dispatch(setSite(snapsot.val()))
         } else {
           // заглушка - сохранить состояние в slice
@@ -103,7 +101,7 @@ export function Canvas() {
         }
       })
       .catch((err) => console.log(err))
-    return off(siteRef) // Функция для отписки
+    return () => off(siteRef) // Функция для отписки
   }, [dispatch, siteId, userId])
 
   //delete by keyboard
@@ -123,20 +121,21 @@ export function Canvas() {
 
   return (
     <>
-  { isPreview 
-    ? (<Preview />)
-    : (<div
-        ref={canvasRef}
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleCanvasMouseEnter}
-        onMouseLeave={handleCanvasMouseLeave}
-        style={{ 
-          flex: 1,
-          position: 'relative',
-          backgroundColor: bgColor,
-          overflow: 'hidden',
-          backgroundImage: `
+      {isPreview ? (
+        <Preview />
+      ) : (
+        <div
+          ref={canvasRef}
+          onClick={handleClick}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleCanvasMouseEnter}
+          onMouseLeave={handleCanvasMouseLeave}
+          style={{
+            flex: 1,
+            position: 'relative',
+            backgroundColor: bgColor,
+            overflow: 'hidden',
+            backgroundImage: `
             linear-gradient(to right, #f0f0f0 1px, transparent 1px),
             linear-gradient(to bottom, #f0f0f0 1px, transparent 1px)`,
             backgroundSize: '140px 100px',
