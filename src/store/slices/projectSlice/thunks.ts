@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { get, getDatabase, ref, remove, set } from 'firebase/database'
+import { get, getDatabase, ref, remove, set, update } from 'firebase/database'
 import { ErrorResponse, SuccessResponse } from './types'
 
-import { Site } from '../siteSlice/types'
+import { Block, Site } from '../siteSlice/types'
 import { RootState } from 'src/store/store'
 import { setSite } from '../siteSlice'
-import { db, dbSite } from 'src/firebase'
-import { doc, updateDoc } from 'firebase/firestore'
+import { dbSite } from 'src/firebase'
+import { addBlock, deleteBlock, updateBlockBgColor, updateBlockContent, updateBlockPosition, updateBlockSize, updateBlockStyles, updateSite } from '../siteSlice/siteSlice'
 
 export const fetchSiteById = createAsyncThunk<
     { success: true; data: Site }, // Возвращаемое значение
@@ -18,7 +18,6 @@ export const fetchSiteById = createAsyncThunk<
         try {
             const userId = getState().user.data?.id
 
-            console.log(userId)
             if (!userId) {
                 return rejectWithValue({
                     success: false,
@@ -36,10 +35,7 @@ export const fetchSiteById = createAsyncThunk<
                 })
             }
 
-            console.log('FAFAF')
-
             const data = snapshot.val()
-            console.log(data)
 
             dispatch(setSite(data))
             return {
@@ -95,7 +91,6 @@ export const fetchSites = createAsyncThunk<
             hasMore: false,
         }
     } catch (error: unknown) {
-        console.error(error)
         return rejectWithValue({
             success: false,
             message: error instanceof Error ? error.message : 'Неизвестная ошибка',
@@ -129,22 +124,23 @@ export const saveSite = createAsyncThunk<
     }
 })
 
-export const patchSite = createAsyncThunk<
+export const patchSiteThunk = createAsyncThunk<
     { success: true }, // Упрощенный тип возвращаемого значения
     { id: string, data: Partial<Site> },
     { state: RootState; rejectValue: ErrorResponse }
->('site/saveSite', async ({ id, data }, { getState, rejectWithValue }) => {
+>('site/patchSiteThunk', async ({ id, data }, { getState, rejectWithValue, dispatch }) => {
+    const userId = getState().user.data?.id;
+    if (!userId) {
+        return rejectWithValue({
+            success: false,
+            message: 'Пользователь не авторизован',
+        });
+    }
+    const siteRef = ref(dbSite, `sites/${userId}/${id}`);
     try {
-        const userId = getState().user.data?.id;
-        if (!userId) {
-            return rejectWithValue({
-                success: false,
-                message: 'Пользователь не авторизован',
-            });
-        }
+        dispatch(updateSite(data))
 
-        const docRef = doc(db, `sites/${userId}`, id);
-        await updateDoc(docRef, data);
+        await update(siteRef, data);
 
         return { success: true };
     } catch (error) {
@@ -154,6 +150,295 @@ export const patchSite = createAsyncThunk<
         });
     }
 });
+
+export const addBlockThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения
+    Block,
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>('site/addBlockThunk',
+    async (block, { getState, dispatch, rejectWithValue }) => {
+
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${block.id}`]: block
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(addBlock(block));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    })
+
+export const deleteBlockThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения
+    string,
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>('site/deleteBlockThunk',
+    async (id, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+        const blockRef = ref(dbSite, `sites/${userId}/${siteId}/blocks/${id}`);
+        try {
+            await remove(blockRef)
+            // Обновляем Redux стейт локально
+            dispatch(deleteBlock(id));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    })
+
+
+export const updateBlockContentThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения // что возвращает
+    { id: string, content: Block['content'] }, // аргументы
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>(
+    'site/updateBlockContentThunk',
+    async ({ id, content }, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${id}/content`]: content
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(updateBlockContent({ id: id, content }));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    }
+);
+
+export const updateBlockPositionThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения // что возвращает
+    { id: string, x: number, y: number }, // аргументы
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>(
+    'site/updateBlockPositionThunk',
+    async ({ id, x, y }, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${id}/position`]: {
+                    x: x,
+                    y: y
+                }
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(updateBlockPosition({ id, x, y }));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    }
+);
+
+export const updateBlockSizeThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения // что возвращает
+    { id: string, width: number, height: number }, // аргументы
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>(
+    'site/updateBlockSizeThunk',
+    async ({ id, width, height }, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${id}/dimentions`]: {
+                    width: width,
+                    height: height
+                }
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(updateBlockSize({ id, width, height }));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    }
+);
+
+export const updateBlockBgColorThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения // что возвращает
+    { id: string, color: string }, // аргументы
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>(
+    'site/updateBlockBgColorThunk',
+    async ({ id, color }, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${id}`]: {
+                    bgColor: color
+                }
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(updateBlockBgColor({ id, color }));
+
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    }
+);
+
+
+export const updateBlockStylesThunk = createAsyncThunk<
+    { success: true }, // Упрощенный тип возвращаемого значения
+    { id: string; styles: Partial<Block['styles']> }, // аргументы
+    { state: RootState, rejectValue: ErrorResponse } // доступ к стейту
+>(
+    'site/updateBlockStylesThunk',
+    async ({ id, styles }, { getState, dispatch, rejectWithValue }) => {
+        const state = getState();
+        const userId = state.user.data?.id;
+        const siteId = state.site.id;
+
+        if (!userId || !siteId) {
+            return rejectWithValue({
+                success: false,
+                message: 'Missing user or site ID',
+            });
+        }
+
+
+        const siteRef = ref(dbSite, `sites/${userId}/${siteId}`);
+        try {
+            await update(siteRef, {
+                [`blocks/${id}/styles`]: styles
+            });
+
+            // Обновляем Redux стейт локально
+            dispatch(updateBlockStyles({ id, styles }));
+            return {
+                success: true
+            }
+
+        } catch (error) {
+            return rejectWithValue({
+                success: false,
+                message: error instanceof Error ? error.message : 'Неизвестная ошибка при сохранении сайта',
+            });
+        }
+    }
+);
 
 export const deleteSite = createAsyncThunk<
     { success: true; data: string }, // Тип возвращаемого значения — ID удалённой задачи

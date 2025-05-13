@@ -14,12 +14,13 @@ export const AppRoutes = () => {
     <Routes>
       {/* Защищенные маршруты для авторизованных пользователей */}
       <Route element={<ProtectedRoute auth={true} />}>
-        <Route path={RoutePaths.MAIN} element={<Main />} />
+        <Route path={RoutePaths.SITES} element={<Main />} />
         <Route
-          path={`${RoutePaths.SITES}/:siteId?/:edit?`}
+          path={`${RoutePaths.SITES_EDIT}`}
           element={<SiteNew />}
         />
         <Route path={RoutePaths.USER} element={<UserPage />} />
+        <Route path={ RoutePaths.MAIN } element={<Navigate to={RoutePaths.SITES} />} />      
       </Route>
 
       {/* Маршруты для неавторизованных пользователей */}

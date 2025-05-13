@@ -1,13 +1,12 @@
 import React, { useState, useRef } from 'react'
 import { setBlockZIndex, setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
-import { useDispatch } from 'react-redux'
-import { useAppSelector } from 'src/store/store'
+import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { selectBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
-import { updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
 import { useClickOutside } from 'src/hooks/useClickOutside'
+import { updateBlockPositionThunk } from 'src/store/slices/projectSlice/thunks'
 
 interface BlockWrapperProps {
   block: Block
@@ -21,7 +20,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const isBlockSelected = activeBlockId === block.id
   const maxZIndex = useAppSelector(selectMaxZIndex)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -35,7 +34,6 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isEditing) return 
-
     dispatch(setBlockZIndex({id: block.id, zIndex: maxZIndex + 1}))
 
     const startX = e.clientX
@@ -43,11 +41,11 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     const initialX = block.position.x
     const initialY = block.position.y
 
-    const handleMouseMove = (moveEvent: MouseEvent) => {
+    const handleMouseMove = async (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX
       const deltaY = moveEvent.clientY - startY
 
-      dispatch(updateBlockPosition({
+      await dispatch(updateBlockPositionThunk({
         id: block.id,
         x: initialX + deltaX,
         y: initialY + deltaY,

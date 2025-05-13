@@ -4,6 +4,7 @@ export enum RoutePaths {
   //тут есть параметр type, его будем ставить как дефолтное значение authType
   SIGNOUT = '/signout',
   SITES = '/sites',
+  SITES_EDIT = '/sites/:siteId/:edit?',
   SITES_NEW = '/sites/new',
   USER = '/user',
   USERDETAIL = '/user/id',

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 // import { setBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
-import { updateBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
 import { selectBlockById, selectBlockId } from 'src/store/slices/siteSlice/selectors'
+import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
 
 export const BoldToggle = () => {
   const dispatch = useAppDispatch()
@@ -15,7 +15,7 @@ export const BoldToggle = () => {
 
   const toggleBold = () => {
     dispatch(
-      updateBlockStyles({
+      updateBlockStylesThunk({
         id: block.id,
         styles: { fontWeight: isBold ? 'normal' : 'bold' },
       })

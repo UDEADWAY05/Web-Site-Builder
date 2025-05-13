@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from "react"
 import { selectBlockId } from "src/store/slices/siteSlice/selectors"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { blockControlsMap } from "./blockControls/blockControlsMap"
-import { deleteBlock, setSelectedBlockId } from "src/store/slices/siteSlice/siteSlice"
+import { setSelectedBlockId } from "src/store/slices/siteSlice/siteSlice"
 import { Block } from "src/store/slices/siteSlice"
+import { deleteBlockThunk } from "src/store/slices/projectSlice/thunks"
 
 export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   const [position,setPosition] = useState({ x:400,y:50 })
@@ -45,7 +46,7 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
       return
     }
 
-    dispatch(deleteBlock(activeBlockId))
+    dispatch(deleteBlockThunk(activeBlockId))
     dispatch(setSelectedBlockId(null))
   }
 
