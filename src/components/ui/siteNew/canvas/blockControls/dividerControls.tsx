@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { selectBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
-import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
+import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
 
 export const DividerControls = () => {
   const blocks = useAppSelector(selectBlocks)
@@ -13,7 +13,7 @@ export const DividerControls = () => {
   const editingBlock = blocks.find(block => block.id === activeBlockId)
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateBlockStyles({
+    dispatch(updateBlockStylesThunk({
       id: activeBlockId,
       styles: { backgroundColor: e.target.value }
     }))

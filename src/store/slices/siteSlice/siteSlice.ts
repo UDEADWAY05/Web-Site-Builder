@@ -20,11 +20,12 @@ const siteSlice = createSlice({
   reducers: {
     setSite: (
       state,
-      action: PayloadAction<{ id: string; bgColor: string; title: string }>
+      action: PayloadAction<{ id: string; bgColor: string; title: string, blocks: Record<string, Block> | undefined }>
     ) => {
       state.id = action.payload.id
       state.title = action.payload.title
       state.bgColor = action.payload.bgColor
+      state.blocks = action.payload.blocks ? Object.values(action.payload.blocks) as Block[] : []
     },
     setBlocks: (state, action: PayloadAction<Block[]>) => {
       state.blocks = action.payload
@@ -38,6 +39,11 @@ const siteSlice = createSlice({
     },
     setModalClose: (state) => {
       state.isModalOpen = false
+    },
+    updateSite: (state, action: PayloadAction<Partial<Site>>) => {
+        //Очень плохое решение но времени мало, а деструктуризация action.payload перезатерает свойства Redux в state
+        if (action.payload.title !== undefined) state.title = action.payload.title
+        if (action.payload.bgColor !== undefined) state.bgColor = action.payload.bgColor
     },
     updateSiteTitle: (state, action: PayloadAction<Site['title']>) => {
       state.title = action.payload
@@ -140,7 +146,8 @@ export const {
   updateBlockStyles,
   setSelectedBlockButton,
   setSelectedBlockId,
-  setBlockZIndex
+  setBlockZIndex,
+  updateSite
 } = siteSlice.actions
 
 export default siteSlice.reducer

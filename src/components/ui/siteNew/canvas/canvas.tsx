@@ -19,12 +19,11 @@ import {
   setSite,
 } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
-import { addBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
-import { deleteBlock } from 'src/store/slices/siteSlice/siteSlice'
 import { Controls } from './Controls'
 import { dbSite } from 'src/firebase'
+import { addBlockThunk, deleteBlockThunk } from 'src/store/slices/projectSlice/thunks'
 
 export function Canvas() {
   const { siteId } = useParams()
@@ -59,9 +58,15 @@ export function Canvas() {
           relativeY
         )
 
-        dispatch(addBlock(newBlock))
-        dispatch(setSelectedBlockId(newBlock.id))
-        dispatch(setSelectedBlockButton(null))
+        dispatch(addBlockThunk(newBlock))
+            .unwrap()
+            .then(() => {
+                dispatch(setSelectedBlockId(newBlock.id))
+                dispatch(setSelectedBlockButton(null))
+            })
+            .catch((err) => {
+                console.error('Ошибка при добавлении блока:', err)
+            })
       } else {
         dispatch(setSelectedBlockId(null))
       }
@@ -106,7 +111,7 @@ export function Canvas() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Delete' && activeBlockId) {
-        dispatch(deleteBlock(activeBlockId))
+        dispatch(deleteBlockThunk(activeBlockId))
         dispatch(setSelectedBlockId(null))
       }
     }

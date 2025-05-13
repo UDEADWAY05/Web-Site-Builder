@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteSite, fetchSites, saveSite } from './thunks';
+import { addBlockThunk, deleteSite, fetchSiteById, fetchSites, patchSiteThunk, saveSite, updateBlockBgColorThunk, updateBlockContentThunk, updateBlockPositionThunk, updateBlockSizeThunk, updateBlockStylesThunk } from './thunks';
 import { SiteState } from './types';
 
 const initialState: SiteState = {
@@ -7,6 +7,7 @@ const initialState: SiteState = {
     data: [],        // теперь всегда массив, даже если пустой
     isLoading: false,
     isFetching: false,
+    site: null
 };
 
 export const ProjectsSlice = createSlice({
@@ -15,6 +16,18 @@ export const ProjectsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(fetchSiteById.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchSiteById.fulfilled, (state, action) => {
+                state.site = action.payload.data;
+                state.isLoading = false;
+            })
+            .addCase(fetchSiteById.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при загрузке сайтов';
+                state.isLoading = false;
+            })
             .addCase(fetchSites.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -44,6 +57,83 @@ export const ProjectsSlice = createSlice({
                 state.isFetching = false;
             })
             .addCase(saveSite.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(patchSiteThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(patchSiteThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(patchSiteThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(addBlockThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(addBlockThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(addBlockThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(updateBlockBgColorThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(updateBlockBgColorThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(updateBlockBgColorThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(updateBlockStylesThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(updateBlockStylesThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(updateBlockStylesThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(updateBlockContentThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(updateBlockContentThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(updateBlockContentThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(updateBlockPositionThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(updateBlockPositionThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(updateBlockPositionThunk.rejected, (state, action) => {
+                state.error = action.payload?.message || 'Ошибка при сохранении сайта';
+                state.isFetching = false;
+            })
+            .addCase(updateBlockSizeThunk.pending, (state) => {
+                state.isFetching = true;
+                state.error = null;
+            })
+            .addCase(updateBlockSizeThunk.fulfilled, (state) => {
+                state.isFetching = false;
+            })
+            .addCase(updateBlockSizeThunk.rejected, (state, action) => {
                 state.error = action.payload?.message || 'Ошибка при сохранении сайта';
                 state.isFetching = false;
             })

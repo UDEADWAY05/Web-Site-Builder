@@ -20,40 +20,25 @@ import {
 } from 'src/store/slices/siteSlice/selectors'
 import { exportSiteToZip } from 'src/utils/exportSiteToZip'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { child, get, off, ref } from 'firebase/database'
-import { dbSite } from 'src/firebase'
+import { useEffect } from 'react'
+import { fetchSiteById } from 'src/store/slices/projectSlice'
 
 export function SiteNew() {
   const blocks = useAppSelector(selectorLayoutSiteData)
-  console.log(blocks)
-  const userId = useAppSelector((store) => store.user.data?.id)
+  const site = useAppSelector((store) => store.project.site)
 
   const isModal = useAppSelector(selectorModalOpen)
   const { siteId } = useParams<{ siteId: string }>()
   const dispatch = useAppDispatch()
+    
+  useEffect(() => {
+    if (siteId) {
+        dispatch(fetchSiteById(siteId))
+    }    
+  }, [siteId])
 
   // временная заглушка
-  const [siteById, setSiteById] = useState<Site | null>(null)
-
-  useEffect(() => {
-    if (!siteId) return
-    const dbRef = ref(dbSite)
-    get(child(dbRef, `sites/${userId}/${siteId}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          setSiteById(snapshot.val() as Site)
-        } else {
-          console.log('No data')
-          setSiteById(null)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        setSiteById(null)
-      })
-    return () => off(dbRef) // Функция для отписки
-  }, [siteId, userId])
+    
 
   return (
     <>
@@ -69,7 +54,7 @@ export function SiteNew() {
           </DialogHeader>
           <div className="flex justify-between gap-4 py-2 ">
             <pre>
-              {siteById ? generateHTML(blocks, siteById) : 'загрузка данных'}
+              {site ? generateHTML(blocks, site) : 'загрузка данных'}
             </pre>
             <pre>
               <div className=" outline-2 ">
@@ -83,8 +68,8 @@ export function SiteNew() {
               Вернуться в режим редактирования
             </Button>
             <Button
-              onClick={() => siteById && exportSiteToZip(blocks, siteById)}
-              disabled={!siteById}
+              onClick={() => site && exportSiteToZip(blocks, site)}
+              disabled={!site}
             >
               Экспорт сайта в виде ZIP архива
             </Button>

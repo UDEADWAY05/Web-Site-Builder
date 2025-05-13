@@ -5,9 +5,11 @@ import { useAppDispatch, useAppSelector } from 'src/store/store';
 import { deleteSite, fetchSites } from 'src/store/slices/projectSlice';
 import { Link } from 'react-router-dom';
 import { Button } from 'src/components/ui/button';
+import { Input } from 'src/components/ui/input';
 
 export const Main = () => {
     const [sort, setSort] = useState<'asc' | 'desc'>('asc');
+    const [isSearch, setIsSearch] = useState('')
     const [page, setPage] = useState(1);
     const pageSize = 10;
 
@@ -20,9 +22,9 @@ export const Main = () => {
         const sorted = [...allSites].sort((a, b) => {
             if (sort === 'asc') return a.title.localeCompare(b.title);
             return b.title.localeCompare(a.title);
-        });
+        }).filter(el => el.title.includes(isSearch));
         return sorted;
-    }, [allSites, sort]);
+    }, [allSites, sort, isSearch]);
 
     const pagedSites = sortedSites.slice(0, page * pageSize);
 
@@ -36,8 +38,10 @@ export const Main = () => {
 
     return (
         <div className="max-w-[1175px] w-full mx-auto p-5 flex flex-col gap-5">
-            <div className="flex justify-between items-center">
-                <p className="text-xl font-bold">Все проекты</p>
+            <h3 className="text-3xl font-bold text-nowrap">Все проекты</h3>
+            <div className="flex justify-between items-center gap-4">
+
+                <Input placeholder='Поиск по названию' onChange={(e) => setIsSearch(e.target.value)} />
                 <Select onValueChange={(v) => setSort(v as 'asc' | 'desc')}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Сортировка" />
@@ -50,7 +54,10 @@ export const Main = () => {
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center items-center">
-                {pagedSites.length === 0 && <div>
+                {
+                    isLoading && <div className='text-2xl'>Loading...</div>
+                }
+                {pagedSites.length === 0 && !isLoading && <div>
                     <h4 className='mt-10 text-2xl text-gray-400'>
                         Здесь пока пусто :)
                     </h4>

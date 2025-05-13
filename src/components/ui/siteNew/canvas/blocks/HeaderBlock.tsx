@@ -1,6 +1,7 @@
 import { CSSProperties, JSX } from 'react'
 import { Input } from 'src/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'src/components/ui/select'
+import { Selector } from 'src/components/ui/selector';
 
 interface HeaderBlockProps {
   content: { text: string; level: number }
@@ -27,6 +28,7 @@ export const HeaderBlock = ({
     })
   }
 
+
   return isEditing ? (
     <form className="flex">
       <Input
@@ -40,22 +42,7 @@ export const HeaderBlock = ({
         }
         placeholder="Edit text"
         className="border p-2 w-full"
-      />
-      <Select
-        value={content.level.toString()}
-        onValueChange={handleLevelChange}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder={`h${content.level}`} />
-        </SelectTrigger>
-        <SelectContent>
-          {HEADER_LEVELS.map((lvl) => (
-            <SelectItem key={lvl} value={lvl.toString()}>
-              {`h${lvl}`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+          />
     </form>
   ) : (
     <HeaderTag style={styles}>{content.text}</HeaderTag>

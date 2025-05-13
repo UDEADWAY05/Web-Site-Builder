@@ -4,6 +4,7 @@ import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
 import { FontStyler } from "./controlElements/FontStyler"
+import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
 
 export const ListControls = () => {
     const blocks = useAppSelector(selectBlocks)
@@ -14,12 +15,14 @@ export const ListControls = () => {
     
       const editingBlock = blocks.find(block => block.id === activeBlockId)
     
-      const toggleFontStyle = (newStyles:React.CSSProperties) => {
-        dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
+    const toggleFontStyle = (newStyles: React.CSSProperties) => {
+        if (editingBlock) {
+            dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: newStyles }))
+        }
       }
     
       const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateBlockStyles({
+        dispatch(updateBlockStylesThunk({
           id: activeBlockId,
           styles: { backgroundColor: e.target.value }
         }))
