@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
+import { Block } from "src/store/slices/siteSlice"
 import { selectBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
 import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
@@ -12,15 +13,13 @@ export const ButtonControls = () => {
   const activeBlockId = useAppSelector(selectBlockId)
   const dispatch = useAppDispatch()
 
-  if (!activeBlockId) return null
-
   const editingBlock = blocks.find(block => block.id === activeBlockId)
 
-  const toggleFontStyle = (newStyles: React.CSSProperties) => {
-    if (editingBlock) {
-        dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: newStyles }))
-    }
-  }
+  if (!activeBlockId || !editingBlock) return null
+
+  const toggleFontStyle = (newStyles: Block['styles']) => {
+     dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
+ }
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateBlockStylesThunk({
@@ -43,9 +42,12 @@ export const ButtonControls = () => {
   return (
     <div className="flex items-center">
       <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
-      <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
-      <TextColorButton color={editingBlock?.styles.color} onChangeColor={handleColorChange}/>
-      <FontSizeButton fontSize={editingBlock?.styles.fontSize} onChangeFontSize={onFontSizeChange}/>
+      <BackgroundColorButton
+        value={editingBlock?.styles.backgroundColor ?? ""}
+        onChange={handleBackgroundColorChange}
+      />
+      <TextColorButton color={editingBlock?.styles.color ?? ""} onChangeColor={handleColorChange} />
+      <FontSizeButton fontSize={editingBlock?.styles.fontSize ?? 16} onChangeFontSize={onFontSizeChange}/>
     </div>
   )
 }

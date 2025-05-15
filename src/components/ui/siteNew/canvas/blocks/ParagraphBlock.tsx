@@ -9,13 +9,7 @@ export type ParagraphBlockProps = {
   height: number
 }
 
-export const ParagraphBlock = ({
-  content,
-  onChange,
-  styles,
-  width,
-  height
-}: ParagraphBlockProps) => {
+export const ParagraphBlock = ({ content, onChange, styles, width, height }: ParagraphBlockProps) => {
   return (
     <textarea 
       value={content}

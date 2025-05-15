@@ -1,6 +1,4 @@
 import { Block } from 'src/store/slices/siteSlice'
-import { transformHeight } from './transformHeight'
-import { transformWidth } from './transformWidth'
 
 export const generateCSSCode = (block: Block) => {
   return `

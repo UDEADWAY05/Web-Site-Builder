@@ -52,7 +52,7 @@ export type ImageBlockType = BaseBlockType & {
   type: 'image'
   content: {
     url: string
-    alt?: string
+    alt: string
   }
 }
 

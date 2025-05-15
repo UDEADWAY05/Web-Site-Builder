@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { checkUserData } from 'src/store/slices/userSlice/thunks'
-import {
-  selectUserData,
-  selectUserId,
-} from 'src/store/slices/userSlice/selectors'
+import { selectUserData } from 'src/store/slices/userSlice/selectors'
 import { Form } from '../components/ui/form'
 import { FormInputField } from 'src/components/ui/auth/CustomFormField'
 import { FirebaseError } from 'firebase/app'

@@ -21,7 +21,7 @@ export const DividerControls = () => {
 
   return (
     <div className="flex items-center">
-      <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
+      <BackgroundColorButton value={editingBlock?.styles.backgroundColor ?? '#000000'} onChange={handleBackgroundColorChange}/>   
     </div>
   )
 }

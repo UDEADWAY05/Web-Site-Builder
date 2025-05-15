@@ -1,4 +1,3 @@
-import type { Site } from 'src/store/slices/siteSlice/types'
 import { SideBar } from 'src/components/ui/siteNew'
 import { Canvas } from 'src/components/ui/siteNew'
 import { Button } from 'src/components/ui/button'

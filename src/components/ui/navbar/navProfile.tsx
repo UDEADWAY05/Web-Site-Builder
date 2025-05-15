@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { useAppSelector } from 'src/hooks/redux-hooks'
 import { RoutePaths } from 'src/routes/paths'
 import { isUserLoggedIn, selectUserData } from 'src/store/slices/userSlice/selectors'
+import { useAppSelector } from 'src/store/store'
 
 export function NavProfile() {
   const isLoggedIn = useAppSelector(isUserLoggedIn)
