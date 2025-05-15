@@ -3,7 +3,7 @@ import { DocumentData } from "firebase/firestore";
 
 export const checkUserData = createAsyncThunk(
   'user/checkData',
-  async ({id,getUserById}:{id:string,getUserById:(id:string) => Promise<DocumentData | undefined>} ,thunkApi) => {
+  async ({id,getUserById}:{id:string,getUserById:(id:string) => Promise<DocumentData | undefined>} ,_) => {
       const user = await getUserById(id)
 
       if (!user){
