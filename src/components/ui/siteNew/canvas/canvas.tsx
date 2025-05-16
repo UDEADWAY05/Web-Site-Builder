@@ -24,18 +24,17 @@ import { BlockWrapper } from './BlockWrapper'
 import { Controls } from './Controls'
 import { dbSite } from 'src/firebase'
 import { addBlockThunk, deleteBlockThunk } from 'src/store/slices/projectSlice/thunks'
+import { Block } from 'src/store/slices/siteSlice'
 
 export function Canvas() {
   const { siteId } = useParams()
   const [mouseOverCanvas, setMouseOverCanvas] = useState(false)
 
   const blocks = useAppSelector(selectBlocks)
-  // console.log('blocks in canvas',blocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector((store) => store.user.data?.id)
   const selectedBlockButton = useAppSelector(selectBlockButton)
-  // const selectedBlockId = useAppSelector(selectBlockId)
   const activeBlockId = useAppSelector(selectBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
@@ -146,7 +145,7 @@ export function Canvas() {
           {activeBlockId &&
             canvasRef.current &&
             createPortal(<Controls blocks={blocks} />, canvasRef.current)}
-          {blocks.map((block) => (
+          {blocks.map((block: Block) => (
             <BlockWrapper block={block} key={block.id} />
           ))}
           {selectedBlockButton && mouseOverCanvas && (

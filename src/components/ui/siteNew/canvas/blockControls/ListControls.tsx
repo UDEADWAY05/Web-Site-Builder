@@ -4,25 +4,24 @@ import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
 import { FontStyler } from "./controlElements/FontStyler"
-import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
+import { Block } from "src/store/slices/siteSlice"
 
 export const ListControls = () => {
     const blocks = useAppSelector(selectBlocks)
       const activeBlockId = useAppSelector(selectBlockId)
       const dispatch = useAppDispatch()
     
-      if (!activeBlockId) return null
     
       const editingBlock = blocks.find(block => block.id === activeBlockId)
-    
-    const toggleFontStyle = (newStyles: React.CSSProperties) => {
-        if (editingBlock) {
-            dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: newStyles }))
-        }
+
+      if (!activeBlockId || !editingBlock) return null
+      
+      const toggleFontStyle = (newStyles:Block['styles']) => {
+        dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
       }
     
       const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateBlockStylesThunk({
+        dispatch(updateBlockStyles({
           id: activeBlockId,
           styles: { backgroundColor: e.target.value }
         }))
@@ -37,8 +36,11 @@ export const ListControls = () => {
       return (
         <div className="flex items-center">
           <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>
-          <BackgroundColorButton value={editingBlock?.styles.backgroundColor} onChange={handleBackgroundColorChange}/>   
-          <TextColorButton color={editingBlock?.styles.color} onChangeColor={handleColorChange}/>
+          <BackgroundColorButton
+             value={editingBlock?.styles.backgroundColor ?? ""}
+             onChange={handleBackgroundColorChange}
+          />
+          <TextColorButton color={editingBlock?.styles.color ?? ""} onChangeColor={handleColorChange} />
         </div>
       )
 }

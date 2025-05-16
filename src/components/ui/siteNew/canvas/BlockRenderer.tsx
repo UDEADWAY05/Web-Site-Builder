@@ -1,62 +1,163 @@
 import { Block } from 'src/store/slices/siteSlice'
-import { useAppDispatch } from 'src/store/store'
 import {
-    ButtonBlock,
-    HeaderBlock,
-    OlListBlock,
-    UlListBlock,
-    ParagraphBlock,
-    QuoteBlock,
-    DividerBlock,
-    ImageBlock,
-    CheckboxBlock,
-    RadioboxBlock,
-    InputBlock,
-    TextareaBlock,
-    SelectBlock,
+  ButtonBlock,
+  HeaderBlock,
+  UlListBlock,
+  OlListBlock,
+  ParagraphBlock,
+  QuoteBlock,
+  DividerBlock,
+  ImageBlock,
+  CheckboxBlock,
+  RadioboxBlock,
+  InputBlock,
+  TextareaBlock,
+  SelectBlock,
 } from './blocks'
-import { updateBlockContentThunk } from 'src/store/slices/projectSlice/thunks'
-
-const blockComponentMap = {
-    button: ButtonBlock,
-    paragraph: ParagraphBlock,
-    ul: UlListBlock,
-    ol: OlListBlock,
-    header: HeaderBlock,
-    quote: QuoteBlock,
-    divider: DividerBlock,
-    image: ImageBlock,
-    checkbox: CheckboxBlock,
-    radiobox: RadioboxBlock,
-    input: InputBlock,
-    textarea: TextareaBlock,
-    select: SelectBlock,
-} as const
 
 type BlockRendererProps = {
     block: Block
     isEditing: boolean
 }
 
+import { useAppDispatch } from "src/store/store"
+import { updateBlockContent } from "src/store/slices/siteSlice/siteSlice"
+
 export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
-    const dispatch = useAppDispatch()
-    const Component = blockComponentMap[block.type]
+  const dispatch = useAppDispatch()
 
-    if (!Component) return <div>Unsupported block: {block.type}</div>
+  const handleChange = (content: Block['content']) => {
+    dispatch(updateBlockContent({ id: block.id, content }))
+  }
 
-    const handleChange = (content: Block['content']) => {
-        dispatch(updateBlockContentThunk({ id: block.id, content }))
-    }
-
-    return (
-        <Component
-            blockId={block.id}
-            content={block.content}
-            isEditing={isEditing}
-            onChange={handleChange}
-            styles={block.styles}
-            width={block.dimentions.width}
-            height={block.dimentions.height}
+  switch (block.type) {
+    case 'header':
+      return (
+        <HeaderBlock
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+      )
+    case 'paragraph':
+      return (
+        <ParagraphBlock
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+      )
+    case 'ul':
+      return (
+        <UlListBlock
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+      )
+    case 'ol':
+      return (
+        <OlListBlock
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
         />
     )
+    case 'button':
+      return (
+        <ButtonBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+      )
+    case 'checkbox':
+      return (
+        <CheckboxBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'divider':
+      return (
+        <DividerBlock
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+    )
+    case 'image':
+      return (
+        <ImageBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'input':
+      return (
+        <InputBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'quote':
+      return (
+        <QuoteBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'radiobox':
+      return (
+        <RadioboxBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'select':
+      return (
+        <SelectBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+        />
+    )
+    case 'textarea':
+      return (
+        <TextareaBlock 
+          content={block.content}
+          isEditing={isEditing}
+          onChange={handleChange}
+          styles={block.styles}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
+        />
+    )
+  }
 }

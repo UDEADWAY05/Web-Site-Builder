@@ -3,6 +3,6 @@ import '@testing-library/jest-dom'; // Добавляет методы в expect
 import { vi } from 'vitest';
 
 vi.mock('redux-persist', () => ({
-  persistReducer: (config: any, reducers: any) => reducers,
+  persistReducer: (_:any, reducers: any) => reducers,
   persistStore: () => ({ persist: () => null, flush: () => null }),
 }));

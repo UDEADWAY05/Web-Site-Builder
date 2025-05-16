@@ -1,4 +1,3 @@
-import { generateAuthSchema } from 'src/utils/generateAuthSchema'
 import { Form } from '../form'
 import { FormInputField } from './CustomFormField'
 import { useFirebase } from 'src/hooks/useFirebase'
@@ -13,7 +12,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 export const SignUp = () => {
-  const authSchema = generateAuthSchema({ isRegister: true })
+  const authSchema = z
+  .object({
+    email: z.string().email("Неверно введен email"),
+    password: z.string().min(6, "Пароль должен содержать не менее 6 символов"),
+    name: z.string().min(3, 'Имя не может быть короче 3 символов'),
+    surname: z.string().min(2, 'Фамилия не должна быть короче 2 символов'),
+    confirmPassword: z.string().min(6, "Пароль должен содержать не менее 6 символов"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Пароли не совпадают",
+    path: ["confirmPassword"],
+  })
 
   const form = useForm<z.infer<typeof authSchema>>({
     mode: 'onTouched',
