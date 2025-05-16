@@ -12,7 +12,7 @@ export interface LayoutSiteState {
 
 export interface BaseBlockType {
   id: string
-  position: { x: number, y: number }
+  position: { x: number; y: number }
   dimentions: {
     width: number
     height: number
@@ -21,7 +21,7 @@ export interface BaseBlockType {
   styles: {
     backgroundColor?: string
     color?: string
-    borderColor?: string,
+    borderColor?: string
     fontSize?: number
     fontWeight?: 'normal' | 'bold'
     fontStyle?: 'normal' | 'italic'
@@ -128,7 +128,8 @@ export interface Site {
   blocks: Array<Block>
   isPreview: boolean
   isModalOpen: boolean
+  editingBlockId: Block['id'] | null
   selectedBlockId: Block['id'] | null
-  selectedBlockButton:Block['type'] | null
+  selectedBlockButton: Block['type'] | null
   maxZIndex: number
 }
