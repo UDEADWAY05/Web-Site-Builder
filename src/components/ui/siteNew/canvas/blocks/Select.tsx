@@ -71,18 +71,18 @@ export const SelectBlock = ({
           <Button type="button" onClick={() => removeItem(index)}>
             x
           </Button>
+          <button
+            type="button"
+            onClick={() => dispatch(setEditingBlockId(null))}
+            className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
+          >
+            Готово
+          </button>
         </div>
       ))}
       <Button type="button" onClick={addItem}>
         + Add item
       </Button>
-      <button
-        type="button"
-        onClick={() => dispatch(setEditingBlockId(null))}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-      >
-        Готово
-      </button>
     </form>
   ) : (
     <Select
@@ -96,7 +96,7 @@ export const SelectBlock = ({
       <SelectContent>
         {content.map((value) => (
           <SelectItem key={value} value={value} style={styles}>
-            {value || 'empty'}
+            {value || ''}
           </SelectItem>
         ))}
       </SelectContent>
