@@ -13,7 +13,6 @@ import {
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
-import { useClickOutside } from 'src/hooks/useClickOutside'
 import { updateBlockPositionThunk } from 'src/store/slices/projectSlice/thunks'
 
 interface BlockWrapperProps {
@@ -29,8 +28,6 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const blockRef = useRef<HTMLDivElement | null>(null)
   const isBlockSelected = activeBlockId === block.id
   const isEditing = editingBlockId === block.id
-
-  console.log(editingBlockId, 'state', isEditing)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -101,11 +98,6 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     window.removeEventListener('mousemove', resizeBlock)
     window.removeEventListener('mouseup', stopResize)
   }
-
-  // useClickOutside(blockRef, () => {
-  //   // console.log(blockRef.current, 'out')
-  //   dispatch(setEditingBlockId(null))
-  // })
 
   return (
     <div

@@ -70,7 +70,7 @@ export const HeaderBlock = ({
       <Button
         type="button"
         onClick={() => dispatch(setEditingBlockId(null))}
-        variant="secondary"
+        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
       >
         Готово
       </Button>
