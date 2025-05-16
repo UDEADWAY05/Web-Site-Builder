@@ -12,7 +12,7 @@ export function useClickOutside<T extends HTMLElement>(
     }
 
     document.addEventListener('mousedown', handleClick)
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClick)
     }

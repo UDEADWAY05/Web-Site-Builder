@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react'
 import {
   setBlockZIndex,
+  setEditingBlockId,
   setSelectedBlockId,
 } from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import {
   selectBlockId,
+  selectEditingBlockId,
   selectMaxZIndex,
 } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
@@ -20,21 +22,28 @@ interface BlockWrapperProps {
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   const dispatch = useAppDispatch()
-  const [isEditing, setIsEditing] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const activeBlockId = useAppSelector(selectBlockId)
+  const editingBlockId = useAppSelector(selectEditingBlockId)
   const maxZIndex = useAppSelector(selectMaxZIndex)
   const blockRef = useRef<HTMLDivElement | null>(null)
   const isBlockSelected = activeBlockId === block.id
+  const isEditing = editingBlockId === block.id
+
+  console.log(editingBlockId, 'state', isEditing)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
 
     if (!isBlockSelected) {
       dispatch(setSelectedBlockId(block.id))
-    } else {
-      setIsEditing(true)
     }
+  }
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    dispatch(setEditingBlockId(block.id))
   }
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -93,16 +102,17 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     window.removeEventListener('mouseup', stopResize)
   }
 
-  useClickOutside(blockRef, () => {
-    // console.log(blockRef.current, 'out')
-    setIsEditing(false)
-  })
+  // useClickOutside(blockRef, () => {
+  //   // console.log(blockRef.current, 'out')
+  //   dispatch(setEditingBlockId(null))
+  // })
 
   return (
     <div
       draggable={!isResizing && !isEditing}
       ref={blockRef}
       onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
       onMouseDown={handleMouseDown}
       style={{
         position: 'absolute',
