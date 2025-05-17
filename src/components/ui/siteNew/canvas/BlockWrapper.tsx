@@ -77,7 +77,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
 
   const startResize = (e: React.MouseEvent) => {
     e.stopPropagation()
-
+    setIsResizing(true)
     window.addEventListener('mousemove', resizeBlock)
     window.addEventListener('mouseup', stopResize)
   }
@@ -95,6 +95,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   }
 
   const stopResize = () => {
+    setIsResizing(false)
     window.removeEventListener('mousemove', resizeBlock)
     window.removeEventListener('mouseup', stopResize)
   }
