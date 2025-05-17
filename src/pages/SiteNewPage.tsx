@@ -29,15 +29,12 @@ export function SiteNew() {
   const isModal = useAppSelector(selectorModalOpen)
   const { siteId } = useParams<{ siteId: string }>()
   const dispatch = useAppDispatch()
-    
+
   useEffect(() => {
     if (siteId) {
-        dispatch(fetchSiteById(siteId))
-    }    
-  }, [siteId])
-
-  // временная заглушка
-    
+      dispatch(fetchSiteById(siteId))
+    }
+  }, [dispatch, siteId])
 
   return (
     <>
@@ -52,9 +49,7 @@ export function SiteNew() {
             <DialogDescription>Здесь представлен Ваш код</DialogDescription>
           </DialogHeader>
           <div className="flex justify-between gap-4 py-2 ">
-            <pre>
-              {site ? generateHTML(blocks, site) : 'загрузка данных'}
-            </pre>
+            <pre>{site ? generateHTML(blocks, site) : 'загрузка данных'}</pre>
             <pre>
               <div className=" outline-2 ">
                 <h3 className="text-center">CSS</h3>

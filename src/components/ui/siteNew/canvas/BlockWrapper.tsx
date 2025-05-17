@@ -1,11 +1,18 @@
 import React, { useState, useRef } from 'react'
-import { setBlockZIndex, setSelectedBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import {
+  setBlockZIndex,
+  setEditingBlockId,
+  setSelectedBlockId,
+} from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
-import { selectBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
+import {
+  selectBlockId,
+  selectEditingBlockId,
+  selectMaxZIndex,
+} from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
-import { useClickOutside } from 'src/hooks/useClickOutside'
 import { updateBlockPositionThunk } from 'src/store/slices/projectSlice/thunks'
 
 interface BlockWrapperProps {
@@ -13,27 +20,32 @@ interface BlockWrapperProps {
 }
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
-  const [isEditing,setIsEditing] = useState(false)
-  const activeBlockId = useAppSelector(selectBlockId)
-  const blockRef = useRef<HTMLDivElement>(null)
-  const isBlockSelected = activeBlockId === block.id
-  const maxZIndex = useAppSelector(selectMaxZIndex)
-
   const dispatch = useAppDispatch()
+  const [isResizing, setIsResizing] = useState(false)
+  const activeBlockId = useAppSelector(selectBlockId)
+  const editingBlockId = useAppSelector(selectEditingBlockId)
+  const maxZIndex = useAppSelector(selectMaxZIndex)
+  const blockRef = useRef<HTMLDivElement | null>(null)
+  const isBlockSelected = activeBlockId === block.id
+  const isEditing = editingBlockId === block.id
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
 
     if (!isBlockSelected) {
       dispatch(setSelectedBlockId(block.id))
-    } else {
-      setIsEditing(true)
     }
   }
 
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    dispatch(setEditingBlockId(block.id))
+  }
+
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isEditing) return 
-    dispatch(setBlockZIndex({id: block.id, zIndex: maxZIndex + 1}))
+    if (isEditing || isResizing) return
+    dispatch(setBlockZIndex({ id: block.id, zIndex: maxZIndex + 1 }))
 
     const startX = e.clientX
     const startY = e.clientY
@@ -41,14 +53,17 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     const initialY = block.position.y
 
     const handleMouseMove = async (moveEvent: MouseEvent) => {
+      if (isResizing) return
       const deltaX = moveEvent.clientX - startX
       const deltaY = moveEvent.clientY - startY
 
-      await dispatch(updateBlockPositionThunk({
-        id: block.id,
-        x: initialX + deltaX,
-        y: initialY + deltaY,
-      }))
+      await dispatch(
+        updateBlockPositionThunk({
+          id: block.id,
+          x: initialX + deltaX,
+          y: initialY + deltaY,
+        })
+      )
     }
 
     const handleMouseUp = () => {
@@ -62,14 +77,13 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
 
   const startResize = (e: React.MouseEvent) => {
     e.stopPropagation()
-
+    setIsResizing(true)
     window.addEventListener('mousemove', resizeBlock)
     window.addEventListener('mouseup', stopResize)
   }
 
   const resizeBlock = (e: MouseEvent) => {
     e.preventDefault()
-
     if (!blockRef.current) return
     const blockRect = blockRef.current.getBoundingClientRect()
     const newWidth = e.clientX - blockRect.left
@@ -81,30 +95,35 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
   }
 
   const stopResize = () => {
+    setIsResizing(false)
     window.removeEventListener('mousemove', resizeBlock)
     window.removeEventListener('mouseup', stopResize)
   }
 
-  useClickOutside(blockRef,() => {console.log(blockRef.current,'out');setIsEditing(false)})
-
   return (
     <div
+      draggable={!isResizing && !isEditing}
       ref={blockRef}
-      className={`absolute overflow-hidden border-transparent rounded-sm ${isBlockSelected ? 'border border-slate-200' : ''}`}
+      onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
+      onMouseDown={handleMouseDown}
       style={{
+        position: 'absolute',
         left: block.position.x,
         top: block.position.y,
-        zIndex: block.zIndex || 1
-      }}  
-      onClick={handleClick}
-      onMouseDown={handleMouseDown}
+        width: block.dimentions.width || 'auto',
+        height: block.dimentions.height || 'auto',
+        zIndex: block.zIndex || 1,
+      }}
+      className={` overflow-hidden border-transparent rounded-sm ${
+        isBlockSelected ? 'border border-slate-200' : ''
+      }`}
     >
-        <BlockRenderer block={block} isEditing={isEditing}/>
-        <div
-          onMouseDown={startResize}
-          className="absolute bottom-0 right-0 w-0 h-0 border-b-4 border-r-4 border-transparent border-b-gray-500 border-r-gray-500 cursor-se-resize z-10"
-        />
+      <BlockRenderer block={block} isEditing={isEditing} />
+      <div
+        onMouseDown={startResize}
+        className="absolute bottom-0 right-0 w-2 h-2 bg-red-500 cursor-se-resize z-100"
+      ></div>
     </div>
   )
 }
-

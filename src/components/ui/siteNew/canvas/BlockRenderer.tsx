@@ -2,8 +2,8 @@ import { Block } from 'src/store/slices/siteSlice'
 import {
   ButtonBlock,
   HeaderBlock,
-  UlListBlock,
   OlListBlock,
+  UlListBlock,
   ParagraphBlock,
   QuoteBlock,
   DividerBlock,
@@ -16,12 +16,12 @@ import {
 } from './blocks'
 
 type BlockRendererProps = {
-    block: Block
-    isEditing: boolean
+  block: Block
+  isEditing: boolean
 }
 
-import { useAppDispatch } from "src/store/store"
-import { updateBlockContent } from "src/store/slices/siteSlice/siteSlice"
+import { useAppDispatch } from 'src/store/store'
+import { updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
 
 export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   const dispatch = useAppDispatch()
@@ -74,10 +74,10 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           width={block.dimentions.width}
           height={block.dimentions.height}
         />
-    )
+      )
     case 'button':
       return (
-        <ButtonBlock 
+        <ButtonBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
@@ -88,13 +88,13 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
       )
     case 'checkbox':
       return (
-        <CheckboxBlock 
+        <CheckboxBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'divider':
       return (
         <DividerBlock
@@ -102,55 +102,55 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           width={block.dimentions.width}
           height={block.dimentions.height}
         />
-    )
+      )
     case 'image':
       return (
-        <ImageBlock 
+        <ImageBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'input':
       return (
-        <InputBlock 
+        <InputBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'quote':
       return (
-        <QuoteBlock 
+        <QuoteBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'radiobox':
       return (
-        <RadioboxBlock 
+        <RadioboxBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'select':
       return (
-        <SelectBlock 
+        <SelectBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
         />
-    )
+      )
     case 'textarea':
       return (
-        <TextareaBlock 
+        <TextareaBlock
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
@@ -158,6 +158,6 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           width={block.dimentions.width}
           height={block.dimentions.height}
         />
-    )
+      )
   }
 }

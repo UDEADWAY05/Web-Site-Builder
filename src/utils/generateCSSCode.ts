@@ -1,4 +1,6 @@
 import { Block } from 'src/store/slices/siteSlice'
+import { transformHeight } from './transformHeight'
+import { transformWidth } from './transformWidth'
 
 export const generateCSSCode = (block: Block) => {
   return `
@@ -6,16 +8,14 @@ export const generateCSSCode = (block: Block) => {
       position:absolute;
       left: ${block.position.x || 0}px; 
       top: ${block.position.y || 0}px; 
-      height: ${block.dimentions.height || 'auto'}; 
-      width: ${
-        block.type !== 'divider' ? `${block.dimentions.width || 'auto'}` : '100%'
-      };
+      height: ${transformHeight(block)}; 
+      width: ${transformWidth(block)};
       background-color: ${block.styles?.backgroundColor || '#fafafa'};
       font-size: ${
         block.type === 'header' ? '' : block.styles?.fontSize || '14px'
       };
-      font-style: ${block.styles?.fontStyle || ''};
-      font-weight: ${block.styles?.fontWeight || ''};
-      text-decoration: ${block.styles?.textDecoration || ''};
+      font-style: ${block.styles?.fontStyle || 'normal'};
+      font-weight: ${block.styles?.fontWeight || 'normal'};
+      text-decoration: ${block.styles?.textDecoration || 'none'};
       color:${block.styles?.color || '#000000'};}`
 }

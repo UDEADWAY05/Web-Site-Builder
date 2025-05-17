@@ -8,7 +8,7 @@ export function transformWidth(block: Block) {
     if (!block.dimentions.width) {
       width = 'auto'
     } else {
-      width = `${block.dimentions.height}px`
+      width = `${block.dimentions.width}px`
     }
   }
 
