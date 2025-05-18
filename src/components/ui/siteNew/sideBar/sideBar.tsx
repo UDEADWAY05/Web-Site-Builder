@@ -11,7 +11,7 @@ export function SideBar() {
   const projectName = useAppSelector(selectSiteTitle)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreviewCode = useAppSelector(selectorPreview)
-  const { isFetching, error } = useAppSelector(store => store.project)
+  const { isLoading, error } = useAppSelector(store => store.project)
   const { siteId: id } = useParams()
   const dispatch = useAppDispatch()
 
@@ -20,19 +20,19 @@ export function SideBar() {
       <div className={isPreviewCode ? 'invisible' : ''}>
         <div className='rounded-full inline-flex items-center gap-2 px-2 justify-center bg-gray-700'>
             {
-                !isFetching && error === null && <>
-                    <p className='text-green-500 font-semibold'>Сохранено</p>
+                !isLoading && error === null && <>
+                    <p className='text-green-500 font-semibold'>Все обновлено</p>
                     <div className='size-3 rounded-full bg-green-500'></div>      
                 </>
             }
             {
-                isFetching && <>
+                isLoading && <>
                     <p className='text-amber-400 font-semibold'>Сохранение...</p>
                     <div className='size-3 rounded-full bg-amber-400'></div>
                 </>
             }    
             {
-                !isFetching && error && <>
+                !isLoading && error && <>
                     <p className='text-red-500 font-semibold'>Ошибка</p>
                     <div className='size-3 rounded-full bg-red-500'></div>
                 </>
