@@ -14,6 +14,7 @@ import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
 import { updateBlockPositionThunk } from 'src/store/slices/projectSlice/thunks'
+import { CornerResizer } from './blockControls/controlElements/CornerResizer'
 
 interface BlockWrapperProps {
   block: Block
@@ -115,15 +116,10 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
         height: block.dimentions.height || 'auto',
         zIndex: block.zIndex || 1,
       }}
-      className={` overflow-hidden border-transparent rounded-sm ${
-        isBlockSelected ? 'border border-slate-200' : ''
-      }`}
+      className={'overflow-hidden rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'}
     >
       <BlockRenderer block={block} isEditing={isEditing} />
-      <div
-        onMouseDown={startResize}
-        className="absolute bottom-0 right-0 w-2 h-2 bg-red-500 cursor-se-resize z-100"
-      ></div>
+      <CornerResizer startResize={startResize}/>
     </div>
   )
 }

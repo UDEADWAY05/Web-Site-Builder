@@ -127,6 +127,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
+          width={block.dimentions.width}
+          height={block.dimentions.height}
           styles={block.styles}
         />
       )

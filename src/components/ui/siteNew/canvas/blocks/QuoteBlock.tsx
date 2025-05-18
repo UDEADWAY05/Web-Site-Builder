@@ -6,6 +6,8 @@ export type QuoteBlockProps = {
   content: string
   isEditing: boolean
   onChange: (newContent: string) => void
+  width: number
+  height: number
   styles: Block['styles']
 }
 
@@ -13,9 +15,13 @@ export const QuoteBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: QuoteBlockProps) => {
+  console.log('wh in bq',width,height)
   const dispatch = useAppDispatch()
+
   return isEditing ? (
     <form className="flex">
       <input
@@ -23,7 +29,7 @@ export const QuoteBlock = ({
         value={content}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Edit text"
-        style={styles}
+        style={{...styles,width:`${width}px`,height:`${height}px`}}
       />
       <button
         type="button"
@@ -34,8 +40,8 @@ export const QuoteBlock = ({
       </button>
     </form>
   ) : (
-    <blockquote style={styles}>
-      <p>{content}</p>
+    <blockquote style={{...styles,width:`${width}px`,height:`${height}px`}}>
+      {content}
     </blockquote>
   )
 }
