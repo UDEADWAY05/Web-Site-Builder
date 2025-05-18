@@ -7,6 +7,7 @@ import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
 import { updateBlockPositionThunk } from 'src/store/slices/projectSlice/thunks'
 import { CornerResizer } from './blockControls/controlElements/CornerResizer'
+import { updateBlockSizeThunk } from 'src/store/slices/projectSlice/thunks'
 
 interface BlockWrapperProps {
   block: Block
@@ -88,16 +89,25 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     const blockRect = blockRef.current.getBoundingClientRect()
     const newWidth = e.clientX - blockRect.left
     const newHeight = e.clientY - blockRect.top
-
-    dispatch(
-      updateBlockSize({ id: block.id, width: newWidth, height: newHeight })
-    )
+  
+    dispatch(updateBlockSize({ id: block.id, width: newWidth, height: newHeight }))
   }
-
+  
   const stopResize = () => {
     setIsResizing(false)
     window.removeEventListener('mousemove', resizeBlock)
     window.removeEventListener('mouseup', stopResize)
+  
+    if (!blockRef.current) return
+    const blockRect = blockRef.current.getBoundingClientRect()
+  
+    dispatch(
+      updateBlockSizeThunk({
+        id: block.id,
+        width: blockRect.width,
+        height: blockRect.height,
+      })
+    )
   }
 
   return (
