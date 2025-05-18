@@ -1,19 +1,19 @@
 import { useState, useRef, useEffect } from "react"
-import { selectBlockId } from "src/store/slices/siteSlice/selectors"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { blockControlsMap } from "./blockControls/blockControlsMap"
-import { setSelectedBlockId } from "src/store/slices/siteSlice/siteSlice"
+import { setEditingBlockId } from "src/store/slices/siteSlice/siteSlice"
 import { Block } from "src/store/slices/siteSlice"
 import { deleteBlockThunk } from "src/store/slices/projectSlice/thunks"
+import { selectEditingBlockId } from "src/store/slices/siteSlice/selectors"
 
 export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   const [position,setPosition] = useState({ x:400,y:50 })
   const isDraggingRef = useRef(false)
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null)
 
-  const activeBlockId = useAppSelector(selectBlockId)
+  const editingBlockId = useAppSelector(selectEditingBlockId)
   
-  const activeBlock = blocks.find(block => block.id === activeBlockId)
+  const activeBlock = blocks.find(block => block.id === editingBlockId)
   const activeBlockType = activeBlock?.type
   const ControlsByType = activeBlockType ? blockControlsMap[activeBlockType] : null
 
@@ -42,12 +42,12 @@ export const Controls = ({ blocks }:{ blocks:Array<Block> }) => {
   }
 
   const onDelete = () => {
-    if (!activeBlockId){
+    if (!editingBlockId){
       return
     }
 
-    dispatch(deleteBlockThunk(activeBlockId))
-    dispatch(setSelectedBlockId(null))
+    dispatch(deleteBlockThunk(editingBlockId))
+    dispatch(setEditingBlockId(null))
   }
 
   const handleMouseUp = () => {

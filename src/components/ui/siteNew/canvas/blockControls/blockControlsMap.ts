@@ -3,7 +3,7 @@ import { ListControls } from "./ListControls";
 import { ParagraphControls } from "./ParagraphControls";
 import { QuoteControls } from "./QuoteControls";
 import { HeaderControls } from "./HeaderControls";
-import { DividerControls } from "./dividerControls";
+import { DividerControls } from "./DividerControls";
 import { ImageControls } from "./ImageControls";
 import { TextareaControls } from "./TextareaControls";
 import { InputControls } from "./InputControls";

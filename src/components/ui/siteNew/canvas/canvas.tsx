@@ -3,21 +3,10 @@ import { createPortal } from 'react-dom'
 import { useAppDispatch } from 'src/store/store'
 import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../store/store'
-import {
-  selectBlockId,
-  selectBlockButton,
-  selectorPreview,
-} from 'src/store/slices/siteSlice/selectors'
-import {
-  selectBlocks,
-  selectSiteBgColor,
-} from 'src/store/slices/siteSlice/selectors'
+import { selectBlockButton, selectEditingBlockId, selectorPreview } from 'src/store/slices/siteSlice/selectors'
+import { selectBlocks, selectSiteBgColor } from 'src/store/slices/siteSlice/selectors'
 import { child, get, off, ref } from 'firebase/database'
-import {
-  setSelectedBlockId,
-  setSelectedBlockButton,
-  setSite,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { setEditingBlockId, setSelectedBlockButton, setSite } from 'src/store/slices/siteSlice/siteSlice'
 import { Preview } from '../Preview/preview'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
@@ -35,7 +24,7 @@ export function Canvas() {
   const isPreview = useAppSelector(selectorPreview)
   const userId = useAppSelector((store) => store.user.data?.id)
   const selectedBlockButton = useAppSelector(selectBlockButton)
-  const activeBlockId = useAppSelector(selectBlockId)
+  const editingBlockId = useAppSelector(selectEditingBlockId)
   const ghostRef = useRef<HTMLSpanElement | null>(null)
   const canvasRef = useRef<HTMLDivElement | null>(null)
 
@@ -47,8 +36,8 @@ export function Canvas() {
       const relativeX = e.clientX - canvasRect.left
       const relativeY = e.clientY - canvasRect.top
 
-      if (activeBlockId) {
-        dispatch(setSelectedBlockId(null))
+      if (editingBlockId) {
+        dispatch(setEditingBlockId(null))
       }
       if (selectedBlockButton) {
         const newBlock = generateBlockByType(
@@ -60,14 +49,14 @@ export function Canvas() {
         dispatch(addBlockThunk(newBlock))
             .unwrap()
             .then(() => {
-                dispatch(setSelectedBlockId(newBlock.id))
+                dispatch(setEditingBlockId(newBlock.id))
                 dispatch(setSelectedBlockButton(null))
             })
             .catch((err) => {
                 console.error('Ошибка при добавлении блока:', err)
             })
       } else {
-        dispatch(setSelectedBlockId(null))
+        dispatch(setEditingBlockId(null))
       }
     }
   }
@@ -107,9 +96,9 @@ export function Canvas() {
   //delete by keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Delete' && activeBlockId) {
-        dispatch(deleteBlockThunk(activeBlockId))
-        dispatch(setSelectedBlockId(null))
+      if (e.key === 'Delete' && editingBlockId) {
+        dispatch(deleteBlockThunk(editingBlockId))
+        dispatch(setEditingBlockId(null))
       }
     }
 
@@ -117,7 +106,7 @@ export function Canvas() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [activeBlockId, dispatch])
+  }, [editingBlockId, dispatch])
 
   return (
     <>
@@ -141,7 +130,7 @@ export function Canvas() {
             backgroundSize: '140px 100px',
           }}
         >
-          {activeBlockId &&
+          {editingBlockId &&
             canvasRef.current &&
             createPortal(<Controls blocks={blocks} />, canvasRef.current)}
           {blocks.map((block: Block) => (

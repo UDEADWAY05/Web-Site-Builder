@@ -129,7 +129,6 @@ export interface Site {
   isPreview: boolean
   isModalOpen: boolean
   editingBlockId: Block['id'] | null
-  selectedBlockId: Block['id'] | null
   selectedBlockButton: Block['type'] | null
   maxZIndex: number
 }

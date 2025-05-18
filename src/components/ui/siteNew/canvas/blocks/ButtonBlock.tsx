@@ -22,6 +22,7 @@ export const ButtonBlock = ({
   styles,
 }: ButtonBlockProps) => {
   const dispatch = useAppDispatch()
+  
   return isEditing ? (
     <form className="flex">
       <Input
@@ -34,7 +35,8 @@ export const ButtonBlock = ({
       <Button
         type="button"
         onClick={() => dispatch(setEditingBlockId(null))}
-        className="text-black bg-gray-200 rounded p-2 hover:bg-gray-300"
+        className="top-2 text-black bg-gray-200 rounded p-2 hover:bg-gray-300"
+
       >
         Готово
       </Button>
