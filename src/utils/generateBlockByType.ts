@@ -25,7 +25,7 @@ export function generateBlockByType(type: Block['type'], x: number, y: number): 
         id,
         type,
         position: { x,y },
-        dimentions: { width:150, height:50},
+        dimentions: { width:350, height:50},
         styles: defaultStyles,
         content: { text: 'new_header', level: 1 },
         zIndex:1

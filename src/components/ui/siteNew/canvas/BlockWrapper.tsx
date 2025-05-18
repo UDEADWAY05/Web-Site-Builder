@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { setBlockZIndex, setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
+import { setBlockZIndex, setEditingBlockId, updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { selectEditingBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
@@ -29,27 +29,37 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
     }
   }
 
-  const handleDoubleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-
-    dispatch(setEditingBlockId(block.id))
-  }
-
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isEditing || isResizing) return
-    dispatch(setBlockZIndex({ id: block.id, zIndex: maxZIndex + 1 }))
 
+    dispatch(setBlockZIndex({ id: block.id, zIndex: maxZIndex + 1 }))
+  
     const startX = e.clientX
     const startY = e.clientY
     const initialX = block.position.x
     const initialY = block.position.y
-
-    const handleMouseMove = async (moveEvent: MouseEvent) => {
-      if (isResizing) return
+  
+    const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX
       const deltaY = moveEvent.clientY - startY
-
-      await dispatch(
+    
+      dispatch(
+        updateBlockPosition({
+          id: block.id,
+          x: initialX + deltaX,
+          y: initialY + deltaY,
+        })
+      )
+    }
+    
+    const handleMouseUp = (upEvent: MouseEvent) => {
+      const deltaX = upEvent.clientX - startX
+      const deltaY = upEvent.clientY - startY
+    
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    
+      dispatch(
         updateBlockPositionThunk({
           id: block.id,
           x: initialX + deltaX,
@@ -57,15 +67,13 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
         })
       )
     }
-
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-
+    
+    
+  
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
   }
+  
 
   const startResize = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -94,10 +102,8 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
 
   return (
     <div
-      // draggable={!isResizing && !isEditing}
       ref={blockRef}
       onClick={handleClick}
-      onDoubleClick={handleDoubleClick}
       onMouseDown={handleMouseDown}
       style={{
         position: 'absolute',

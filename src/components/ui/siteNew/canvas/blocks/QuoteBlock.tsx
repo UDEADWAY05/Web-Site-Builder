@@ -19,7 +19,6 @@ export const QuoteBlock = ({
   height,
   styles,
 }: QuoteBlockProps) => {
-  console.log('wh in bq',width,height)
   const dispatch = useAppDispatch()
 
   return isEditing ? (
