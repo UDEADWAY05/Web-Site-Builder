@@ -10,7 +10,6 @@ export type ParagraphBlockProps = {
 }
 
 export const ParagraphBlock = ({ content, onChange, styles, width, height }: ParagraphBlockProps) => {
-  console.log('wh in par',width,height)
   return (
     <textarea 
       value={content}

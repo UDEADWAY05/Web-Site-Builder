@@ -1,15 +1,7 @@
 import React, { useState, useRef } from 'react'
-import {
-  setBlockZIndex,
-  setEditingBlockId,
-  setSelectedBlockId,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { setBlockZIndex, setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
-import {
-  selectBlockId,
-  selectEditingBlockId,
-  selectMaxZIndex,
-} from 'src/store/slices/siteSlice/selectors'
+import { selectEditingBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
@@ -21,20 +13,19 @@ interface BlockWrapperProps {
 }
 
 export const BlockWrapper = ({ block }: BlockWrapperProps) => {
-  const dispatch = useAppDispatch()
   const [isResizing, setIsResizing] = useState(false)
-  const activeBlockId = useAppSelector(selectBlockId)
   const editingBlockId = useAppSelector(selectEditingBlockId)
   const maxZIndex = useAppSelector(selectMaxZIndex)
   const blockRef = useRef<HTMLDivElement | null>(null)
-  const isBlockSelected = activeBlockId === block.id
   const isEditing = editingBlockId === block.id
+  
+  const dispatch = useAppDispatch()
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (!isBlockSelected) {
-      dispatch(setSelectedBlockId(block.id))
+    if (!isEditing) {
+      dispatch(setEditingBlockId(block.id))
     }
   }
 
@@ -103,7 +94,7 @@ export const BlockWrapper = ({ block }: BlockWrapperProps) => {
 
   return (
     <div
-      draggable={!isResizing && !isEditing}
+      // draggable={!isResizing && !isEditing}
       ref={blockRef}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}

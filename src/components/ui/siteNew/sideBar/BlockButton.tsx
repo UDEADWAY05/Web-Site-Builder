@@ -1,11 +1,11 @@
-import { selectBlockButton } from "src/store/slices/siteSlice/selectors"
+import { selectEditingBlockId } from "src/store/slices/siteSlice/selectors"
 import { setSelectedBlockButton } from "src/store/slices/siteSlice/siteSlice"
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { BlockButtonType } from "src/store/slices/siteSlice/types"
 
 export const BlockButton = ({ block }: { block: BlockButtonType}) => {
-    const activeBlockButton = useAppSelector(selectBlockButton)
-    const isSelected = activeBlockButton === block.type
+    const editingBlockId = useAppSelector(selectEditingBlockId)
+    const isSelected = editingBlockId === block.type
 
     const dispatch = useAppDispatch()
 

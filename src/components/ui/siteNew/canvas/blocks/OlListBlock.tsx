@@ -22,6 +22,7 @@ export const OlListBlock = ({
   styles,
 }: ListBlockProps) => {
   const dispatch = useAppDispatch()
+
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
@@ -33,30 +34,34 @@ export const OlListBlock = ({
   const removeItem = (index: number) =>
     onChange(content.filter((_, i) => i !== index))
 
+  const isNarrow = width < 120
+
   return isEditing ? (
     <ol style={{ ...styles, width: `${width}px`, height: `${height}px` }}>
       {content.map((item, index) => (
-        <li key={index} className="flex">
+        <li key={index} className={`flex ${isNarrow ? 'flex-col' : 'flex-row'}`}>
           <Input
             type="text"
             value={item}
             onChange={(e) => updateItem(index, e.target.value)}
           />
-          <button
+          <Button
+            variant={'secondary'}
             onClick={() => removeItem(index)}
             className="bg-gray-100 rounded p-2 hover:bg-gray-200"
           >
             x
-          </button>
-          <button
-            type="button"
-            onClick={() => dispatch(setEditingBlockId(null))}
-            className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-          >
-            Готово
-          </button>
+          </Button>
+         
         </li>
       ))}
+      <Button
+        variant={'secondary'}
+        onClick={() => dispatch(setEditingBlockId(null))}
+        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
+      >
+        Готово
+      </Button>
       <Button onClick={addItem} variant={'secondary'}>
         + Add item
       </Button>

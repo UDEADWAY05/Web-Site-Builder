@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
-import { selectBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
+import { selectBlocks, selectEditingBlockId } from "src/store/slices/siteSlice/selectors"
 import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
@@ -8,13 +8,11 @@ import { Block } from "src/store/slices/siteSlice"
 
 export const ListControls = () => {
     const blocks = useAppSelector(selectBlocks)
-      const activeBlockId = useAppSelector(selectBlockId)
-      const dispatch = useAppDispatch()
-    
-    
-      const editingBlock = blocks.find(block => block.id === activeBlockId)
+      const editingBlockId = useAppSelector(selectEditingBlockId)
+      const editingBlock = blocks.find(block => block.id === editingBlockId)
+      const dispatch = useAppDispatch()    
 
-      if (!activeBlockId || !editingBlock) return null
+      if (!editingBlockId || !editingBlock) return null
       
       const toggleFontStyle = (newStyles:Block['styles']) => {
         dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
@@ -22,13 +20,13 @@ export const ListControls = () => {
     
       const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(updateBlockStyles({
-          id: activeBlockId,
+          id: editingBlockId,
           styles: { backgroundColor: e.target.value }
         }))
       }
     
       const handleColorChange = (color:string) => {dispatch(updateBlockStyles({
-          id: activeBlockId,
+          id: editingBlockId,
           styles: { color }
         }))
       }

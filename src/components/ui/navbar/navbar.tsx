@@ -12,9 +12,6 @@ import { loggedOutUser } from 'src/store/slices/userSlice'
 import { Button } from '../button'
 import { ButtonNewSite } from '../siteNew/buttonNewSite/buttonNewSite'
 
-// import { useAuth } from 'src/hooks/useAuth'
-// import { removeUser } from 'src/store/slices/userSlice'
-
 function classNames(...classes: (string | boolean)[]): string {
   return classes.filter(Boolean).join(' ')
 }

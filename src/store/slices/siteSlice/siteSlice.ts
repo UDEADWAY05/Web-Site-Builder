@@ -10,7 +10,6 @@ const initialState: Site = {
   isPreview: false,
   isModalOpen: false,
   editingBlockId: null,
-  selectedBlockId: null,
   selectedBlockButton: null,
   maxZIndex: 1,
 }
@@ -162,9 +161,6 @@ const siteSlice = createSlice({
     ) => {
       state.selectedBlockButton = action.payload
     },
-    setSelectedBlockId: (state, action: PayloadAction<Block['id'] | null>) => {
-      state.selectedBlockId = action.payload
-    },
     setEditingBlockId: (state, action: PayloadAction<Block['id'] | null>) => {
       state.editingBlockId = action.payload
     },
@@ -188,7 +184,6 @@ export const {
   updateBlockBgColor,
   updateBlockStyles,
   setSelectedBlockButton,
-  setSelectedBlockId,
   setEditingBlockId,
   setBlockZIndex,
   updateSite,

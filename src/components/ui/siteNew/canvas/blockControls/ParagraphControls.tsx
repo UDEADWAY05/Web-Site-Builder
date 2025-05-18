@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
-import { selectBlockId, selectBlocks } from "src/store/slices/siteSlice/selectors"
+import { selectBlocks, selectEditingBlockId } from "src/store/slices/siteSlice/selectors"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
@@ -9,30 +9,30 @@ import { Block } from "src/store/slices/siteSlice"
 
 export const ParagraphControls = () => {
   const blocks = useAppSelector(selectBlocks)
-  const activeBlockId = useAppSelector(selectBlockId)
+  const editingBlockId = useAppSelector(selectEditingBlockId)
   const dispatch = useAppDispatch()
 
-  const editingBlock = blocks.find(block => block.id === activeBlockId)
+  const editingBlock = blocks.find(block => block.id === editingBlockId)
 
-  if (!activeBlockId || !editingBlock) return null
+  if (!editingBlockId || !editingBlock) return null
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateBlockStyles({
-      id: activeBlockId,
+      id: editingBlockId,
       styles: { backgroundColor: e.target.value }
     }))
   }
 
   const handleColorChange = (color:string) => {
     dispatch(updateBlockStyles({
-      id: activeBlockId,
+      id: editingBlockId,
       styles: { color }
     }))
   }
 
   const onFontSizeChange = (size:number) => dispatch(
     updateBlockStyles({
-      id: activeBlockId,
+      id: editingBlockId,
       styles: { fontSize: size }
   }))
 
