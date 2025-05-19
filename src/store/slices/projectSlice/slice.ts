@@ -23,8 +23,10 @@ export const ProjectsSlice = createSlice({
             .addCase(fetchSiteById.fulfilled, (state, action) => {
                 state.site = action.payload.data;
                 state.isLoading = false;
+                state.error = null
             })
             .addCase(fetchSiteById.rejected, (state, action) => {
+                console.log(action.payload?.message, '2sss')
                 state.error = action.payload?.message || 'Ошибка при загрузке сайтов';
                 state.isLoading = false;
             })
@@ -35,8 +37,10 @@ export const ProjectsSlice = createSlice({
             .addCase(fetchSites.fulfilled, (state, action) => {
                 state.data = action.payload.data || [];
                 state.isLoading = false;
+                state.error = null
             })
             .addCase(fetchSites.rejected, (state, action) => {
+                console.log(action.payload?.message, 'fafa')
                 state.error = action.payload?.message || 'Ошибка при загрузке сайтов';
                 state.isLoading = false;
             })
