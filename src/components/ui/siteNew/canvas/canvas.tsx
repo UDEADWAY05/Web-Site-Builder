@@ -25,8 +25,8 @@ import { Block } from 'src/store/slices/siteSlice'
 export function Canvas() {
   const dispatch = useAppDispatch()
   const { siteId } = useParams()
-  const [mouseOverCanvas, setMouseOverCanvas] = useState(false)
 
+  const [mouseOverCanvas, setMouseOverCanvas] = useState(false)
   const blocks = useAppSelector(selectBlocks)
   const bgColor = useAppSelector(selectSiteBgColor)
   const isPreview = useAppSelector(selectorPreview)
