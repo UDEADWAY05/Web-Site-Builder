@@ -1,8 +1,6 @@
 import { Textarea } from 'src/components/ui/textarea'
 import { Input } from 'src/components/ui/input'
 import { Block } from 'src/store/slices/siteSlice/types'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
-import { useAppDispatch } from 'src/store/store'
 
 export type TextareaBlockProps = {
   content: string
@@ -21,7 +19,6 @@ export const TextareaBlock = ({
   height,
   styles,
 }: TextareaBlockProps) => {
-  const dispatch = useAppDispatch()
   return isEditing ? (
     <form className="flex">
       <Input
@@ -36,13 +33,6 @@ export const TextareaBlock = ({
           resize: 'none',
         }}
       />
-      <button
-        type="button"
-        onClick={() => dispatch(setEditingBlockId(null))}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-      >
-        Готово
-      </button>
     </form>
   ) : (
     <Textarea

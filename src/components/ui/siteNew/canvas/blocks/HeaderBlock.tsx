@@ -1,5 +1,4 @@
 import { JSX } from 'react'
-import { Button } from 'src/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -7,9 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/select'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { Block, HeaderBlockType } from 'src/store/slices/siteSlice/types'
-import { useAppDispatch } from 'src/store/store'
 
 interface HeaderBlockProps {
   content: HeaderBlockType['content']
@@ -28,7 +25,6 @@ export const HeaderBlock = ({
   onChange,
   styles,
 }: HeaderBlockProps) => {
-  const dispatch = useAppDispatch()
   const HeaderTag = `h${content.level}` as keyof JSX.IntrinsicElements
 
   const handleLevelChange = (newLevel: string) => {
@@ -67,13 +63,6 @@ export const HeaderBlock = ({
           ))}
         </SelectContent>
       </Select>
-      <Button
-        type="button"
-        onClick={() => dispatch(setEditingBlockId(null))}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-      >
-        Готово
-      </Button>
     </form>
   ) : (
     <HeaderTag style={styles}>{content.text}</HeaderTag>

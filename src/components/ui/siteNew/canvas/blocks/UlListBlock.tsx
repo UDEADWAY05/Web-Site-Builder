@@ -1,7 +1,5 @@
 import { Input } from 'src/components/ui/input'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
 import { Block } from 'src/store/slices/siteSlice/types'
-import { useAppDispatch } from 'src/store/store'
 
 export type ListBlockProps = {
   content: string[]
@@ -20,7 +18,6 @@ export const UlListBlock = ({
   height,
   styles,
 }: ListBlockProps) => {
-  const dispatch = useAppDispatch()
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
@@ -45,13 +42,6 @@ export const UlListBlock = ({
             className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
           >
             x
-          </button>
-          <button
-            type="button"
-            onClick={() => dispatch(setEditingBlockId(null))}
-            className="bg-gray-100 rounded p-2 hover:bg-gray-200"
-          >
-            Готово
           </button>
         </li>
       ))}
