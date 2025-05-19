@@ -21,13 +21,13 @@ type BlockRendererProps = {
 }
 
 import { useAppDispatch } from 'src/store/store'
-import { updateBlockContent } from 'src/store/slices/siteSlice/siteSlice'
+import { updateBlockContentThunk } from 'src/store/slices/projectSlice/thunks'
 
 export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   const dispatch = useAppDispatch()
 
   const handleChange = (content: Block['content']) => {
-    dispatch(updateBlockContent({ id: block.id, content }))
+    dispatch(updateBlockContentThunk({ id: block.id, content }))
   }
 
   switch (block.type) {
