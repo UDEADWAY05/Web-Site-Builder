@@ -3,9 +3,9 @@ import { selectBlocks, selectEditingBlockId } from "src/store/slices/siteSlice/s
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
-import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { FontStyler } from "./controlElements/FontStyler"
 import { Block } from "src/store/slices/siteSlice"
+import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
 
 export const ParagraphControls = () => {
   const blocks = useAppSelector(selectBlocks)
@@ -16,30 +16,29 @@ export const ParagraphControls = () => {
 
   if (!editingBlockId || !editingBlock) return null
 
-  const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateBlockStyles({
-      id: editingBlockId,
-      styles: { backgroundColor: e.target.value }
-    }))
-  }
+    const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateBlockStylesThunk({
+            id: editingBlockId,
+            styles: { ...editingBlock.styles, backgroundColor: e.target.value }
+        }))
+    }
 
-  const handleColorChange = (color:string) => {
-    dispatch(updateBlockStyles({
-      id: editingBlockId,
-      styles: { color }
-    }))
-  }
+    const handleColorChange = (color: string) => {
+        dispatch(updateBlockStylesThunk({
+            id: editingBlockId,
+            styles: { ...editingBlock.styles, color }
+        }))
+    }
 
-  const onFontSizeChange = (size:number) => dispatch(
-    updateBlockStyles({
-      id: editingBlockId,
-      styles: { fontSize: size }
-  }))
+    const onFontSizeChange = (size: number) => dispatch(
+        updateBlockStylesThunk({
+            id: editingBlockId,
+            styles: { ...editingBlock.styles, fontSize: size }
+        }))
 
-  const toggleFontStyle = (newStyles: Block['styles']) => {
-    dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
-  }
-
+    const toggleFontStyle = (newStyles: Block['styles']) => {
+        dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: { ...editingBlock.styles, ...newStyles } }))
+    }
   return (
     <div className="flex align-baseline gap-1 relative">
       <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle}/>

@@ -5,7 +5,6 @@ import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
 import { FontStyler } from "./controlElements/FontStyler"
-import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
 
 export const TextareaControls = () => {
@@ -20,25 +19,25 @@ export const TextareaControls = () => {
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateBlockStylesThunk({
       id: editingBlockId,
-      styles: { backgroundColor: e.target.value }
+      styles: { ...editingBlock.styles, backgroundColor: e.target.value }
     }))
   }
 
   const handleColorChange = (color:string) => {
     dispatch(updateBlockStylesThunk({
       id: editingBlockId,
-      styles: { color }
+        styles: { ...editingBlock.styles, color }
     }))
   }
 
   const onFontSizeChange = (size:number) => dispatch(
     updateBlockStylesThunk({
       id: editingBlockId,
-      styles: { fontSize: size }
+        styles: { ...editingBlock.styles, fontSize: size }
   }))
 
   const toggleFontStyle = (newStyles:Block['styles']) => {
-    dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
+      dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: { ...editingBlock.styles, ...newStyles } }))
   }
 
   return (

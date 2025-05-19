@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "src/store/store"
 import { Block } from "src/store/slices/siteSlice"
 import { selectBlocks, selectEditingBlockId } from "src/store/slices/siteSlice/selectors"
-import { updateBlockStyles } from "src/store/slices/siteSlice/siteSlice"
 import { TextColorButton } from "./controlElements/TextColorButton"
 import { FontSizeButton } from "./controlElements/FontSizeButton"
 import { BackgroundColorButton } from "./controlElements/BackgroundColorButton"
@@ -18,7 +17,7 @@ export const ButtonControls = () => {
   if (!editingBlockId || !editingBlock) return null
 
   const toggleFontStyle = (newStyles: Block['styles']) => {
-     dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
+      dispatch(updateBlockStylesThunk({ id: editingBlock?.id, styles: newStyles }))
  }
 
   const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,13 +27,13 @@ export const ButtonControls = () => {
     }))
   }
 
-  const handleColorChange = (color:string) => {dispatch(updateBlockStyles({
+  const handleColorChange = (color:string) => {dispatch(updateBlockStylesThunk({
       id: editingBlockId,
       styles: { color }
     }))
   }
 
-  const onFontSizeChange = (size:number) => dispatch(updateBlockStyles({
+    const onFontSizeChange = (size: number) => dispatch(updateBlockStylesThunk({
     id: editingBlockId,
     styles: { fontSize: size }
   }))
