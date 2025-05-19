@@ -4,8 +4,6 @@ import { Input } from 'src/components/ui/input'
 import { Label } from 'src/components/ui/label'
 import { RadioGroup, RadioGroupItem } from 'src/components/ui/radio-group'
 import { Block } from 'src/store/slices/siteSlice'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
-import { useAppDispatch } from 'src/store/store'
 
 export type RadioboxBlockProps = {
   content: string[]
@@ -20,7 +18,6 @@ export const RadioboxBlock = ({
   onChange,
   styles,
 }: RadioboxBlockProps) => {
-  const dispatch = useAppDispatch()
   const [selectedValue, setSelectedValue] = useState<string>(content[0] || '')
 
   const updateItem = (index: number, newValue: string) => {
@@ -59,13 +56,6 @@ export const RadioboxBlock = ({
       ))}
       <Button type="button" onClick={addItem}>
         + Add item
-      </Button>
-      <Button
-        type="button"
-        onClick={() => dispatch(setEditingBlockId(null))}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-      >
-        Готово
       </Button>
     </form>
   ) : (

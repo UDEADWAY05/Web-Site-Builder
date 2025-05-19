@@ -9,8 +9,6 @@ import {
   SelectValue,
 } from 'src/components/ui/select'
 import { Block } from 'src/store/slices/siteSlice'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
-import { useAppDispatch } from 'src/store/store'
 
 export type SelectBlockProps = {
   content: string[]
@@ -25,7 +23,6 @@ export const SelectBlock = ({
   onChange,
   styles,
 }: SelectBlockProps) => {
-  const dispatch = useAppDispatch()
   const [selectedValue, setSelectedValue] = useState<string>(
     content[0] || 'empty'
   )
@@ -71,13 +68,6 @@ export const SelectBlock = ({
           <Button type="button" onClick={() => removeItem(index)}>
             x
           </Button>
-          <button
-            type="button"
-            onClick={() => dispatch(setEditingBlockId(null))}
-            className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-          >
-            Готово
-          </button>
         </div>
       ))}
       <Button type="button" onClick={addItem}>

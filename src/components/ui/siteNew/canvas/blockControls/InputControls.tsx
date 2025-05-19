@@ -1,3 +1,3 @@
 export const InputControls = () => {
-    return null
+  return <div>Input controls</div>
 }

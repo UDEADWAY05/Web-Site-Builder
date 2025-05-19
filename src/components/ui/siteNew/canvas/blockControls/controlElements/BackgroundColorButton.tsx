@@ -1,18 +1,21 @@
 interface BackgroundColorInputProps {
-    value:string,
-    onChange:(e:React.ChangeEvent<HTMLInputElement>) => void
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const BackgroundColorButton = ({ value, onChange }: BackgroundColorInputProps) => {
-    return (<div>
-          <input
-            id='backgroundColor' 
-            type="color" 
-            value={value}
-            onChange={onChange}
-            className="w-8 h-8 p-0 border-none hover:bg-slate-200"
-        />
+export const BackgroundColorButton = ({
+  value,
+  onChange,
+}: BackgroundColorInputProps) => {
+  return (
+    <div>
+      <input
+        id="backgroundColor"
+        type="color"
+        value={value}
+        onChange={onChange}
+        className="w-7 h-7 bg-gray-100 rounded hover:bg-gray-200 text-black"
+      />
     </div>
-      
-    )
+  )
 }

@@ -19,6 +19,8 @@ import saveIcon from './save.png'
 import editSm from './edit-sm.png'
 import closeSm from './close-sm.png'
 import saveSm from './save-sm.png'
+import delete_icon from './delete_icon.svg'
+import check from './check.svg'
 
 export {
   button,
@@ -41,5 +43,7 @@ export {
   saveIcon,
   editSm,
   closeSm,
-  saveSm
+  saveSm,
+  delete_icon,
+  check,
 }

@@ -1,33 +1,39 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from 'react'
 
 interface TextColorButtonProps {
-  color: string;
-  onChangeColor: (color: string) => void;
+  color: string
+  onChangeColor: (color: string) => void
 }
 
-export const TextColorButton = ({ color, onChangeColor }: TextColorButtonProps) => {
-  const [open, setOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+export const TextColorButton = ({
+  color,
+  onChangeColor,
+}: TextColorButtonProps) => {
+  const [open, setOpen] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const toggleOpen = () => {
-    setOpen(!open);
-  };
+    setOpen(!open)
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-        setOpen(false);
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false)
       }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <div className="relative">
       <button
         onClick={toggleOpen}
-        className="w-10 h-10 flex flex-col items-center justify-center relative hover:bg-gray-100 rounded"
+        className="w-8 h-8 flex flex-col items-center justify-center relative hover:bg-gray-100 rounded"
       >
         <span className="text-lg font-bold leading-none">T</span>
         <span
@@ -46,5 +52,5 @@ export const TextColorButton = ({ color, onChangeColor }: TextColorButtonProps) 
         />
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,3 +1,3 @@
 export const CheckboxControls = () => {
-    return null
+  return <div>Checkbox controls</div>
 }

@@ -1,3 +1,3 @@
 export const SelectControls = () => {
-    return null
+  return <div>Select controls</div>
 }

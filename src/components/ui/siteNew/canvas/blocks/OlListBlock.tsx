@@ -1,8 +1,6 @@
 import { Block } from 'src/store/slices/siteSlice'
 import { Button } from 'src/components/ui/button'
 import { Input } from 'src/components/ui/input'
-import { setEditingBlockId } from 'src/store/slices/siteSlice/siteSlice'
-import { useAppDispatch } from 'src/store/store'
 
 export type ListBlockProps = {
   content: string[]
@@ -21,8 +19,6 @@ export const OlListBlock = ({
   height,
   styles,
 }: ListBlockProps) => {
-  const dispatch = useAppDispatch()
-
   const updateItem = (index: number, newValue: string) => {
     const updated = [...content]
     updated[index] = newValue
@@ -39,7 +35,10 @@ export const OlListBlock = ({
   return isEditing ? (
     <ol style={{ ...styles, width: `${width}px`, height: `${height}px` }}>
       {content.map((item, index) => (
-        <li key={index} className={`flex ${isNarrow ? 'flex-col' : 'flex-row'}`}>
+        <li
+          key={index}
+          className={`flex ${isNarrow ? 'flex-col' : 'flex-row'}`}
+        >
           <Input
             type="text"
             value={item}
@@ -52,16 +51,8 @@ export const OlListBlock = ({
           >
             x
           </Button>
-         
         </li>
       ))}
-      <Button
-        variant={'secondary'}
-        onClick={() => dispatch(setEditingBlockId(null))}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
-      >
-        Готово
-      </Button>
       <Button onClick={addItem} variant={'secondary'}>
         + Add item
       </Button>
