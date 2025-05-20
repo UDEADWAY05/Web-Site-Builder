@@ -1,19 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { addBlockThunk, deleteSite, fetchSiteById, fetchSites, patchSiteThunk, saveSite, updateBlockBgColorThunk, updateBlockContentThunk, updateBlockPositionThunk, updateBlockSizeThunk, updateBlockStylesThunk } from './thunks';
-import { SiteState } from './types';
+import { SiteState, SiteSort } from './types';
 
 const initialState: SiteState = {
     error: null,
-    data: [],        // теперь всегда массив, даже если пустой
+    data: [],
     isLoading: false,
     isFetching: false,
-    site: null
+    site: null,
+    siteFilters: {
+        searchPhrase:'',
+        page: 1,
+        sort: SiteSort['asc']
+    }
 };
 
 export const ProjectsSlice = createSlice({
     name: 'Projects',
     initialState,
-    reducers: {},
+    reducers: {
+        updateSiteFilters:(state,action: PayloadAction<{ key: string, value: string }>) => {
+            const { key,value } = action.payload
+
+            state.siteFilters = {...state.siteFilters, [key]: value}
+        },
+        resetSiteFilters: (state) => {
+            state.siteFilters = initialState.siteFilters
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchSiteById.pending, (state) => {
@@ -26,7 +40,6 @@ export const ProjectsSlice = createSlice({
                 state.error = null
             })
             .addCase(fetchSiteById.rejected, (state, action) => {
-                console.log(action.payload?.message, '2sss')
                 state.error = action.payload?.message || 'Ошибка при загрузке сайтов';
                 state.isLoading = false;
             })
@@ -157,3 +170,5 @@ export const ProjectsSlice = createSlice({
             })
     },
 });
+
+export const { updateSiteFilters, resetSiteFilters } = ProjectsSlice.actions

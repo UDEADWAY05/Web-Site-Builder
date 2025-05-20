@@ -6,12 +6,13 @@ import { deleteSite, fetchSites } from 'src/store/slices/projectSlice';
 import { Link } from 'react-router-dom';
 import { Button } from 'src/components/ui/button';
 import { Input } from 'src/components/ui/input';
+import { useFilters } from 'src/hooks/useFilters';
+
+const PAGE_SIZE = 10;
 
 export const Main = () => {
-    const [sort, setSort] = useState<'asc' | 'desc'>('asc');
-    const [isSearch, setIsSearch] = useState('')
     const [page, setPage] = useState(1);
-    const pageSize = 10;
+    const { filters, updateQueryParams } = useFilters()
 
     const dispatch = useAppDispatch();
     const user = useAppSelector(store => store.user);
@@ -19,14 +20,28 @@ export const Main = () => {
 
     const sortedSites = useMemo(() => {
         if (!allSites) return [];
-        const sorted = [...allSites].sort((a, b) => {
-            if (sort === 'asc') return a.title.localeCompare(b.title);
-            return b.title.localeCompare(a.title);
-        }).filter(el => el.title.includes(isSearch));
-        return sorted;
-    }, [allSites, sort, isSearch]);
 
-    const pagedSites = sortedSites.slice(0, page * pageSize);
+        const sortedSites = [...allSites].sort((a, b) => {
+            switch (filters.sort) {
+                case 'asc':
+                    return a.title.localeCompare(b.title)
+                case 'desc':
+                    return b.title.localeCompare(a.title)
+                case 'newest':
+                    return a.createdAt < b.createdAt ? 1 : -1
+                case 'newest':
+                    return a.createdAt < b.createdAt ? -1 : 1
+                default: 
+                    return a.title.localeCompare(b.title)
+            }
+            
+        })
+        const sortedAndFilteredSites = sortedSites.filter(el => el.title.toLowerCase().includes(filters.searchPhrase));
+
+        return sortedAndFilteredSites;
+    }, [allSites, filters]);
+
+    const pagedSites = sortedSites.slice(0, page * PAGE_SIZE);
 
     const lastNodeRef = useLastNode(isLoading, pagedSites.length < sortedSites.length, () => setPage(p => p + 1));
 
@@ -40,17 +55,19 @@ export const Main = () => {
         <div className="max-w-[1175px] w-full mx-auto p-5 flex flex-col gap-5">
             <h3 className="text-3xl font-bold text-nowrap">Все проекты</h3>
             <div className="flex justify-between items-center gap-4">
-
-                <Input placeholder='Поиск по названию' onChange={(e) => setIsSearch(e.target.value)} />
-                <Select onValueChange={(v) => setSort(v as 'asc' | 'desc')}>
+                <Input placeholder='Поиск по названию' onChange={(e) => updateQueryParams('searchPhrase',e.target.value)} />
+                <Select onValueChange={value => updateQueryParams('sort',value)}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Сортировка" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="asc">По имени A-Z</SelectItem>
                         <SelectItem value="desc">По имени Z-A</SelectItem>
+                        <SelectItem value="oldest">Сначала старые</SelectItem>
+                        <SelectItem value="newest">Сначала новые</SelectItem>
                     </SelectContent>
                 </Select>
+                
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center items-center">

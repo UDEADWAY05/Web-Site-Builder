@@ -6,6 +6,7 @@ export type SiteState = {
     error: string | null
     isFetching: boolean
     site: Site | null
+    siteFilters: SiteFilters
 }
 
 export interface SuccessResponse {
@@ -18,4 +19,17 @@ export interface SuccessResponse {
 export interface ErrorResponse {
     success: false;
     message: string;
+}
+
+export interface SiteFilters {
+    searchPhrase: string
+    sort: SiteSort
+    page: string | number
+}
+
+export enum SiteSort {
+    asc = 'asc',
+    desc = 'desc',
+    oldest = 'oldest',
+    newest = 'newest'
 }
