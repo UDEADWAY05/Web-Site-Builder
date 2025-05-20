@@ -1,7 +1,10 @@
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import type { Block, Site } from 'src/store/slices/siteSlice/types'
+import { useTransformData } from './transformData'
 
 export function generateHTML(blocks: Block[], siteById: Site) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { blocksForm, blocksBase } = useTransformData(blocks)
   return `<!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,7 +16,11 @@ export function generateHTML(blocks: Block[], siteById: Site) {
 <body 
   style="background-color: ${siteById?.bgColor};position: relative;
    min-height: 100vh;">
-  ${blocks?.map((block) => `${generateHTMLCode(block)}`).join('\n')}
+   ${blocksBase.map((block) => `${generateHTMLCode(block)} `).join('\n')}
+    ${`<form">
+      ${blocksForm.map((block) => `${generateHTMLCode(block)} `).join('\n')}
+        </form> `}
+  <script src="script.js"></script>
 </body>
 </html>`
 }

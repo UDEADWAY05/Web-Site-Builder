@@ -61,6 +61,7 @@ export type ButtonBlockType = BaseBlockType & {
   content: {
     text: string
     type: string
+    script: string
   }
 }
 
