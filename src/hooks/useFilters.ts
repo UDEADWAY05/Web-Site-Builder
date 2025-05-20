@@ -29,9 +29,9 @@ export function useFilters(){
 
     useEffect(() => {
         searchParams.forEach((value,key) => {
-            updateSiteFilters( {key, value })
+            dispatch(updateSiteFilters({key, value }))
         })
-    },[])
+    },[searchParams])
 
-    return { filters, updateQueryParams }
+    return { filters, updateQueryParams, setSearchParams }
 }
