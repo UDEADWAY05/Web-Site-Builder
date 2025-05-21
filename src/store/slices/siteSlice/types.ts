@@ -127,7 +127,7 @@ export type Block =
 
 export interface Site {
   id: string
-  createdAt: Date
+  createdAt: number
   title: string
   bgColor: string
   blocks: Array<Block>
