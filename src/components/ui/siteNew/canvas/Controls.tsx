@@ -6,7 +6,11 @@ import { deleteBlockThunk } from 'src/store/slices/projectSlice/thunks'
 import { selectEditingBlockId } from 'src/store/slices/siteSlice/selectors'
 import { check, delete_icon } from 'src/assets'
 
-export const Controls = (block: Block) => {
+interface ControlProps {
+  block: Block
+}
+
+export const Controls = ({block}: ControlProps) => {
   const dispatch = useAppDispatch()
   const editingBlockId = useAppSelector(selectEditingBlockId)
   const ControlsByType = blockControlsMap[block.type]
@@ -42,7 +46,7 @@ export const Controls = (block: Block) => {
         <img src={delete_icon} alt="icondelete" />
       </button>
 
-      {ControlsByType && <ControlsByType />}
+      {ControlsByType && <ControlsByType block={block}/>}
     </div>
   )
 }

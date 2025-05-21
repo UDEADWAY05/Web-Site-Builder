@@ -118,7 +118,7 @@ export const BlockWrapper = (block: Block) => {
       }}
       className={'relative rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'}
     >
-      {isEditing && <Controls {...block} />}
+      {isEditing && <Controls block={block} />}
       <BlockRenderer block={block} isEditing={isEditing} />
       <CornerResizer startResize={startResize} />
     </div>

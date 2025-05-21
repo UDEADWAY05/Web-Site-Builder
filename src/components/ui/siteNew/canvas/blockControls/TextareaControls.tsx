@@ -9,9 +9,12 @@ import { FontSizeButton } from './controlElements/FontSizeButton'
 import { BackgroundColorButton } from './controlElements/BackgroundColorButton'
 import { FontStyler } from './controlElements/FontStyler'
 import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
-import { updateBlockStyles } from 'src/store/slices/siteSlice/siteSlice'
 
-export const TextareaControls = () => {
+interface TextareaControlProps {
+  block: Block
+}
+
+export const TextareaControls = ({block}: TextareaControlProps) => {
   const blocks = useAppSelector(selectBlocks)
   const editingBlockId = useAppSelector(selectEditingBlockId)
   const dispatch = useAppDispatch()
@@ -31,15 +34,6 @@ export const TextareaControls = () => {
     )
   }
 
-  const handleColorChange = (color: string) => {
-    dispatch(
-      updateBlockStylesThunk({
-        id: editingBlockId,
-        styles: { color },
-      })
-    )
-  }
-
   const onFontSizeChange = (size: number) =>
     dispatch(
       updateBlockStylesThunk({
@@ -48,20 +42,16 @@ export const TextareaControls = () => {
       })
     )
 
-  const toggleFontStyle = (newStyles: Block['styles']) => {
-    dispatch(updateBlockStyles({ id: editingBlock?.id, styles: newStyles }))
-  }
-
   return (
     <div className="flex align-baseline gap-1 relative">
-      <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle} />
+       <FontStyler styles={block.styles} id={block.id} />
       <BackgroundColorButton
         value={editingBlock?.styles.backgroundColor ?? ''}
         onChange={handleBackgroundColorChange}
       />
       <TextColorButton
-        color={editingBlock?.styles.color ?? ''}
-        onChangeColor={handleColorChange}
+        id={block.id}
+        styles={block.styles}
       />
       <FontSizeButton
         fontSize={editingBlock?.styles.fontSize ?? 16}
