@@ -56,12 +56,19 @@ export const ButtonBlock = ({
 
   return isEditing ? (
     <div className="flex flex-col gap-2">
-      <form className="flex gap-2">
+      <form 
+        className="flex gap-2"
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+        }}
+      >
         <Input
           type="text"
           value={content.text}
           onChange={(e) => handleTextChange(e.target.value)}
           placeholder="Edit text"
+          style={styles}
         />
 
         <Select value={content.type} onValueChange={handleTypeChange}>
@@ -85,17 +92,17 @@ export const ButtonBlock = ({
         </button>
       </form>
       {isEditingScript && (
-        <div className="flex flex-col gap-2">
+        <div 
+          className="flex flex-col gap-2"
+        >
           <label>Custom Script:</label>
           <textarea
             value={content.script}
             onChange={(e) => handleScriptChange(e.target.value)}
             placeholder="Напишите свой кастомный script или используй пример ниже
-            
             const button = document.querySelector('button')
-           button?.addEventListener('click', () => {
-           alert('Message')})"
-            className="w-full p-2 border rounded min-h-[100px] font-mono text-sm"
+            button?.addEventListener('click', () => {
+            alert('Message')})"            
           />
         </div>
       )}
@@ -103,11 +110,13 @@ export const ButtonBlock = ({
   ) : (
     <button
       type={content.type as 'button' | 'submit' | 'reset'}
+      className="break-words whitespace-pre-wrap p-2 text-center"
       style={{
         ...styles,
         width: `${width}px`,
         height: `${height}px`,
-        whiteSpace: 'normal',
+        overflowWrap: 'break-word',
+        overflow: 'hidden',
       }}
     >
       {content.text}

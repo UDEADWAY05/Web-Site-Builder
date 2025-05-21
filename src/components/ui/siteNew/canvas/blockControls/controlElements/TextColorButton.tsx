@@ -1,16 +1,27 @@
 import { useState, useRef, useEffect } from 'react'
+import { Block } from 'src/store/slices/siteSlice'
+import { useAppDispatch } from 'src/store/store'
+import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
 
 interface TextColorButtonProps {
-  color: string
-  onChangeColor: (color: string) => void
+  id: string
+  styles: Block['styles']
+  // onChangeColor: (color: string) => void
 }
 
-export const TextColorButton = ({
-  color,
-  onChangeColor,
-}: TextColorButtonProps) => {
+export const TextColorButton = ({id, styles}: TextColorButtonProps) => {
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dispatch = useAppDispatch()
+
+  const handleColorChange = (color: string) => {
+      dispatch(
+        updateBlockStylesThunk({
+          id,
+          styles: { ...styles, color },
+        })
+      )
+    }
 
   const toggleOpen = () => {
     setOpen(!open)
@@ -38,7 +49,7 @@ export const TextColorButton = ({
         <span className="text-lg font-bold leading-none">T</span>
         <span
           className="absolute bottom-1 w-4 h-0.5"
-          style={{ backgroundColor: color }}
+          style={{ backgroundColor: styles.color }}
         />
       </button>
 
@@ -46,8 +57,9 @@ export const TextColorButton = ({
         <input
           ref={inputRef}
           type="color"
-          value={color}
-          onChange={(e) => onChangeColor(e.target.value)}
+          value={styles.color}
+          // onChange={(e) => onChangeColor(e.target.value)}
+          onChange={(e) => handleColorChange(e.target.value)}
           className="absolute top-12 left-1/2 transform -translate-x-1/2 border rounded p-0 w-8 h-8 cursor-pointer"
         />
       )}

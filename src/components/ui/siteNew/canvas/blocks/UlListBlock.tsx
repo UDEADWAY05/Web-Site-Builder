@@ -50,7 +50,11 @@ export const UlListBlock = ({
   ) : (
     <ul style={{ ...styles, width: `${width}px`, height: `${height}px` }}>
       {content.map((item, i) => (
-        <li style={styles} key={i}>
+        <li
+          key={i}
+          style={styles}
+          className="break-words whitespace-pre-wrap p-2 text-center"
+        >
           {item}
         </li>
       ))}

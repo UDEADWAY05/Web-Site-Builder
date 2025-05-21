@@ -13,7 +13,6 @@ export const ImageBlock = ({
   onChange,
   styles,
 }: ImageBlockProps) => {
-  console.log(styles)
 
   return isEditing ? (
     <div>

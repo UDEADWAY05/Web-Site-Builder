@@ -1,8 +1,4 @@
-import { useAppDispatch, useAppSelector } from 'src/store/store'
-import {
-  selectBlocks,
-  selectEditingBlockId,
-} from 'src/store/slices/siteSlice/selectors'
+import { useAppDispatch } from 'src/store/store'
 import { TextColorButton } from './controlElements/TextColorButton'
 import { FontSizeButton } from './controlElements/FontSizeButton'
 import { BackgroundColorButton } from './controlElements/BackgroundColorButton'
@@ -10,31 +6,18 @@ import { FontStyler } from './controlElements/FontStyler'
 import { Block } from 'src/store/slices/siteSlice'
 import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
 
-export const ParagraphControls = () => {
-  const blocks = useAppSelector(selectBlocks)
-  const editingBlockId = useAppSelector(selectEditingBlockId)
+interface ParagraphContolProps {
+  block: Block
+}
+
+export const ParagraphControls = ({block}: ParagraphContolProps) => {
   const dispatch = useAppDispatch()
 
-  const editingBlock = blocks.find((block) => block.id === editingBlockId)
-
-  if (!editingBlockId || !editingBlock) return null
-
-  const handleBackgroundColorChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleBackgroundColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(
       updateBlockStylesThunk({
-        id: editingBlockId,
-        styles: { ...editingBlock.styles, backgroundColor: e.target.value },
-      })
-    )
-  }
-
-  const handleColorChange = (color: string) => {
-    dispatch(
-      updateBlockStylesThunk({
-        id: editingBlockId,
-        styles: { ...editingBlock.styles, color },
+        id: block.id,
+        styles: { ...block.styles, backgroundColor: e.target.value },
       })
     )
   }
@@ -42,32 +25,24 @@ export const ParagraphControls = () => {
   const onFontSizeChange = (size: number) =>
     dispatch(
       updateBlockStylesThunk({
-        id: editingBlockId,
-        styles: { ...editingBlock.styles, fontSize: size },
+        id: block.id,
+        styles: { ...block.styles, fontSize: size },
       })
     )
 
-  const toggleFontStyle = (newStyles: Block['styles']) => {
-    dispatch(
-      updateBlockStylesThunk({
-        id: editingBlock?.id,
-        styles: { ...editingBlock.styles, ...newStyles },
-      })
-    )
-  }
   return (
     <div className="flex items-center gap-1 ">
-      <FontStyler styles={editingBlock?.styles} onChange={toggleFontStyle} />
+      <FontStyler styles={block.styles} id={block.id} />
       <BackgroundColorButton
-        value={editingBlock?.styles.backgroundColor ?? ''}
+        value={block.styles.backgroundColor ?? ''}
         onChange={handleBackgroundColorChange}
       />
       <TextColorButton
-        color={editingBlock?.styles.color ?? ''}
-        onChangeColor={handleColorChange}
+        id={block.id}
+        styles={block.styles}
       />
       <FontSizeButton
-        fontSize={editingBlock?.styles.fontSize ?? 16}
+        fontSize={block.styles.fontSize ?? 16}
         onChangeFontSize={onFontSizeChange}
       />
     </div>

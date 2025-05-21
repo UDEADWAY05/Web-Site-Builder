@@ -53,7 +53,6 @@ export const ProjectsSlice = createSlice({
                 state.error = null
             })
             .addCase(fetchSites.rejected, (state, action) => {
-                console.log(action.payload?.message, 'fafa')
                 state.error = action.payload?.message || 'Ошибка при загрузке сайтов';
                 state.isLoading = false;
             })

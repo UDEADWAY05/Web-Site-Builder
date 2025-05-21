@@ -65,6 +65,6 @@ export const HeaderBlock = ({
       </Select>
     </form>
   ) : (
-    <HeaderTag style={styles}>{content.text}</HeaderTag>
+    <HeaderTag style={styles} className="break-words whitespace-pre-wrap p-2 text-center">{content.text}</HeaderTag>
   )
 }

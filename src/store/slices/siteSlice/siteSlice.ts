@@ -4,7 +4,7 @@ import type { Block, Site } from './types'
 
 const initialState: Site = {
   id: generateId(),
-  createdAt: new Date(),
+  createdAt: new Date().getTime(),
   bgColor: '#fafafa',
   title: 'New_title',
   blocks: [],

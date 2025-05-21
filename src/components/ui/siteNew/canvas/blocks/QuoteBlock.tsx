@@ -30,7 +30,8 @@ export const QuoteBlock = ({
   ) : (
     <blockquote
       style={{ ...styles, width: `${width}px`, height: `${height}px` }}
-    >
+      className="whitespace-pre-wrap break-words overflow-hidden"
+    > 
       {content}
     </blockquote>
   )
