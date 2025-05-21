@@ -43,8 +43,8 @@ export const TextareaControls = ({block}: TextareaControlProps) => {
     )
 
   return (
-    <div className="flex align-baseline gap-1 relative">
-       <FontStyler styles={block.styles} id={block.id} />
+    <div className="flex items-center gap-1 relative">
+      <FontStyler styles={block.styles} id={block.id} />
       <BackgroundColorButton
         value={editingBlock?.styles.backgroundColor ?? ''}
         onChange={handleBackgroundColorChange}
@@ -57,7 +57,6 @@ export const TextareaControls = ({block}: TextareaControlProps) => {
         fontSize={editingBlock?.styles.fontSize ?? 16}
         onChangeFontSize={onFontSizeChange}
       />
-      Textarea controls
     </div>
   )
 }

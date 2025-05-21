@@ -21,7 +21,6 @@ export const FontStyler = ({ id, styles }: FontStylerProps) => {
     value: PossibleFontStyles[K]
   ) => {
     const newStyles = {...styles,[key]: value}
-    console.log('newStyles',newStyles)
 
     dispatch(
       updateBlockStylesThunk({
