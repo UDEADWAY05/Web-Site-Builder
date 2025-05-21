@@ -1,21 +1,11 @@
 import React, { useState, useRef } from 'react'
-import {
-  setBlockZIndex,
-  setEditingBlockId,
-  updateBlockPosition,
-} from 'src/store/slices/siteSlice/siteSlice'
+import { setBlockZIndex, setEditingBlockId, updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
-import {
-  selectEditingBlockId,
-  selectMaxZIndex,
-} from 'src/store/slices/siteSlice/selectors'
+import { selectEditingBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
 import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
-import {
-  updateBlockPositionThunk,
-  updateBlockSizeThunk,
-} from 'src/store/slices/projectSlice/thunks'
+import { updateBlockPositionThunk, updateBlockSizeThunk } from 'src/store/slices/projectSlice/thunks'
 import { CornerResizer } from './blockControls/controlElements/CornerResizer'
 import { Controls } from './Controls'
 
@@ -124,13 +114,9 @@ export const BlockWrapper = (block: Block) => {
         position: 'absolute',
         left: block.position.x,
         top: block.position.y,
-        width: block.dimentions.width || 'auto',
-        height: block.dimentions.height || 'auto',
         zIndex: block.zIndex || 1,
       }}
-      className={
-        'overflow-hidden rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'
-      }
+      className={'relative rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'}
     >
       {isEditing && <Controls {...block} />}
       <BlockRenderer block={block} isEditing={isEditing} />
