@@ -49,7 +49,7 @@ export function generateBlockByType(
         id,
         type,
         position: { x, y },
-        dimentions: { width: 400, height: 100 },
+        dimentions: { width: 280, height: 60 },
         styles: { ...defaultStyles, fontSize: 16, color: '#000000' },
         content: { text: 'Button', type: 'button', script: '' },
         zIndex: 1,
