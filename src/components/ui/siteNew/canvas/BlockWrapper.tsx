@@ -120,7 +120,7 @@ export const BlockWrapper = (block: Block) => {
     >
       {isEditing && <Controls block={block} />}
       <BlockRenderer block={block} isEditing={isEditing} />
-      <CornerResizer startResize={startResize} />
+      {!isEditing && <CornerResizer startResize={startResize} />}
     </div>
   )
 }
