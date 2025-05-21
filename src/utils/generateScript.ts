@@ -1,11 +1,8 @@
-export function generateScript() {
-  return `function handleSubmit(event) {
-          event.preventDefault();
-          const formData = new FormData(event.target);
-          const data = {};
-          for (let [key, value] of formData.entries()) {
-            data[key] = value;
-          }
-          window.parent.postMessage({ type: 'form-submission', data: data }, '*')
-        }`
+import { Block } from 'src/store/slices/siteSlice'
+
+export function generateScriptButton(blocks: Block[]) {
+  const findScript = blocks.find((block) => block.type === 'button')?.content
+    .script
+
+  return findScript || ''
 }

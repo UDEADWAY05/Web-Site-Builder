@@ -51,7 +51,7 @@ export function generateBlockByType(
         position: { x, y },
         dimentions: { width: 400, height: 100 },
         styles: { ...defaultStyles, fontSize: 16, color: '#000000' },
-        content: 'Button',
+        content: { text: 'Button', type: 'button', script: '' },
         zIndex: 1,
       }
     case 'ul':

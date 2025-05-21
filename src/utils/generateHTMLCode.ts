@@ -25,7 +25,7 @@ export const generateHTMLCode = (block: Block) => {
       return `<hr class="${block.type}-${block.id}"/>`
 
     case 'button':
-      return `<button class="${block.type}-${block.id}">${block.content}</button>`
+      return `<button type=${block.content.type} class="${block.type}-${block.id}">${block.content.text}</button>`
 
     case 'quote':
       return `

@@ -58,7 +58,11 @@ export type ImageBlockType = BaseBlockType & {
 
 export type ButtonBlockType = BaseBlockType & {
   type: 'button'
-  content: string
+  content: {
+    text: string
+    type: string
+    script: string
+  }
 }
 
 export type UnorderedListBlockType = BaseBlockType & {

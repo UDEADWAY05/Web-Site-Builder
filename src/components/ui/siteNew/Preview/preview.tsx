@@ -5,29 +5,13 @@ import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import { generateCSSCode } from 'src/utils/generateCSSCode'
 import { selectSiteById } from 'src/store/slices/projectSlice/selectors'
-import { generateScript } from 'src/utils/generateScript'
+import { useTransformData } from 'src/utils/transformData'
+import { generateScriptButton } from 'src/utils/generateScript'
 
 export function Preview() {
   const { siteId } = useParams()
   const blocks = useAppSelector(selectorLayoutSiteData)
-  const blocksForm = blocks.filter(
-    (block) =>
-      block.type === 'button' ||
-      block.type === 'checkbox' ||
-      block.type === 'input' ||
-      block.type === 'radiobox' ||
-      block.type === 'select' ||
-      block.type === 'textarea'
-  )
-  const blocksBase = blocks.filter(
-    (block) =>
-      block.type !== 'button' &&
-      block.type !== 'checkbox' &&
-      block.type !== 'input' &&
-      block.type !== 'radiobox' &&
-      block.type !== 'select' &&
-      block.type !== 'textarea'
-  )
+  const { blocksForm, blocksBase } = useTransformData(blocks)
   const siteById = useAppSelector(selectSiteById(siteId ?? ''))
   const [formSubmitted, setFormSubmitted] = useState(false)
 
@@ -50,11 +34,11 @@ export function Preview() {
   </head>
   <body>
     ${blocksBase.map((block) => `${generateHTMLCode(block)} `).join('\n')}
-    ${`<form  onsubmit="handleSubmit(event)">
+    ${`<form  ">
       ${blocksForm.map((block) => `${generateHTMLCode(block)} `).join('\n')}
         </form> `}
-        <script>
-        ${generateScript()}
+  <script>
+        ${generateScriptButton(blocks)}
    </script>
   </body>
   </html>`
