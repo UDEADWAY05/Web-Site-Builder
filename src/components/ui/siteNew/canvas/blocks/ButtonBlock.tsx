@@ -103,11 +103,13 @@ export const ButtonBlock = ({
   ) : (
     <button
       type={content.type as 'button' | 'submit' | 'reset'}
+      className="break-words whitespace-pre-wrap p-2 text-center"
       style={{
         ...styles,
         width: `${width}px`,
         height: `${height}px`,
-        whiteSpace: 'normal',
+        overflowWrap: 'break-word',
+        overflow: 'hidden',
       }}
     >
       {content.text}
