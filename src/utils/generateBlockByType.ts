@@ -146,7 +146,7 @@ export function generateBlockByType(
         id,
         type,
         position: { x, y },
-        dimentions: { width: 400, height: 200 },
+        dimentions: { width: 100, height: 50 },
         styles: defaultStyles,
         content: ['yes', 'no'],
         zIndex: 1,

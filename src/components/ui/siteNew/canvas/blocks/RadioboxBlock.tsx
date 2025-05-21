@@ -9,6 +9,8 @@ export type RadioboxBlockProps = {
   content: string[]
   isEditing: boolean
   onChange: (items: string[]) => void
+  width: number
+  height: number
   styles: Block['styles']
 }
 
@@ -16,8 +18,11 @@ export const RadioboxBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: RadioboxBlockProps) => {
+  console.log('dimentions in radio',width,height)
   const [selectedValue, setSelectedValue] = useState<string>(content[0] || '')
 
   const updateItem = (index: number, newValue: string) => {
@@ -59,11 +64,17 @@ export const RadioboxBlock = ({
       </Button>
     </form>
   ) : (
-    <RadioGroup value={selectedValue} onValueChange={setSelectedValue}>
+    <RadioGroup 
+      value={selectedValue}
+      onValueChange={setSelectedValue}
+      style={{...styles,width:`${width}px`,height:`${height}px`}}
+    >
       {content.map((item, index) => (
-        <div key={index} style={styles} className="flex items-center space-x-2">
-          <RadioGroupItem value={item} id="radiobox" />
-          <Label htmlFor="radiobox">{item}</Label>
+        <div 
+          key={index}
+          className="flex items-center space-x-2">
+            <RadioGroupItem value={item} id="radiobox" />
+            <Label htmlFor="radiobox">{item}</Label>
         </div>
       ))}
     </RadioGroup>
