@@ -22,7 +22,6 @@ export const RadioboxBlock = ({
   height,
   styles,
 }: RadioboxBlockProps) => {
-  console.log('dimentions in radio',width,height)
   const [selectedValue, setSelectedValue] = useState<string>(content[0] || '')
 
   const updateItem = (index: number, newValue: string) => {

@@ -7,6 +7,8 @@ export type CheckboxBlockProps = {
   content: string
   isEditing: boolean
   onChange: (newContent: string) => void
+  width: number
+  height: number
   styles: Block['styles']
 }
 
@@ -14,6 +16,8 @@ export const CheckboxBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: CheckboxBlockProps) => {
   return isEditing ? (
@@ -27,7 +31,10 @@ export const CheckboxBlock = ({
       />
     </form>
   ) : (
-    <form style={styles} className="flex text-center gap-3">
+    <form 
+      style={{...styles,width:`${width}px`,height:`${height}px`}}
+      className="flex text-center gap-3"
+    >
       {/* заглушка, поправить id  */}
       <Checkbox id="checkbox" />
       <Label htmlFor="checkbox">{content}</Label>
