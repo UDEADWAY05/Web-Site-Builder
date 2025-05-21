@@ -67,7 +67,6 @@ export const QuoteControls = () => {
         fontSize={editingBlock?.styles.fontSize ?? 16}
         onChangeFontSize={onFontSizeChange}
       />
-      Quote
     </div>
   )
 }

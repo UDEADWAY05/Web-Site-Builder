@@ -28,16 +28,16 @@ export const Controls = (block: Block) => {
   }
 
   return (
-    <div className=" flex items-center bg-slate-50 pt-0 min-w-80">
+    <div className="absolute bottom-full flex items-center bg-slate-100 rounded-sm">
       <button
         onClick={onSaveEditing}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black "
+        className="min-w-[40px] min-h-[40px] bg-gray-100 rounded p-2 hover:bg-gray-200 text-black flex items-center justify-center"
       >
         <img src={check} alt="iconsave" />
       </button>
       <button
         onClick={onDelete}
-        className="bg-gray-100 rounded p-2 hover:bg-gray-200 text-black"
+        className="min-w-[40px] min-h-[40px] bg-gray-100 rounded p-2 hover:bg-gray-200 text-black flex items-center justify-center"
       >
         <img src={delete_icon} alt="icondelete" />
       </button>
