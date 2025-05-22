@@ -13,7 +13,7 @@ export interface LayoutSiteState {
 export interface BaseBlockType {
   id: string
   position: { x: number; y: number }
-  dimentions: {
+  dimensions: {
     width: number
     height: number
   }

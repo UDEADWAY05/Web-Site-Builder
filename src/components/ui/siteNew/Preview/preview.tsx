@@ -5,7 +5,7 @@ import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import { generateCSSCode } from 'src/utils/generateCSSCode'
 import { selectSiteById } from 'src/store/slices/projectSlice/selectors'
-import { useTransformData } from 'src/utils/transformData'
+import { useTransformData } from 'src/hooks/useTransformData'
 import { generateScriptButton } from 'src/utils/generateScript'
 
 export function Preview() {

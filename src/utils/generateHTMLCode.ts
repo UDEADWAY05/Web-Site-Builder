@@ -15,7 +15,7 @@ export const generateHTMLCode = (block: Block) => {
 
     case 'ol':
       return `<ol class="${block.type}-${block.id}">
-  ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
+  ${block.content.map((item) => ` <li >${item}</li>`).join('\n')}
 </ol>`
 
     case 'image':

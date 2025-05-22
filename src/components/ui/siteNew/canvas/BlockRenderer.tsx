@@ -38,8 +38,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'paragraph':
@@ -49,8 +49,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'ul':
@@ -60,8 +60,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'ol':
@@ -71,8 +71,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'button':
@@ -82,8 +82,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'checkbox':
@@ -92,8 +92,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -101,8 +101,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
       return (
         <DividerBlock
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
     case 'image':
@@ -111,8 +111,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -122,8 +122,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -133,8 +133,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -144,8 +144,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -155,8 +155,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
           styles={block.styles}
         />
       )
@@ -167,8 +167,8 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           isEditing={isEditing}
           onChange={handleChange}
           styles={block.styles}
-          width={block.dimentions.width}
-          height={block.dimentions.height}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
         />
       )
   }

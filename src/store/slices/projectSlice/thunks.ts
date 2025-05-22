@@ -267,13 +267,12 @@ export const updateBlockContentThunk = createAsyncThunk<
     const siteRef = ref(dbSite, `sites/${userId}/${siteId}`)
     try {
       dispatch(updateBlockContent({ id: id, content }))
-        
+
       await update(siteRef, {
         [`blocks/${id}/content`]: content,
       })
 
       // Обновляем Redux стейт локально
-
 
       return {
         success: true,
@@ -356,7 +355,7 @@ export const updateBlockSizeThunk = createAsyncThunk<
     const siteRef = ref(dbSite, `sites/${userId}/${siteId}`)
     try {
       await update(siteRef, {
-        [`blocks/${id}/dimentions`]: {
+        [`blocks/${id}/dimensions`]: {
           width: width,
           height: height,
         },

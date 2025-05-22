@@ -5,10 +5,10 @@ export function transformWidth(block: Block) {
   if (block.type === 'divider') {
     width = '100%'
   } else {
-    if (!block.dimentions.width) {
+    if (!block.dimensions.width) {
       width = 'auto'
     } else {
-      width = `${block.dimentions.width}px`
+      width = `${block.dimensions.width}px`
     }
   }
 
