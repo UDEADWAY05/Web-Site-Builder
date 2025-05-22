@@ -29,7 +29,7 @@ export const Main = () => {
                     return b.title.localeCompare(a.title)
                 case 'newest':
                     return a.createdAt < b.createdAt ? 1 : -1
-                case 'newest':
+                case 'oldest':
                     return a.createdAt < b.createdAt ? -1 : 1
                 default: 
                     return a.title.localeCompare(b.title)

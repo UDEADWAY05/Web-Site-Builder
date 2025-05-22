@@ -4,6 +4,8 @@ export type ImageBlockProps = {
   content: { url: string; alt: string }
   isEditing: boolean
   onChange: (newContent: { url: string; alt: string }) => void
+  width: number
+  height:number
   styles: Block['styles']
 }
 
@@ -11,6 +13,8 @@ export const ImageBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: ImageBlockProps) => {
 
@@ -30,8 +34,11 @@ export const ImageBlock = ({
     <img
       style={{
         ...styles,
-        width: '100%',
-        height: 'auto',
+        // width: '100%',
+        width:`${width}px`,
+        height:`${height}px`,
+
+        // height: 'auto',
         objectFit: 'cover',
       }}
       src={`${content.url}`}
