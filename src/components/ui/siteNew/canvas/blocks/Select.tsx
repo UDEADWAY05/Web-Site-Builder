@@ -13,6 +13,8 @@ import { Block } from 'src/store/slices/siteSlice'
 export type SelectBlockProps = {
   content: string[]
   isEditing: boolean
+  width: number
+  height: number
   onChange: (items: string[]) => void
   styles: Block['styles']
 }
@@ -21,6 +23,8 @@ export const SelectBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: SelectBlockProps) => {
   const [selectedValue, setSelectedValue] = useState<string>(
@@ -80,7 +84,9 @@ export const SelectBlock = ({
       onValueChange={setSelectedValue}
       disabled={content.length === 0}
     >
-      <SelectTrigger className="w-[120px]">
+      <SelectTrigger
+        style={{ ...styles, width: `${width}px`, height: `${height}px` }}
+      >
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>

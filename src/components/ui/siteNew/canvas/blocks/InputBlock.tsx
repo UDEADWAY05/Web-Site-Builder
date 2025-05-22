@@ -6,6 +6,8 @@ export type InputBlockProps = {
   content: string
   isEditing: boolean
   onChange: (newContent: string) => void
+  width: number,
+  height: number
   styles: Block['styles']
 }
 
@@ -13,6 +15,8 @@ export const InputBlock = ({
   content,
   isEditing,
   onChange,
+  width,
+  height,
   styles,
 }: InputBlockProps) => {
   return isEditing ? (
@@ -22,7 +26,6 @@ export const InputBlock = ({
         value={content}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Edit text"
-        className="border p-2 w-full"
       />
     </form>
   ) : (
@@ -32,7 +35,7 @@ export const InputBlock = ({
         type="text"
         value={content}
         placeholder="Edit text"
-        className="border p-2 w-full"
+        style={{ ...styles, width: `${width}px`, height: `${height}px` }}
         onChange={(e) => e.target.value}
       />
       <Label htmlFor={content}>"Поле для ввода текста"</Label>
