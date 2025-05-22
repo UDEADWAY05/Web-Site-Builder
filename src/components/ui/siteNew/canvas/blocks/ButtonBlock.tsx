@@ -57,11 +57,7 @@ export const ButtonBlock = ({
   return isEditing ? (
     <div className="flex flex-col gap-2">
       <form 
-        className="flex gap-2"
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-        }}
+        className="flex gap-1"
       >
         <Input
           type="text"
@@ -71,8 +67,12 @@ export const ButtonBlock = ({
           style={styles}
         />
 
-        <Select value={content.type} onValueChange={handleTypeChange}>
-          <SelectTrigger className="w-[120px]">
+        <Select 
+          value={content.type}
+          onValueChange={handleTypeChange}
+        
+        >
+          <SelectTrigger>
             <SelectValue placeholder="select type" />
           </SelectTrigger>
           <SelectContent>
