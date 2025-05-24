@@ -1,6 +1,6 @@
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import type { Block, Site } from 'src/store/slices/siteSlice/types'
-import { useTransformData } from './transformData'
+import { useTransformData } from '../hooks/useTransformData'
 
 export function generateHTML(blocks: Block[], siteById: Site) {
   // eslint-disable-next-line react-hooks/rules-of-hooks

@@ -97,8 +97,8 @@ const siteSlice = createSlice({
         throw new Error('Updating block not found')
       }
 
-      blockToUpdate.dimentions.width = action.payload.width
-      blockToUpdate.dimentions.height = action.payload.height
+      blockToUpdate.dimensions.width = action.payload.width
+      blockToUpdate.dimensions.height = action.payload.height
 
       state.blocks = state.blocks.map((block) =>
         block.id === blockToUpdate.id ? blockToUpdate : block
