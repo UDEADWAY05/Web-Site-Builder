@@ -5,7 +5,7 @@ import { TextColorButton } from './controlElements/TextColorButton'
 import { FontSizeButton } from './controlElements/FontSizeButton'
 import { BackgroundColorButton } from './controlElements/BackgroundColorButton'
 import { FontStyler } from './controlElements/FontStyler'
-import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
+import { updateBlockStylesThunk } from 'src/store/slices/siteSlice/thunk'
 
 interface ButtonControlProps {
   block: Block
@@ -16,7 +16,7 @@ export const ButtonControls = ({block}: ButtonControlProps) => {
   const editingBlockId = useAppSelector(selectEditingBlockId)
   const dispatch = useAppDispatch()
 
-  const editingBlock = blocks.find((block) => block.id === editingBlockId)
+  const editingBlock = blocks?.find((block) => block.id === editingBlockId)
 
   if (!editingBlockId || !editingBlock) return null
 

@@ -5,7 +5,6 @@ export type SiteState = {
     isLoading: boolean,
     error: string | null
     isFetching: boolean
-    site: Site | null
     siteFilters: SiteFilters
 }
 

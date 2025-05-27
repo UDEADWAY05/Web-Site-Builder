@@ -21,7 +21,8 @@ type BlockRendererProps = {
 }
 
 import { useAppDispatch } from 'src/store/store'
-import { updateBlockContentThunk } from 'src/store/slices/projectSlice/thunks'
+import { updateBlockContentThunk } from 'src/store/slices/siteSlice/thunk'
+import { BackgroundBlock } from './blocks/BackGroundBlock'
 
 export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
   const dispatch = useAppDispatch()
@@ -48,6 +49,14 @@ export const BlockRenderer = ({ block, isEditing }: BlockRendererProps) => {
           content={block.content}
           isEditing={isEditing}
           onChange={handleChange}
+          styles={block.styles}
+          width={block.dimensions.width}
+          height={block.dimensions.height}
+        />
+      )
+    case 'background':
+      return (
+        <BackgroundBlock
           styles={block.styles}
           width={block.dimensions.width}
           height={block.dimensions.height}

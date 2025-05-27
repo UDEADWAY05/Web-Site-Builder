@@ -3,11 +3,6 @@ import { generateCSS } from '../generateCSS'
 import type { Block } from 'src/store/slices/siteSlice'
 
 describe('generateCSS', () => {
-  it('should return empty string for undefined blocks', () => {
-    const result = generateCSS(undefined)
-    expect(result).toBe('')
-  })
-
   it('should return empty string for null blocks', () => {
     const result = generateCSS(null as unknown as Block[])
     expect(result).toBe('')

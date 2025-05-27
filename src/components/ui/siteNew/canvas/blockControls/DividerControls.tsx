@@ -4,7 +4,7 @@ import {
   selectEditingBlockId,
 } from 'src/store/slices/siteSlice/selectors'
 import { BackgroundColorButton } from './controlElements/BackgroundColorButton'
-import { updateBlockStylesThunk } from 'src/store/slices/projectSlice/thunks'
+import { updateBlockStylesThunk } from 'src/store/slices/siteSlice/thunk'
 
 export const DividerControls = () => {
   const blocks = useAppSelector(selectBlocks)
@@ -13,7 +13,7 @@ export const DividerControls = () => {
 
   if (!editingBlockId) return null
 
-  const editingBlock = blocks.find((block) => block.id === editingBlockId)
+  const editingBlock = blocks?.find((block) => block.id === editingBlockId)
 
   const handleBackgroundColorChange = (
     e: React.ChangeEvent<HTMLInputElement>
