@@ -1,36 +1,30 @@
-// import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
+import {
+  selectorLayoutSiteData,
+  selectSiteData,
+} from 'src/store/slices/siteSlice/selectors'
 import { useAppSelector } from 'src/store/store'
 import { generateHTMLCode } from 'src/utils/generateHTMLCode'
 import { generateCSSCode } from 'src/utils/generateCSSCode'
-import { selectSiteById } from 'src/store/slices/projectSlice/selectors'
 import { useTransformData } from 'src/hooks/useTransformData'
 import { generateScriptButton } from 'src/utils/generateScript'
 
 export function Preview() {
-  const { siteId } = useParams()
   const blocks = useAppSelector(selectorLayoutSiteData)
   const { blocksForm, blocksBase } = useTransformData(blocks)
-  const siteById = useAppSelector(selectSiteById(siteId ?? ''))
-  // const [formSubmitted, setFormSubmitted] = useState(false)
-  console.log(siteById) //комментарий
-  if (!siteById) {
-    return <p>"error</p>
-  }
+  const siteData = useAppSelector(selectSiteData)
 
   const documentContent = `<!DOCTYPE html>
   <html lang="ru">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${siteById?.title || 'Мой проект'}</title>
+    <title>${siteData?.title || 'Мой проект'}</title>
     <style>
       body {
         position: relative;
          margin:5px;
          padding: 5px;
-         background-color: ${siteById?.bgColor || '#ffffff'};
+         background-color: ${siteData?.bgColor || '#ffffff'};
              ${blocks
                ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
                .join('')}
@@ -47,25 +41,8 @@ export function Preview() {
   </body>
   </html>`
 
-  // useEffect(() => {
-  //   const listener = (e: MessageEvent) => {
-  //     if (e.data?.type === 'form-submission') {
-  //       console.log('Форма отправлена:', e.data)
-  //       setFormSubmitted(true)
-  //       setTimeout(() => setFormSubmitted(false), 3000)
-  //     }
-  //   }
-  //   window.addEventListener('message', listener)
-  //   return () => window.removeEventListener('message', listener)
-  // }, [])
-
   return (
     <div className="relative w-full">
-      {/* {formSubmitted && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
-          Данные отправлены
-        </div>
-      )} */}
       <iframe
         title="Preview"
         style={{ width: '100%', height: '100%' }}
