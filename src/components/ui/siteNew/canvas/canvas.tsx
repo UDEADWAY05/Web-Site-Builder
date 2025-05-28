@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
-import { useParams } from 'react-router-dom'
 import {
   selectBlockButton,
   selectEditingBlockId,
@@ -15,17 +14,11 @@ import {
 import { Preview } from '../Preview/preview'
 import { generateBlockByType } from 'src/utils/generateBlockByType'
 import { BlockWrapper } from './BlockWrapper'
-import {
-  addBlockThunk,
-  deleteBlockThunk,
-  fetchSiteById,
-} from 'src/store/slices/projectSlice/thunks'
 import { Block } from 'src/store/slices/siteSlice'
+import { addBlockThunk, deleteBlockThunk } from 'src/store/slices/siteSlice/thunk'
 
 export function Canvas() {
   const dispatch = useAppDispatch()
-  const { siteId } = useParams()
-
   const [mouseOverCanvas, setMouseOverCanvas] = useState(false)
   const blocks = useAppSelector(selectBlocks)
   const bgColor = useAppSelector(selectSiteBgColor)
@@ -81,12 +74,6 @@ export function Canvas() {
   const handleCanvasMouseEnter = () => setMouseOverCanvas(true)
   const handleCanvasMouseLeave = () => setMouseOverCanvas(false)
 
-  useEffect(() => {
-    if (siteId) {
-      dispatch(fetchSiteById(siteId))
-    }
-  }, [dispatch, siteId])
-
   //delete by keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -119,7 +106,7 @@ export function Canvas() {
             overflow: 'hidden',
           }}
         >
-          {blocks.map((block: Block) => (
+          {blocks && blocks.map((block: Block) => (
             <BlockWrapper {...block} key={block.id} />
           ))}
           {selectedBlockButton && mouseOverCanvas && (

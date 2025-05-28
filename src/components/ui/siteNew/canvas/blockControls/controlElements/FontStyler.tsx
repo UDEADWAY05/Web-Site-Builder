@@ -1,6 +1,6 @@
 import { Block } from "src/store/slices/siteSlice"
 import { useAppDispatch } from "src/store/store"
-import { updateBlockStylesThunk } from "src/store/slices/projectSlice/thunks"
+import { updateBlockStylesThunk } from 'src/store/slices/siteSlice/thunk'
 interface PossibleFontStyles {
   fontSize?: number
   fontWeight?: 'normal' | 'bold'

@@ -24,6 +24,16 @@ export function generateBlockByType(
         content: 'new_paragraph',
         zIndex: 1,
       }
+    case 'background':
+      return {
+        id,
+        type,
+        content: '',
+        position: { x, y },
+        dimensions: { width: 400, height: 100 },
+        styles: { ...defaultStyles },
+        zIndex: 1,
+      }
     case 'header':
       return {
         id,

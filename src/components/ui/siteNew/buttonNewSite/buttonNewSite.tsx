@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../../button'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
 import { resetLayout } from 'src/store/slices/siteSlice'
-import { ref, set } from 'firebase/database'
-import { dbSite } from 'src/firebase'
+import { saveSite } from 'src/store/slices/projectSlice'
 
 export function ButtonNewSite() {
   const navigate = useNavigate()
@@ -11,6 +10,9 @@ export function ButtonNewSite() {
   const userId = useAppSelector((store) => store.user.data?.id)
   const handleCreateSite = async () => {
     try {
+      if (!userId) {
+        throw new Error('Отсутствует id пользователя')
+      }
       const date = new Date()
       const siteId = Date.now().toString()
       const newSite = {
@@ -18,9 +20,12 @@ export function ButtonNewSite() {
         title: `Мой проект ${date.toLocaleString()}`,
         bgColor: '#fafafa',
         data: [],
+        blocks: [],
+        createdAt: Date.now().toString()
       }
       dispatch(resetLayout())
-      await set(ref(dbSite, `sites/${userId}/${siteId}`), newSite)
+      dispatch(saveSite(newSite))
+      // await set(ref(dbSite, `sites/${userId}/${siteId}`), newSite)
 
       navigate(`/sites/${siteId}`)
     } catch (error) {

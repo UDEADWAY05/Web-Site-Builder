@@ -8,6 +8,9 @@ export const generateHTMLCode = (block: Block) => {
     case 'paragraph':
       return `<p class="${block.type}-${block.id}">${block.content}</p>`
 
+    case 'background':
+      return `<div class="${block.type}-${block.id}"/>`
+
     case 'ul':
       return `<ul class="${block.type}-${block.id}">
   ${block.content.map((item) => `<li >${item}</li>`).join('\n')}
@@ -55,17 +58,17 @@ export const generateHTMLCode = (block: Block) => {
     case 'radiobox':
       return `<div class="${block.type}-${block.id}">
  ${block.content
-   .map(
-     (item) =>
-       ` <input 
+          .map(
+            (item) =>
+              ` <input 
     type="radio" 
     id='${item}'
     name='${block.id}'
     value='${item}'
     checked />
   <label for='${item}'>${item}</label>`
-   )
-   .join('\n')}
+          )
+          .join('\n')}
 </div>`
 
     case 'input':

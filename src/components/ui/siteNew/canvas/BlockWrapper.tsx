@@ -1,18 +1,16 @@
 import React, { useState, useRef } from 'react'
-import { setBlockZIndex, setEditingBlockId, updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
+import { setEditingBlockId, updateBlockPosition } from 'src/store/slices/siteSlice/siteSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/store'
-import { selectEditingBlockId, selectMaxZIndex } from 'src/store/slices/siteSlice/selectors'
+import { selectEditingBlockId } from 'src/store/slices/siteSlice/selectors'
 import { Block } from 'src/store/slices/siteSlice'
 import { BlockRenderer } from './BlockRenderer'
-import { updateBlockSize } from 'src/store/slices/siteSlice/siteSlice'
-import { updateBlockPositionThunk, updateBlockSizeThunk } from 'src/store/slices/projectSlice/thunks'
+import { updateBlockPositionThunk, updateBlockSizeThunk } from 'src/store/slices/siteSlice/thunk'
 import { CornerResizer } from './blockControls/controlElements/CornerResizer'
 import { Controls } from './Controls'
 
 export const BlockWrapper = (block: Block) => {
   const [isResizing, setIsResizing] = useState(false)
   const editingBlockId = useAppSelector(selectEditingBlockId)
-  const maxZIndex = useAppSelector(selectMaxZIndex)
   const blockRef = useRef<HTMLDivElement | null>(null)
   const isEditing = editingBlockId === block.id
 
@@ -29,7 +27,7 @@ export const BlockWrapper = (block: Block) => {
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isEditing || isResizing) return
 
-    dispatch(setBlockZIndex({ id: block.id, zIndex: maxZIndex + 1 }))
+    // dispatch(setBlockZIndex({ id: block.id, zIndex: maxZIndex + 1 }))
 
     const startX = e.clientX
     const startY = e.clientY
@@ -84,7 +82,7 @@ export const BlockWrapper = (block: Block) => {
     const newHeight = e.clientY - blockRect.top
 
     dispatch(
-      updateBlockSize({ id: block.id, width: newWidth, height: newHeight })
+      updateBlockSizeThunk({ id: block.id, width: newWidth, height: newHeight })
     )
   }
 
@@ -116,7 +114,7 @@ export const BlockWrapper = (block: Block) => {
         top: block.position.y,
         zIndex: block.zIndex || 1,
       }}
-      className={'relative rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'}
+      className={'relative p-4 rounded-sm shadow-[1px_1px_6px_0px_rgba(0,_0,_0,_0.1)]'}
     >
       {isEditing && <Controls block={block} />}
       <BlockRenderer block={block} isEditing={isEditing} />

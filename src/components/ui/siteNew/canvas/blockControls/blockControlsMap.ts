@@ -11,6 +11,7 @@ import { CheckboxControls } from "./CheckboxControls";
 import { RadioboxControls } from "./RadioboxControls";
 import { SelectControls } from "./SelectControls";
 import { Block } from "src/store/slices/siteSlice";
+import { BackGroundControls } from "./backgroundControls";
 
 export const blockControlsMap:Record<Block['type'],React.ElementType> = {
     button: ButtonControls,
@@ -25,5 +26,6 @@ export const blockControlsMap:Record<Block['type'],React.ElementType> = {
     input: InputControls,
     checkbox: CheckboxControls,
     radiobox: RadioboxControls,
-    select: SelectControls
+    select: SelectControls,
+    background: BackGroundControls,
 }

@@ -110,6 +110,11 @@ export type RadioBoxBlockType = BaseBlockType & {
   content: string[]
 }
 
+export type BackGroundType = BaseBlockType & {
+  type: 'background'
+  content: string
+}
+
 export type Block =
   | ParagraphBlockType
   | HeaderBlockType
@@ -124,16 +129,36 @@ export type Block =
   | SelectBlockType
   | CheckBoxBlockType
   | RadioBoxBlockType
+  | BackGroundType
 
 export interface Site {
-  id: string
-  createdAt: number
+  id: string;
   title: string
   bgColor: string
   blocks: Array<Block>
-  isPreview: boolean
-  isModalOpen: boolean
+  createdAt: string;
+}
+
+export interface SiteSlice {
+  data: Site;
+  error: string | null;
+  isLoading: boolean;
+  isFetching: boolean;
+  isPreview: boolean;
+  isModalOpen: boolean;
   editingBlockId: Block['id'] | null
   selectedBlockButton: Block['type'] | null
   maxZIndex: number
+}
+
+export interface SuccessResponse {
+  success: true;
+  data: Site[];
+  lastKey: string | null;
+  hasMore: boolean;
+}
+
+export interface ErrorResponse {
+  success: false;
+  message: string;
 }

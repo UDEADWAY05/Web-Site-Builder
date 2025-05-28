@@ -8,8 +8,10 @@ function App() {
     <div className="App">
       <ErrorBoundary>
         <FirebaseProvider>
-          <NavBar />
-          <AppRoutes />
+            <NavBar />
+            <div className='w-full h-full max-h-[calc(100vh-64px)]'>
+                <AppRoutes />
+            </div>
         </FirebaseProvider>
       </ErrorBoundary>
     </div>
