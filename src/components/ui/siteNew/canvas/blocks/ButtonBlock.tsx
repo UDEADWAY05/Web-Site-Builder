@@ -56,9 +56,7 @@ export const ButtonBlock = ({
 
   return isEditing ? (
     <div className="flex flex-col gap-2">
-      <form 
-        className="flex gap-1"
-      >
+      <form className="flex gap-1">
         <Input
           type="text"
           value={content.text}
@@ -67,11 +65,7 @@ export const ButtonBlock = ({
           style={styles}
         />
 
-        <Select 
-          value={content.type}
-          onValueChange={handleTypeChange}
-        
-        >
+        <Select value={content.type} onValueChange={handleTypeChange}>
           <SelectTrigger>
             <SelectValue placeholder="select type" />
           </SelectTrigger>
@@ -92,17 +86,14 @@ export const ButtonBlock = ({
         </button>
       </form>
       {isEditingScript && (
-        <div 
-          className="flex flex-col gap-2"
-        >
+        <div className="flex flex-col gap-2">
           <label>Custom Script:</label>
           <textarea
             value={content.script}
             onChange={(e) => handleScriptChange(e.target.value)}
             placeholder="Напишите свой кастомный script или используй пример ниже
-            const button = document.querySelector('button')
-            button?.addEventListener('click', () => {
-            alert('Message')})"            
+            document.querySelector('button').addEventListener('click', () => {
+            alert('Message')}) "
           />
         </div>
       )}

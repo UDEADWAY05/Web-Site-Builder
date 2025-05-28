@@ -33,16 +33,12 @@ export const generateHTMLCode = (block: Block) => {
     case 'quote':
       return `
        <blockquote 
-          cite="https://www.huxley.net/bnw/four.html"
           class="${block.type}-${block.id}">
     <p >
-      Words can be like X-rays, if you use them properly—they’ll go
-      through anything. You read and you’re pierced.
+      ${block.content}
     </p>
   </blockquote>
-  <p>
-    —Aldous Huxley, <cite>Brave New World</cite>
-  </p> `
+   `
 
     /// form ///
     case 'checkbox':
@@ -58,17 +54,17 @@ export const generateHTMLCode = (block: Block) => {
     case 'radiobox':
       return `<div class="${block.type}-${block.id}">
  ${block.content
-          .map(
-            (item) =>
-              ` <input 
+   .map(
+     (item) =>
+       ` <input 
     type="radio" 
     id='${item}'
     name='${block.id}'
     value='${item}'
     checked />
   <label for='${item}'>${item}</label>`
-          )
-          .join('\n')}
+   )
+   .join('\n')}
 </div>`
 
     case 'input':

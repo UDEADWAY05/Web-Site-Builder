@@ -10,7 +10,7 @@ export function generateBlockByType(
   const id = generateId()
 
   const defaultStyles: Block['styles'] = {
-    backgroundColor: '#f5fafa',
+    backgroundColor: '#00FF0000',
   }
 
   switch (type) {
@@ -60,8 +60,13 @@ export function generateBlockByType(
         type,
         position: { x, y },
         dimensions: { width: 280, height: 60 },
-        styles: { ...defaultStyles, fontSize: 16, color: '#000000' },
-        content: { text: 'Button', type: 'button', script: '' },
+        styles: { backgroundColor: '#fff', fontSize: 16, color: '#000000' },
+        content: {
+          text: 'Button',
+          type: 'button',
+          script: ` document.querySelector('.button-${id}').addEventListener('click', () => {
+            alert('Message')});`,
+        },
         zIndex: 1,
       }
     case 'ul':

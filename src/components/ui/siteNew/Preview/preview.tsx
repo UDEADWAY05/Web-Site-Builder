@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { selectorLayoutSiteData } from 'src/store/slices/siteSlice/selectors'
 import { useAppSelector } from 'src/store/store'
@@ -13,7 +13,11 @@ export function Preview() {
   const blocks = useAppSelector(selectorLayoutSiteData)
   const { blocksForm, blocksBase } = useTransformData(blocks)
   const siteById = useAppSelector(selectSiteById(siteId ?? ''))
-  const [formSubmitted, setFormSubmitted] = useState(false)
+  // const [formSubmitted, setFormSubmitted] = useState(false)
+  console.log(siteById) //комментарий
+  if (!siteById) {
+    return <p>"error</p>
+  }
 
   const documentContent = `<!DOCTYPE html>
   <html lang="ru">
@@ -34,7 +38,7 @@ export function Preview() {
   </head>
   <body>
     ${blocksBase.map((block) => `${generateHTMLCode(block)} `).join('\n')}
-    ${`<form  ">
+    ${`<form>
       ${blocksForm.map((block) => `${generateHTMLCode(block)} `).join('\n')}
         </form> `}
   <script>
@@ -43,25 +47,25 @@ export function Preview() {
   </body>
   </html>`
 
-  useEffect(() => {
-    const listener = (e: MessageEvent) => {
-      if (e.data?.type === 'form-submission') {
-        console.log('Форма отправлена:', e.data)
-        setFormSubmitted(true)
-        setTimeout(() => setFormSubmitted(false), 3000)
-      }
-    }
-    window.addEventListener('message', listener)
-    return () => window.removeEventListener('message', listener)
-  }, [])
+  // useEffect(() => {
+  //   const listener = (e: MessageEvent) => {
+  //     if (e.data?.type === 'form-submission') {
+  //       console.log('Форма отправлена:', e.data)
+  //       setFormSubmitted(true)
+  //       setTimeout(() => setFormSubmitted(false), 3000)
+  //     }
+  //   }
+  //   window.addEventListener('message', listener)
+  //   return () => window.removeEventListener('message', listener)
+  // }, [])
 
   return (
     <div className="relative w-full">
-      {formSubmitted && (
+      {/* {formSubmitted && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
           Данные отправлены
         </div>
-      )}
+      )} */}
       <iframe
         title="Preview"
         style={{ width: '100%', height: '100%' }}

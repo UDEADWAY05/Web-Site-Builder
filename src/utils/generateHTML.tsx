@@ -17,7 +17,7 @@ export function generateHTML(blocks: Block[], siteById: Site) {
   style="background-color: ${siteById?.bgColor};position: relative;
    min-height: 100vh;">
    ${blocksBase.map((block) => `${generateHTMLCode(block)} `).join('\n')}
-    ${`<form">
+    ${`<form>
       ${blocksForm.map((block) => `${generateHTMLCode(block)} `).join('\n')}
         </form> `}
   <script src="script.js"></script>

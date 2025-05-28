@@ -146,6 +146,7 @@ export function NavBar() {
               {item.name}
             </DisclosureButton>
           ))}
+          {<ButtonNewSite />}
         </div>
       </DisclosurePanel>
     </Disclosure>
