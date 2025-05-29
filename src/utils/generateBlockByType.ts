@@ -60,7 +60,7 @@ export function generateBlockByType(
         type,
         position: { x, y },
         dimensions: { width: 280, height: 60 },
-        styles: { backgroundColor: '#fff000', fontSize: 16, color: '#000000' },
+        styles: { backgroundColor: '#ffffff', fontSize: 16, color: '#000000' },
         content: {
           text: 'Button',
           type: 'button',

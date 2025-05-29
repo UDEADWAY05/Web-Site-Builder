@@ -23,15 +23,15 @@ export function ButtonNewSite() {
         blocks: [],
         createdAt: Date.now().toString(),
         formScript: `
-        document.querySelector('form').addEventListener('submit', function(event) {
-          event.preventDefault();
+          document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-          const formData = new FormData(form);
-          const data = Object.fromEntries(formData.entries());
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
 
-          // Валидация
-          console.log(data)
-        });
+            // Валидация
+            alert(JSON.stringify(data))
+          });
         `
       }
       dispatch(resetLayout())
