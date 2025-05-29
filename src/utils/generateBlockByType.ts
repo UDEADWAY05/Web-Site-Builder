@@ -60,7 +60,7 @@ export function generateBlockByType(
         type,
         position: { x, y },
         dimensions: { width: 280, height: 60 },
-        styles: { backgroundColor: '#fff', fontSize: 16, color: '#000000' },
+        styles: { backgroundColor: '#fff000', fontSize: 16, color: '#000000' },
         content: {
           text: 'Button',
           type: 'button',
@@ -111,6 +111,7 @@ export function generateBlockByType(
       return {
         id,
         type,
+        name: "",
         position: { x, y },
         dimensions: { width: 400, height: 100 },
         styles: defaultStyles,
@@ -122,6 +123,7 @@ export function generateBlockByType(
       return {
         id,
         type,
+        name: "",
         position: { x, y },
         dimensions: { width: 130, height: 70 },
         styles: {
@@ -129,6 +131,7 @@ export function generateBlockByType(
           fontWeight: 'bold',
           color: '#000000',
           fontSize: 16,
+          backgroundColor: '#ffffff',
         },
         content: 'Type your message here',
         zIndex: 1,
@@ -138,6 +141,7 @@ export function generateBlockByType(
       return {
         id,
         type,
+        name: "",
         position: { x, y },
         dimensions: { width: 120, height: 50 },
         styles: defaultStyles,
@@ -149,6 +153,7 @@ export function generateBlockByType(
       return {
         id,
         type,
+        name: "",
         position: { x, y },
         dimensions: { width: 130, height: 60 },
         styles: defaultStyles,
@@ -160,6 +165,7 @@ export function generateBlockByType(
       return {
         id,
         type,
+        name: "",
         position: { x, y },
         dimensions: { width: 100, height: 50 },
         styles: defaultStyles,

@@ -21,7 +21,18 @@ export function ButtonNewSite() {
         bgColor: '#fafafa',
         data: [],
         blocks: [],
-        createdAt: Date.now().toString()
+        createdAt: Date.now().toString(),
+        formScript: `
+        document.querySelector('form').addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
+
+          // Валидация
+          console.log(data)
+        });
+        `
       }
       dispatch(resetLayout())
       dispatch(saveSite(newSite))

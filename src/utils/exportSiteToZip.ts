@@ -11,7 +11,7 @@ export async function exportSiteToZip(blocks: Block[], siteById: Site) {
 
   const htmlContent = generateHTML(blocks, siteById)
   const cssContent = generateCSS(blocks)
-  const scriptContent = generateScriptButton(blocks)
+  const scriptContent = generateScriptButton(blocks, siteById.formScript)
 
   //добавляем файлы в архив
   zip.file('index.html', htmlContent)

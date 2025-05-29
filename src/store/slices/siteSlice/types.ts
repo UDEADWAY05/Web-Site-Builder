@@ -137,6 +137,7 @@ export interface Site {
   bgColor: string
   blocks: Array<Block>
   createdAt: string;
+  formScript: string;
 }
 
 export interface SiteSlice {
@@ -148,7 +149,7 @@ export interface SiteSlice {
   isModalOpen: boolean;
   editingBlockId: Block['id'] | null
   selectedBlockButton: Block['type'] | null
-  maxZIndex: number
+  maxZIndex: number;
 }
 
 export interface SuccessResponse {

@@ -8,6 +8,8 @@ import { patchSiteThunk } from 'src/store/slices/siteSlice/thunk'
 import { useParams } from 'react-router-dom'
 import { exportSiteToZip } from 'src/utils/exportSiteToZip'
 import { Download } from 'lucide-react'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'src/components/ui/accordion'
+import { Textarea } from '../../textarea'
 
 export function SideBar() {
   const projectName = useAppSelector(selectSiteTitle)
@@ -19,7 +21,7 @@ export function SideBar() {
   const site = useAppSelector(store => store.site.data)
   const dispatch = useAppDispatch()
   return (
-    <div className="p-2 w-[250px] bg-[#f4f4f4] flex flex-col">
+    <div className="p-2 w-[250px] overflow-auto bg-[#f4f4f4] flex flex-col">
       <div className={isPreviewCode ? 'invisible' : ''}>
         <div className='rounded-full inline-flex items-center gap-2 px-2 justify-center bg-gray-700'>
           {
@@ -61,6 +63,17 @@ export function SideBar() {
             value={bgColor || '#fafafa'}
             onChange={(e) => dispatch(patchSiteThunk({ id: id, data: { bgColor: e.target.value } }))}
           />
+        }
+
+        {
+          id !== undefined && <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Код для формы</AccordionTrigger>
+              <AccordionContent>
+                <Textarea value={site.formScript} onChange={(e) => dispatch(patchSiteThunk({ id: id, data: { formScript: e.target.value } }))} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         }
 
         <hr />
