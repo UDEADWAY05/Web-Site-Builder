@@ -113,26 +113,6 @@ const siteSlice = createSlice({
 
       block.content = action.payload.content
     },
-
-    updateBlockName: (
-      state,
-      action: PayloadAction<{ id: Block['id']; name: string }>
-    ) => {
-      const block = state.data.blocks?.find((block) => block.id === action.payload.id)
-
-      if (!block) {
-        return
-      }
-
-      if (block.type === 'input'
-        || block.type === 'checkbox'
-        || block.type === 'textarea'
-        || block.type === 'radiobox'
-        || block.type === 'select'
-      ) {
-        block.name = action.payload.name
-      }
-    },
     updateBlockBgColor: (
       state,
       action: PayloadAction<{ id: Block['id']; color: string }>

@@ -1,5 +1,4 @@
 import { Textarea } from 'src/components/ui/textarea'
-import { Input } from 'src/components/ui/input'
 import { Block } from 'src/store/slices/siteSlice/types'
 
 export type TextareaBlockProps = {
