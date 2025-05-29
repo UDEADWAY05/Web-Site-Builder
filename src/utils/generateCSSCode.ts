@@ -2,10 +2,15 @@ import { Block } from 'src/store/slices/siteSlice'
 import { transformHeight } from './transformHeight'
 import { transformWidth } from './transformWidth'
 
-
 const headerDivCss = `
     widht: fit-content;
     height: fit-content;
+`
+
+const checkboxDivCss = `
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 `
 
 const inputDivCss = `
@@ -71,5 +76,6 @@ export const generateCSSCode = (block: Block) => {
       ${block.type === 'button' ? buttonDivCss : ''}
       ${block.type === 'textarea' ? textareaDivCss : ""}
       ${block.type === 'header' ? headerDivCss : ""}
+      ${block.type === 'checkbox' ? checkboxDivCss : ""}
     }`
 }
