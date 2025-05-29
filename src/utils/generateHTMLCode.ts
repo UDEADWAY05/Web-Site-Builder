@@ -46,6 +46,7 @@ export const generateHTMLCode = (block: Block) => {
     <input 
       type="checkbox" 
       id='${block.id}'
+      name='${block.id}'
       checked />
     <label for='${block.id}'>${block.content}</label>
   </div>`
@@ -59,6 +60,7 @@ export const generateHTMLCode = (block: Block) => {
     type="radio" 
     id='${item}'
     value='${item}'
+    name='${block.id}'
     checked />
   <label for='${item}'>${item}</label>`
           )
@@ -70,6 +72,7 @@ export const generateHTMLCode = (block: Block) => {
       <label for='${block.id}'>Поле для ввода текста</label>
     <input 
       type="text" 
+      name='${block.id}'
       id='${block.id}'
       value=${block.content}
     />
@@ -80,6 +83,7 @@ export const generateHTMLCode = (block: Block) => {
       return `<div class="${block.type}-${block.id}">
     <textarea 
       id='${block.id}'
+      name='${block.id}'
       rows='5'
         >
       ${block.content}
