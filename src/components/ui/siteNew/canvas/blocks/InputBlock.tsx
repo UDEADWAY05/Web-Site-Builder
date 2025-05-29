@@ -23,6 +23,7 @@ export const InputBlock = ({
             <Input
                 type="text"
                 value={content}
+                name={}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="Edit text"
                 className='bg-white'
