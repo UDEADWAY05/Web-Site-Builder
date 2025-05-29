@@ -43,7 +43,7 @@ const textareaDivCss = `
 const buttonDivCss = `
     display: flex;
     align-items: center;
-    justify-flex: center;
+    justify-content: center;
     padding: 8px 16px;
     border: 1px solid #e5e5e5;
     border-radius: 8px;
@@ -67,9 +67,9 @@ export const generateCSSCode = (block: Block) => {
       text-decoration: ${block.styles?.textDecoration || 'none'};
       color:${block.styles?.color || '#000000'};
       z-index:${block.zIndex};
-      ${block.type === 'input' && inputDivCss}
-      ${block.type === 'button' && buttonDivCss}
-      ${block.type === 'textarea' && textareaDivCss}
-      ${block.type === 'header' && headerDivCss}
-    };`
+      ${block.type === 'input' ? inputDivCss : ""}
+      ${block.type === 'button' ? buttonDivCss : ''}
+      ${block.type === 'textarea' ? textareaDivCss : ""}
+      ${block.type === 'header' ? headerDivCss : ""}
+    }`
 }

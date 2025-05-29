@@ -111,7 +111,6 @@ export function generateBlockByType(
       return {
         id,
         type,
-        name: "",
         position: { x, y },
         dimensions: { width: 400, height: 100 },
         styles: defaultStyles,
@@ -123,7 +122,6 @@ export function generateBlockByType(
       return {
         id,
         type,
-        name: "",
         position: { x, y },
         dimensions: { width: 130, height: 70 },
         styles: {
@@ -141,7 +139,6 @@ export function generateBlockByType(
       return {
         id,
         type,
-        name: "",
         position: { x, y },
         dimensions: { width: 120, height: 50 },
         styles: defaultStyles,
@@ -153,7 +150,6 @@ export function generateBlockByType(
       return {
         id,
         type,
-        name: "",
         position: { x, y },
         dimensions: { width: 130, height: 60 },
         styles: defaultStyles,
@@ -165,7 +161,6 @@ export function generateBlockByType(
       return {
         id,
         type,
-        name: "",
         position: { x, y },
         dimensions: { width: 100, height: 50 },
         styles: defaultStyles,
