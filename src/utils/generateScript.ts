@@ -1,7 +1,7 @@
 import { Block } from 'src/store/slices/siteSlice'
 
-export function generateScriptButton(blocks: Block[]) {
-  const findScript = blocks.reduce((acc, block) => {
+export function generateScriptButton(blocks: Block[], formScript: string) {
+    const findScript = formScript + '' + blocks.reduce((acc, block) => {
     if (block.type === 'button') {
       return acc + ' ' + block.content.script
     } else {
@@ -9,5 +9,5 @@ export function generateScriptButton(blocks: Block[]) {
     }
   }, '')
 
-  return findScript || ''
+    return findScript || ''
 }

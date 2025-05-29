@@ -26,17 +26,17 @@ export function Preview() {
          padding: 5px;
          background-color: ${siteData?.bgColor || '#ffffff'};
              ${blocks
-               ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
-               .join('')}
+      ?.map((block) => `${block.styles ? generateCSSCode(block) : ''}`)
+      .join('')}
     </style>
   </head>
   <body>
     ${blocksBase.map((block) => `${generateHTMLCode(block)} `).join('\n')}
-    ${`<form>
+    ${`<form id="form">
       ${blocksForm.map((block) => `${generateHTMLCode(block)} `).join('\n')}
         </form> `}
   <script>
-        ${generateScriptButton(blocks)}
+        ${generateScriptButton(blocks, siteData.formScript)}
    </script>
   </body>
   </html>`

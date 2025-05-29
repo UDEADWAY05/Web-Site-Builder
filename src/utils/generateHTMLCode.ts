@@ -9,7 +9,7 @@ export const generateHTMLCode = (block: Block) => {
       return `<p class="${block.type}-${block.id}">${block.content}</p>`
 
     case 'background':
-      return `<div class="${block.type}-${block.id}"/>`
+      return `<div class="${block.type}-${block.id}"></div>`
 
     case 'ul':
       return `<ul class="${block.type}-${block.id}">
@@ -46,7 +46,6 @@ export const generateHTMLCode = (block: Block) => {
     <input 
       type="checkbox" 
       id='${block.id}'
-      name='${block.id}'
       checked />
     <label for='${block.id}'>${block.content}</label>
   </div>`
@@ -54,37 +53,34 @@ export const generateHTMLCode = (block: Block) => {
     case 'radiobox':
       return `<div class="${block.type}-${block.id}">
  ${block.content
-   .map(
-     (item) =>
-       ` <input 
+          .map(
+            (item) =>
+              ` <input 
     type="radio" 
     id='${item}'
-    name='${block.id}'
     value='${item}'
     checked />
   <label for='${item}'>${item}</label>`
-   )
-   .join('\n')}
+          )
+          .join('\n')}
 </div>`
 
     case 'input':
       return `<div class="${block.type}-${block.id}">
+      <label for='${block.id}'>Поле для ввода текста</label>
     <input 
       type="text" 
       id='${block.id}'
-      name='${block.id}'
       value=${block.content}
     />
-    <label for='${block.id}'>"Поле для ввода текста"</label>
+    
   </div>`
 
     case 'textarea':
       return `<div class="${block.type}-${block.id}">
     <textarea 
       id='${block.id}'
-      name='${block.id}'
       rows='5'
-      cols='33'
         >
       ${block.content}
       </textarea>

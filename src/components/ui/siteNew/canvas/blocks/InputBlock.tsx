@@ -25,16 +25,17 @@ export const InputBlock = ({
                 value={content}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="Edit text"
+                className='bg-white'
             />
         </form>
     ) : (
         <form style={styles} className="flex flex-col gap-2">
             <Input
                 id={content}
-                type="text"
+                type="text"    
                 value={content}
                 placeholder="Edit text"
-                style={{ ...styles, width: `${width}px`, height: `${height}px` }}
+                style={{ ...styles, background: '#ffffff', width: `${width}px`, height: `${height}px` }}
                 onChange={(e) => e.target.value}
             />
         </form>

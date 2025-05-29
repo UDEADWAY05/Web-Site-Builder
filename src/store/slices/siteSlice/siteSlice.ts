@@ -9,6 +9,7 @@ const initialState: SiteSlice = {
     bgColor: "#fafafa",
     blocks: [],
     createdAt: "",
+    formScript: ''
   },
   error: null,
   isLoading: false,
